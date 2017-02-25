@@ -13,6 +13,8 @@ addons:
     token:
       # token for sonarqube
       secure: UnysxLto5zQxaKwma0bCwYd0u43kKqDfP7iio7mN44NbkQs83NT7WXqyDdc01ycpcV919VCUIAmArFImGhlUt8KmM65/lj9pgb1NGwqUse4ecIANsc7po4HrX6Ke/FKGq5KOx//0ofP5LMjfsGuo2IlDFkP23dsBj5d00LoD+2A0nQTnkY3mSswIRTxJ36tbwe5OK3xysOBlEFxruFj0rdJRo5enUC/fCHOt4D8PQZfsb892cpAYmg5y93GPNiF/ruewIHIVLYiAHKRYzQWoeTW03l0zhWH594xOvIWREk0R8zF+FKp9Y0axpYjS3uZFoElt9GB5g430YtF4SXiNZiEMl9DsA/gfns3ZVQQaPVHy+8s5oZkcQMbLYx4tijk/0T4Z18rITW+Yj4binN7mf8gyl8awqKY5fjjB/n9r/fxYC7nuQeQ6m3/2OEkxH4ifTabnfyWqo/097RpZTLwCrs6EvNkgrE+W/EtYpZa/471WzLNSe5kbDYt2nke+xNPqOuQZjSKdD0sdj5w134kkr9jqcY5fu8sWBPqtXHrO96wwz+VrYA1hmK+e2wE1vnZeeJRZwBhLQawHFQe1JtN8kPwqXgOP2YSiFaH5Kk3EZu9EPrY7d/YtMudubBRbgmRKzzBKjBFX3JKJ+QCeXBQSAimn/Sy8MXquKoSTljXnhvc=
+    branches:
+      - develop
 
 script: 
   - mvn clean verify
