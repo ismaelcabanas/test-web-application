@@ -11,13 +11,13 @@ public class StandardWebServerTest {
     public void when_i_start_server_on_a_port_then_the_server_is_up(){
         // given
         int port = 8002;
-        StandardWebServer standardWebServer = new StandardWebServer(port);
+        WebServer standardWebServer = new StandardWebServer(port);
 
         // when
         standardWebServer.start();
 
         // then
-        Assert.assertThat(standardWebServer.isUp(), Is.is(IsEqual.equalTo(true)));
+        Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(true)));
 
         standardWebServer.stop();
     }
@@ -26,23 +26,23 @@ public class StandardWebServerTest {
     public void when_i_stop_a_started_server_then_the_server_is_down(){
         // given
         int port = 8002;
-        StandardWebServer standardWebServer = new StandardWebServer(port);
+        WebServer standardWebServer = new StandardWebServer(port);
         standardWebServer.start();
 
         // when
         standardWebServer.stop();
 
         // then
-        Assert.assertThat(standardWebServer.isUp(), Is.is(IsEqual.equalTo(false)));
+        Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(false)));
     }
 
     @Test
     public void if_the_server_is_not_started_the_server_is_down(){
         // given
         int port = 8002;
-        StandardWebServer standardWebServer = new StandardWebServer(port);
+        WebServer standardWebServer = new StandardWebServer(port);
 
         // then
-        Assert.assertThat(standardWebServer.isUp(), Is.is(IsEqual.equalTo(false)));
+        Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(false)));
     }
 }
