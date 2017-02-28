@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity;
 
+import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
@@ -9,15 +10,25 @@ import org.junit.Assert;
 
 public class StartServerStepDefs implements En {
 
-    private WebServer webServer;
+    private WebServer standardWebServer;
 
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
-            webServer = new WebServer(8);
-            webServer.start();
+            standardWebServer = new StandardWebServer(port);
+            standardWebServer.start();
         });
         Then("^the web server is up$", () -> {
-            Assert.assertThat(webServer.isUp(), Is.is(IsEqual.equalTo(true)));
+            Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(true)));
+        });
+
+        After(() -> {
+            standardWebServer.stop();
+        });
+        And("^I stopped it$", () -> {
+            standardWebServer.stop();
+        });
+        Then("^the web server is down$", () -> {
+            Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(false)));
         });
     }
 }
