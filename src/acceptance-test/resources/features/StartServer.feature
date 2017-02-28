@@ -4,5 +4,5 @@ Feature: Start Web Server
   In order to initiate the technical test to the candidate
 
   Scenario: Starting Web Server
-    When I start the web server
+    When I start the web server on 8000 port
     Then the web server is up
