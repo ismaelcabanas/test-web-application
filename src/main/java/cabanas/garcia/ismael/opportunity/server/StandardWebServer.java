@@ -19,16 +19,19 @@ public class StandardWebServer implements WebServer {
         this.state = State.STOPPED;
     }
 
-    public void start() {
+    @Override
+    public void start() throws UnavailableServerException {
         httpServer = createServer();
         httpServer.start();
         updateStatus(State.RUNNING);
     }
 
+    @Override
     public boolean isRunning() {
         return state != State.STOPPED;
     }
 
+    @Override
     public void stop() {
         try {
             httpServer.stop(1);
@@ -43,7 +46,7 @@ public class StandardWebServer implements WebServer {
         this.state = newState;
     }
 
-    private HttpServer createServer() {
+    private HttpServer createServer() throws UnavailableServerException {
         HttpServer server = null;
         try {
             server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -57,7 +60,7 @@ public class StandardWebServer implements WebServer {
             server.setExecutor(null);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UnavailableServerException(e);
         }
         return server;
     }

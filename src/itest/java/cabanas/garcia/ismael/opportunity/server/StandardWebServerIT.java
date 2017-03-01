@@ -26,7 +26,7 @@ public class StandardWebServerIT {
     }
 
     @Test
-    public void when_i_start_server_on_a_port_then_the_server_is_up(){
+    public void when_i_start_server_on_a_port_then_the_server_is_up() throws Exception{
         // when
         standardWebServer.start();
 
@@ -35,7 +35,7 @@ public class StandardWebServerIT {
     }
 
     @Test
-    public void when_i_stop_a_started_server_then_the_server_is_down(){
+    public void when_i_stop_a_started_server_then_the_server_is_down() throws Exception{
         // given
         standardWebServer.start();
 
@@ -44,6 +44,15 @@ public class StandardWebServerIT {
 
         // then
         Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(false)));
+    }
+
+    @Test(expected = UnavailableServerException.class)
+    public void server_start_on_port_in_use() throws Exception{
+        // given
+        standardWebServer.start();
+
+        // when
+        standardWebServer.start();
     }
 
     @Test

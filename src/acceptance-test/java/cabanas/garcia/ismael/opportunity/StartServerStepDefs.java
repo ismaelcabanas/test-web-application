@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity;
 
 import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
+import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
@@ -15,7 +16,11 @@ public class StartServerStepDefs implements En {
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
             standardWebServer = new StandardWebServer(port);
-            standardWebServer.start();
+            try {
+                standardWebServer.start();
+            } catch (UnavailableServerException e) {
+                throw new RuntimeException(e);
+            }
         });
         Then("^the web server is up$", () -> {
             Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(true)));
