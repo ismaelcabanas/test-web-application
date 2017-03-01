@@ -19,8 +19,24 @@ public class StandardWebServer implements WebServer {
     }
 
     public void start() {
+
+        httpServer = createServer(port);
+        httpServer.start();
+        this.state = State.RUNNING;
+    }
+
+    public boolean isRunning() {
+        return state != State.STOPPED;
+    }
+
+    public void stop() {
+        httpServer.stop(1);
+        state = State.STOPPED;
+    }
+
+    private HttpServer createServer(int port){
         try {
-            this.httpServer = HttpServer.create(new InetSocketAddress(port), 0);
+            HttpServer httpServer = HttpServer.create(new InetSocketAddress(port), 0);
             HttpHandler handler = new HttpHandler() {
                 @Override
                 public void handle(HttpExchange httpExchange) throws IOException {
@@ -29,19 +45,9 @@ public class StandardWebServer implements WebServer {
             };
             httpServer.createContext("/", handler);
             httpServer.setExecutor(null);
-            this.state = State.RUNNING;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        httpServer.start();
-    }
-
-    public boolean isRunning() {
-        return state != State.STOPPED;
-    }
-
-    public void stop() {
-        httpServer.stop(0);
-        state = State.STOPPED;
+        return httpServer;
     }
 }
