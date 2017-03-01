@@ -43,6 +43,7 @@
 
         <cucumber.version>1.2.5</cucumber.version>
         <gherkin.version>2.12.2</gherkin.version>
+        <slf4j-api.version>1.7.21</slf4j-api.version>
     </properties>
 
     <build>
@@ -221,6 +222,30 @@
     </build>
 
     <dependencies>
+        <!-- ***************** -->
+        <!-- * compile scope * -->
+        <!-- ***************** -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+
         <!-- ************** -->
         <!-- * test scope * -->
         <!-- ************** -->
