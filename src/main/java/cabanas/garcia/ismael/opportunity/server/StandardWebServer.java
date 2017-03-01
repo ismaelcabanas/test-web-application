@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
 
 public class StandardWebServer implements WebServer {
     private final int port;
+
     private State state;
 
     private HttpServer httpServer;
@@ -19,10 +20,9 @@ public class StandardWebServer implements WebServer {
     }
 
     public void start() {
-
-        httpServer = createServer(port);
+        httpServer = createServer();
         httpServer.start();
-        this.state = State.RUNNING;
+        updateStatus(State.RUNNING);
     }
 
     public boolean isRunning() {
@@ -30,24 +30,36 @@ public class StandardWebServer implements WebServer {
     }
 
     public void stop() {
-        httpServer.stop(1);
-        state = State.STOPPED;
+        try {
+            httpServer.stop(1);
+            updateStatus(State.STOPPED);
+        }
+        finally {
+            httpServer = null;
+        }
     }
 
-    private HttpServer createServer(int port){
+    private void updateStatus(State newState) {
+        this.state = newState;
+    }
+
+    private HttpServer createServer() {
+        HttpServer server = null;
         try {
-            HttpServer httpServer = HttpServer.create(new InetSocketAddress(port), 0);
+            server = HttpServer.create(new InetSocketAddress(port), 0);
             HttpHandler handler = new HttpHandler() {
                 @Override
                 public void handle(HttpExchange httpExchange) throws IOException {
 
                 }
             };
-            httpServer.createContext("/", handler);
-            httpServer.setExecutor(null);
+            server.createContext("/", handler);
+            server.setExecutor(null);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return httpServer;
+        return server;
     }
+
 }
