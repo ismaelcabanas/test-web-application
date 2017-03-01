@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StandardWebServerTest {
+public class StandardWebServerIT {
 
     private int port;
     private WebServer standardWebServer;
