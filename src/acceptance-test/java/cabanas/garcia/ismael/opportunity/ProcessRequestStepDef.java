@@ -1,6 +1,6 @@
 package cabanas.garcia.ismael.opportunity;
 
-import cabanas.garcia.ismael.opportunity.server.SunHttpServer;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
 import cucumber.api.java8.En;

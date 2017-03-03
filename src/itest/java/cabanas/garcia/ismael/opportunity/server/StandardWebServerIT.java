@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server;
 
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.junit.After;

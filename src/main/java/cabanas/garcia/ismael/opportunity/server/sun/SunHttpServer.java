@@ -1,5 +1,8 @@
-package cabanas.garcia.ismael.opportunity.server;
+package cabanas.garcia.ismael.opportunity.server.sun;
 
+import cabanas.garcia.ismael.opportunity.server.State;
+import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
+import cabanas.garcia.ismael.opportunity.server.WebServer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -25,9 +28,13 @@ public class SunHttpServer implements WebServer {
 
     @Override
     public void start() throws UnavailableServerException {
+
         httpServer = createServer();
+
         httpServer.start();
+
         updateStatus(State.RUNNING);
+
         log.info("Server started");
     }
 
