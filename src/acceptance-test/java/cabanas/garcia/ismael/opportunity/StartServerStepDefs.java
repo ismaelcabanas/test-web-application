@@ -1,9 +1,8 @@
 package cabanas.garcia.ismael.opportunity;
 
-import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
+import cabanas.garcia.ismael.opportunity.server.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
-import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -15,7 +14,7 @@ public class StartServerStepDefs implements En {
 
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
-            standardWebServer = new StandardWebServer(port);
+            standardWebServer = new SunHttpServer(port);
             try {
                 standardWebServer.start();
             } catch (UnavailableServerException e) {

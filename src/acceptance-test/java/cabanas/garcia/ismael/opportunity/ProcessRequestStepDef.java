@@ -1,11 +1,9 @@
 package cabanas.garcia.ismael.opportunity;
 
-import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
+import cabanas.garcia.ismael.opportunity.server.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
-import cucumber.api.PendingException;
 import cucumber.api.java8.En;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -31,7 +29,7 @@ public class ProcessRequestStepDef implements En {
     public ProcessRequestStepDef() {
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
-            standardWebServer = new StandardWebServer(port);
+            standardWebServer = new SunHttpServer(port);
             try {
                 standardWebServer.start();
             } catch (UnavailableServerException e) {

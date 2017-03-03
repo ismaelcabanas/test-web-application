@@ -15,7 +15,7 @@ public class StandardWebServerIT {
     @Before
     public void setUp() throws Exception {
         port = 8003;
-        standardWebServer = new StandardWebServer(port);
+        standardWebServer = new SunHttpServer(port);
     }
 
     @After

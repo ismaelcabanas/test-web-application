@@ -6,10 +6,11 @@ import com.sun.net.httpserver.HttpServer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
 @Slf4j
-public class StandardWebServer implements WebServer {
+public class SunHttpServer implements WebServer {
 
     private final int port;
 
@@ -17,7 +18,7 @@ public class StandardWebServer implements WebServer {
 
     private HttpServer httpServer;
 
-    public StandardWebServer(int port) {
+    public SunHttpServer(int port) {
         this.port = port;
         this.state = State.STOPPED;
     }
@@ -58,7 +59,12 @@ public class StandardWebServer implements WebServer {
             HttpHandler handler = new HttpHandler() {
                 @Override
                 public void handle(HttpExchange httpExchange) throws IOException {
-
+                    String response = "Hello";
+                    httpExchange.sendResponseHeaders(200, response.getBytes().length);
+                    OutputStream out = httpExchange.getResponseBody();
+                    out.write(response.getBytes());
+                    out.flush();
+                    httpExchange.close();
                 }
             };
             server.createContext("/", handler);
