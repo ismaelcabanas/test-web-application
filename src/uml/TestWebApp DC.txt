@@ -1,0 +1,37 @@
+@startuml
+class StandardWebServer{
+    - port : int
+    - registryService : ControllerRegistryService
+    - server : WebServer
+    start() : void
+}
+
+abstract Controller
+
+interface ControllerRegistryService{
+    register() : List<Controller>
+}
+
+interface WebServer{
+    start() : void
+    stop() : void
+    isRunning() : boolean
+}
+
+interface HttpHandler
+
+class AnnotationControllerRegistryService{
+}
+
+class SunHttpServer
+
+class SunHttpHandler
+
+HttpHandler <|.. SunHttpHandler
+WebServer <|.. SunHttpServer
+SunHttpServer -> HttpHandler
+ControllerRegistryService <|.. AnnotationControllerRegistryService
+StandardWebServer -> ControllerRegistryService
+StandardWebServer -> WebServer
+ControllerRegistryService -> Controller
+@enduml
