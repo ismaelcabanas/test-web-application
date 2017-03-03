@@ -1,32 +1,65 @@
 @startuml
-class StandardWebServer{
-    - port : int
-    - registryService : ControllerRegistryService
-    - server : WebServer
-    start() : void
+together {
+    class StandardWebServer{
+        - port : int
+        - registryService : ControllerRegistryService
+        - server : WebServer
+        + start() : void
+    }
+    interface WebServer{
+        + start() : void
+        + stop() : void
+        + isRunning() : boolean
+    }
+    class SunHttpServer
+    interface HttpHandler
+    class SunHttpHandler{
+        + handle(HttpExchange:httpExchange) : void
+    }
+    class HttpExchange
 }
 
-abstract Controller
+together {
+    interface ControllerRegistryService{
+        + register() : List<Controller>
+    }
+    class AnnotationControllerRegistryService{
+    }
+}
+together {
+    abstract Controller{
+        + process(request:Request) : View
+    }
+    abstract View{
+        + render(model:Model)
+    }
 
-interface ControllerRegistryService{
-    register() : List<Controller>
+    abstract Model
 }
 
-interface WebServer{
-    start() : void
-    stop() : void
-    isRunning() : boolean
+together {
+    class RequestFactory{
+        + create() : Request
+    }
+
+    interface Request
+
+    class DefaultRequest
 }
 
-interface HttpHandler
-
-class AnnotationControllerRegistryService{
+class ControllerSelector{
+    + select(request:Request) : Controller
 }
 
-class SunHttpServer
-
-class SunHttpHandler
-
+Controller -> View
+Controller -> Model
+View -> Model
+SunHttpHandler -> HttpExchange
+SunHttpHandler -> ControllerSelector
+ControllerSelector -> Request
+ControllerSelector -> Controller
+RequestFactory -> Request
+Request <|.. DefaultRequest
 HttpHandler <|.. SunHttpHandler
 WebServer <|.. SunHttpServer
 SunHttpServer -> HttpHandler
@@ -34,4 +67,5 @@ ControllerRegistryService <|.. AnnotationControllerRegistryService
 StandardWebServer -> ControllerRegistryService
 StandardWebServer -> WebServer
 ControllerRegistryService -> Controller
+HttpHandler -> Controller
 @enduml

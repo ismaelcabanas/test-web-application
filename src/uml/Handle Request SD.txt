@@ -1,0 +1,26 @@
+@startuml
+actor StandardWebServer
+participant SunHttpHandler
+participant RequestFactory
+participant DefaultRequest
+participant ControllerSelector
+participant Controller
+participant Model
+participant View
+
+StandardWebServer -> SunHttpHandler : handle(HttpExchange)
+SunHttpHandler -> RequestFactory : create(HttpExchange)
+RequestFactory -> DefaultRequest : new()
+DefaultRequest -> RequestFactory : request : Request
+RequestFactory -> SunHttpHandler : request : Request
+SunHttpHandler -> ControllerSelector : select(Request)
+ControllerSelector -> SunHttpHandler : controller : Controller
+SunHttpHandler -> Controller : process(Request)
+Controller -> Model : update()
+Model -> Controller : updateModel : Model
+Controller -> View : render(Model)
+View -> Controller : updatedView : View
+Controller -> SunHttpHandler : view : View
+SunHttpHandler -> SunHttpHandler : processResponse(View)
+
+@enduml
