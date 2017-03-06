@@ -40,7 +40,7 @@ public class StandardWebServerTest {
     }
 
     @Test
-    public void when_start_server_controllers_are_registered() throws Exception{
+    public void when_start_server_controllers_are_scanned() throws Exception{
         // when
         sut.start();
 
