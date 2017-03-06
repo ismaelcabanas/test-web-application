@@ -1,17 +1,16 @@
-package cabanas.garcia.ismael.opportunity.service;
+package cabanas.garcia.ismael.opportunity.controller;
 
-import cabanas.garcia.ismael.opportunity.controller.Controller;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class DefaultControllerScannerService implements ControllerScannerService {
+public class DefaultControllerScanner implements ControllerScanner {
 
     private List<Class<? extends Controller>> controllersScanned;
 
-    public DefaultControllerScannerService(String pathToScanner) {
+    public DefaultControllerScanner(String pathToScanner) {
         controllersScanned = new ArrayList<>();
         Reflections reflections = new Reflections(pathToScanner);
         Set<Class<? extends Controller>> controllers =

@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.server;
 
 import cabanas.garcia.ismael.opportunity.controller.ControllerMapper;
-import cabanas.garcia.ismael.opportunity.service.ControllerScannerService;
+import cabanas.garcia.ismael.opportunity.controller.ControllerScanner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ public class StandardWebServerTest {
     WebServer theWebServer;
 
     @Mock
-    ControllerScannerService controllerScannerService;
+    ControllerScanner controllerScanner;
 
     @Mock
     ControllerMapper controllerMapper;
@@ -31,7 +31,7 @@ public class StandardWebServerTest {
 
     @Before
     public void setUp(){
-        sut = new StandardWebServer(PORT, controllerScannerService, controllerMapper, theWebServer);
+        sut = new StandardWebServer(PORT, controllerScanner, controllerMapper, theWebServer);
         when(theWebServer.isRunning()).thenReturn(true);
     }
 
@@ -50,7 +50,7 @@ public class StandardWebServerTest {
         sut.start();
 
         // then
-        verify(controllerScannerService).scanner();
+        verify(controllerScanner).scanner();
     }
 
     @Test

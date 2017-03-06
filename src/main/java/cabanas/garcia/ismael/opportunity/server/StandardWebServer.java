@@ -2,26 +2,26 @@ package cabanas.garcia.ismael.opportunity.server;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.ControllerMapper;
-import cabanas.garcia.ismael.opportunity.service.ControllerScannerService;
+import cabanas.garcia.ismael.opportunity.controller.ControllerScanner;
 
 import java.util.List;
 import java.util.Map;
 
 public class StandardWebServer {
     private final int port;
-    private final ControllerScannerService controllerScannerService;
+    private final ControllerScanner controllerScanner;
     private final WebServer server;
     private final ControllerMapper controllerMapper;
 
-    public StandardWebServer(int port, ControllerScannerService controllerScannerService, ControllerMapper controllerMapper, WebServer theWebServer) {
+    public StandardWebServer(int port, ControllerScanner controllerScanner, ControllerMapper controllerMapper, WebServer theWebServer) {
         this.port = port;
-        this.controllerScannerService = controllerScannerService;
+        this.controllerScanner = controllerScanner;
         this.controllerMapper = controllerMapper;
         this.server = theWebServer;
     }
 
     public void start() {
-        List<Class<? extends Controller>> controllersScanned = controllerScannerService.scanner();
+        List<Class<? extends Controller>> controllersScanned = controllerScanner.scanner();
 
         Map<String, Class<? extends Controller>> controllerMapping = controllerMapper.mapping(controllersScanned);
 

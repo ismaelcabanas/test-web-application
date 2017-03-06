@@ -1,10 +1,10 @@
-package cabanas.garcia.ismael.opportunity.service;
+package cabanas.garcia.ismael.opportunity.controller;
 
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 
 import java.util.List;
 
-public interface ControllerScannerService {
+public interface ControllerScanner {
     List<Class<? extends Controller>> scanner();
 }

@@ -1,6 +1,7 @@
-package cabanas.garcia.ismael.opportunity.service;
+package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
+import cabanas.garcia.ismael.opportunity.controller.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.view.View;
 import org.junit.Test;
@@ -13,12 +14,12 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class DefaultControllerScannerServiceTest {
+public class DefaultControllerScannerTest {
 
     @Test
     public void scanner_controllers(){
         // given
-        DefaultControllerScannerService sut = new DefaultControllerScannerService("cabanas.garcia.ismael.opportunity.service");
+        DefaultControllerScanner sut = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.service");
 
         // when
         List<Class<? extends Controller>> actual = sut.scanner();
@@ -31,7 +32,7 @@ public class DefaultControllerScannerServiceTest {
     @Test
     public void scanner_controllers_in_package_that_not_exist_controllers(){
         // given
-        DefaultControllerScannerService sut = new DefaultControllerScannerService("cabanas.garcia.ismael.opportunity.server");
+        DefaultControllerScanner sut = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.server");
 
         // when
         List<Class<? extends Controller>> actual = sut.scanner();
