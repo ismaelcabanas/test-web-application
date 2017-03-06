@@ -1,7 +1,7 @@
-package cabanas.garcia.ismael.opportunity.controller;
+package cabanas.garcia.ismael.opportunity.scanner;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
-import cabanas.garcia.ismael.opportunity.controller.DefaultControllerScanner;
+import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.view.View;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class DefaultControllerScannerTest {
     @Test
     public void scanner_controllers(){
         // given
-        DefaultControllerScanner sut = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.service");
+        DefaultControllerScanner sut = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.scanner");
 
         // when
         List<Class<? extends Controller>> actual = sut.scanner();

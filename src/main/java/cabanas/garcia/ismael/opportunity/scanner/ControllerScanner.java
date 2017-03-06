@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity.controller;
+package cabanas.garcia.ismael.opportunity.scanner;
 
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;

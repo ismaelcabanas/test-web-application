@@ -1,8 +1,8 @@
 package cabanas.garcia.ismael.opportunity.server;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
-import cabanas.garcia.ismael.opportunity.controller.ControllerMapper;
-import cabanas.garcia.ismael.opportunity.controller.ControllerScanner;
+import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
+import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.util.ConfigurationBuilder;
 
 import java.util.List;
