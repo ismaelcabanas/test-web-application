@@ -49,6 +49,9 @@ public class SunHttpHandlerTest {
         sut = new SunHttpHandler(controllers);
         httpExchange = new PageSuccessRequestStub("page1");
         request = RequestFactory.create(httpExchange);
+        when(controllers.select(request)).thenReturn(page1Controller);
+        when(page1Controller.process(request)).thenReturn(page1View);
+        when(page1View.render()).thenReturn("Hello page1");
     }
 
     @Test
@@ -63,9 +66,6 @@ public class SunHttpHandlerTest {
 
     @Test
     public void controller_handle_incoming_request() throws Exception{
-        // given
-        when(controllers.select(request)).thenReturn(page1Controller);
-
         // when
         sut.handle(httpExchange);
 
@@ -77,17 +77,15 @@ public class SunHttpHandlerTest {
     @Test
     public void handle_process_response() throws Exception{
         // given
-        HttpExchange httpExchangeSpy = Mockito.spy(HttpExchange.class);
-        when(controllers.select(request)).thenReturn(page1Controller);
-        when(page1View.render()).thenReturn("Hello page1");
+        HttpExchange httpExchangeSpy = Mockito.spy(httpExchange);
 
         // when
         sut.handle(httpExchangeSpy);
 
         // then
         verify(httpExchangeSpy).getResponseBody();
+        verify(page1View).render();
         assertThat(httpExchangeSpy.getResponseCode(), is(equalTo(200)));
-        assertThat(httpExchangeSpy.getResponseBody().toString(), is(equalTo("Hello page1")));
     }
 
 }

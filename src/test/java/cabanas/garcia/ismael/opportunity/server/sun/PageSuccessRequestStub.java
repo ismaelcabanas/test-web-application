@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import com.sun.net.httpserver.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -95,7 +96,7 @@ public class PageSuccessRequestStub extends HttpExchange {
 
     @Override
     public OutputStream getResponseBody() {
-        return null;
+        return new ByteArrayOutputStream();
     }
 
     @Override
