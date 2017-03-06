@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
+import cabanas.garcia.ismael.opportunity.server.Configuration;
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
@@ -53,6 +54,11 @@ public class SunHttpServer implements WebServer {
             httpServer = null;
         }
         log.info("Server shutdown");
+    }
+
+    @Override
+    public void addConfiguration(Configuration configuration) {
+
     }
 
     private void updateStatus(State newState) {

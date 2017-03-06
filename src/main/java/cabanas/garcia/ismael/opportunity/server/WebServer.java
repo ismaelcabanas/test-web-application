@@ -10,4 +10,6 @@ public interface WebServer {
     void stop();
 
     boolean isRunning();
+
+    void addConfiguration(Configuration configuration);
 }

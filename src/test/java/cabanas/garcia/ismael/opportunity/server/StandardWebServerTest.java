@@ -41,6 +41,7 @@ public class StandardWebServerTest {
         sut.start();
 
         // then
+        verify(theWebServer).addConfiguration(Mockito.any(Configuration.class));
         verify(theWebServer).start();
     }
 
