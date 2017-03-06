@@ -1,14 +1,14 @@
 @startuml
 actor Evaluator
 participant StandardWebServer
-participant DefaultControllerScannerService
+participant DefaultControllerScanner
 participant ControllerMapper
 participant SunHttpHandler
 participant SunHttpServer
 
 Evaluator -> StandardWebServer : start()
-StandardWebServer -> DefaultControllerScannerService : scanner()
-DefaultControllerScannerService -> StandardWebServer : controllers:List<Class<Controller>>
+StandardWebServer -> DefaultControllerScanner : scanner()
+DefaultControllerScanner -> StandardWebServer : controllers:List<Class<Controller>>
 StandardWebServer -> ControllerMapper : mapping(List<Class<Controller>>
 ControllerMapper -> StandardWebServer : mapper:Map<String, Class<Controller>>
 StandardWebServer -> SunHttpHandler : new(Map<String, Class<Controller>>)
