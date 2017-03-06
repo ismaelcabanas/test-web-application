@@ -21,7 +21,7 @@ public class Controllers {
                 .stream()
                 .filter(controller -> controller.getMappingPath().equals(request.getPath()))
                 .findFirst();
-        
+
         if(optionalController.isPresent())
             return optionalController.get();
 
