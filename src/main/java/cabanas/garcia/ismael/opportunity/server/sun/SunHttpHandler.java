@@ -30,6 +30,10 @@ public class SunHttpHandler implements HttpHandler{
 
         String response = view.render();
 
+        renderResponse(httpExchange, response);
+    }
+
+    private void renderResponse(HttpExchange httpExchange, String response) throws IOException {
         OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
