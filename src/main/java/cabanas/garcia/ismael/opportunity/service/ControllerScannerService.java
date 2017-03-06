@@ -5,6 +5,6 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 
 import java.util.List;
 
-public interface ControllerRegistryService {
+public interface ControllerScannerService {
     List<Controller> register();
 }
