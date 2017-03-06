@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity.util;
+package cabanas.garcia.ismael.opportunity.test.util;
 
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
