@@ -1,20 +1,20 @@
 package cabanas.garcia.ismael.opportunity.server;
 
-import cabanas.garcia.ismael.opportunity.service.ControllerRegistryService;
+import cabanas.garcia.ismael.opportunity.service.ControllerScannerService;
 
 public class StandardWebServer {
     private final int port;
-    private final ControllerRegistryService controllerRegistryService;
+    private final ControllerScannerService controllerScannerService;
     private final WebServer server;
 
-    public StandardWebServer(int port, ControllerRegistryService controllerRegistryService, WebServer theWebServer) {
+    public StandardWebServer(int port, ControllerScannerService controllerScannerService, WebServer theWebServer) {
         this.port = port;
-        this.controllerRegistryService = controllerRegistryService;
+        this.controllerScannerService = controllerScannerService;
         this.server = theWebServer;
     }
 
     public void start() {
-        controllerRegistryService.register();
+        controllerScannerService.scanner();
         try {
             server.start();
         } catch (UnavailableServerException e) {

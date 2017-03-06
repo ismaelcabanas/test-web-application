@@ -1,12 +1,10 @@
 package cabanas.garcia.ismael.opportunity.server;
 
-import cabanas.garcia.ismael.opportunity.service.ControllerRegistryService;
-import org.junit.Assert;
+import cabanas.garcia.ismael.opportunity.service.ControllerScannerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertTrue;
@@ -20,7 +18,7 @@ public class StandardWebServerTest {
     WebServer theWebServer;
 
     @Mock
-    ControllerRegistryService controllerRegistryService;
+    ControllerScannerService controllerScannerService;
 
     public static final int PORT = 8000;
 
@@ -28,7 +26,7 @@ public class StandardWebServerTest {
 
     @Before
     public void setUp(){
-        sut = new StandardWebServer(PORT, controllerRegistryService, theWebServer);
+        sut = new StandardWebServer(PORT, controllerScannerService, theWebServer);
         when(theWebServer.isRunning()).thenReturn(true);
     }
 
@@ -47,7 +45,7 @@ public class StandardWebServerTest {
         sut.start();
 
         // then
-        verify(controllerRegistryService).register();
+        verify(controllerScannerService).scanner();
     }
 
     @Test

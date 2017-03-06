@@ -2,8 +2,6 @@ package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultRequest;
-import cabanas.garcia.ismael.opportunity.util.Test1Controller;
-import cabanas.garcia.ismael.opportunity.util.Test2Controller;
 import org.junit.Test;
 
 import java.util.Arrays;
