@@ -19,12 +19,6 @@ import static cabanas.garcia.ismael.opportunity.steps.Hooks.standardWebServer;
 public class StartServerStepDefs implements En {
 
     public StartServerStepDefs() {
-        /*Before(() -> {
-            controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller");
-            controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
-            httpServer = new SunHttpServer();
-        });*/
-
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
             standardWebServer = new StandardWebServer(port, controllerScanner, controllerMapper, new SunHttpServer());
             standardWebServer.start();
@@ -32,11 +26,6 @@ public class StartServerStepDefs implements En {
         Then("^the web server is up$", () -> {
             Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(true)));
         });
-
-        /*After(() -> {
-            if(standardWebServer.isRunning())
-                standardWebServer.stop();
-        });*/
 
         And("^I stopped it$", () -> {
             standardWebServer.stop();

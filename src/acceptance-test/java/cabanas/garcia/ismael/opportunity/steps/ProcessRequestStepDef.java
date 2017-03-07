@@ -32,12 +32,6 @@ public class ProcessRequestStepDef implements En {
 
     public ProcessRequestStepDef() {
 
-/*        Before(() -> {
-            controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller");
-            controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
-            httpServer = new SunHttpServer();
-        });*/
-
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
             standardWebServer = new StandardWebServer(port, controllerScanner, controllerMapper, new SunHttpServer());
@@ -58,11 +52,7 @@ public class ProcessRequestStepDef implements En {
         Then("^the web server returns (.*)$", (String expected) -> {
             Assert.assertThat(response, Is.is(IsEqual.equalTo(expected)));
         });
-
-        /*After(() -> {
-            if(standardWebServer.isRunning())
-                standardWebServer.stop();
-        });*/
+        
     }
 
     private static String getStringFromInputStream(InputStream is) {
