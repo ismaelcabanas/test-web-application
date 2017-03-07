@@ -49,7 +49,7 @@ public class DefaultControllerMapperTest {
         assertThat(actual.getController(TEST4_PATH).get(), is(equalTo(Test4Controller.class)));
     }
 
-    class Test3Controller extends Controller{
+    class Test3Controller implements Controller{
         @Override
         public View process(Request request) {
             return null;
@@ -61,7 +61,7 @@ public class DefaultControllerMapperTest {
         }
     }
 
-    class Test4Controller extends Controller{
+    class Test4Controller implements Controller{
         @Override
         public View process(Request request) {
             return null;

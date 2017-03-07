@@ -42,7 +42,7 @@ public class DefaultControllerScannerTest {
         assertThat(actual.size(), is(equalTo(0)));
     }
 
-    private class Test3Controller extends Controller{
+    private class Test3Controller implements Controller{
 
         @Override
         public View process(Request request) {
@@ -55,7 +55,7 @@ public class DefaultControllerScannerTest {
         }
     }
 
-    private class Test4Controller extends Controller{
+    private class Test4Controller implements Controller{
 
         @Override
         public View process(Request request) {

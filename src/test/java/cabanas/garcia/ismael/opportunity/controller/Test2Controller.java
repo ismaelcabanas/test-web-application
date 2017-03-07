@@ -4,10 +4,7 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.view.View;
 
-/**
- * Created by XI317311 on 06/03/2017.
- */
-public class Test2Controller extends Controller {
+public class Test2Controller implements Controller {
     private String path;
 
     public Test2Controller() {
