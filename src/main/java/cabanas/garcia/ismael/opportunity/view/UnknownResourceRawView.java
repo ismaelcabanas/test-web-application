@@ -5,12 +5,12 @@ import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
 
 import java.net.HttpURLConnection;
 
-public class Page1RawView implements View {
+public class UnknownResourceRawView implements View{
     @Override
     public Response render() {
         return DefaultResponse.builder()
-                .statusCode(HttpURLConnection.HTTP_OK)
-                .content("Hello".getBytes())
+                .statusCode(HttpURLConnection.HTTP_NOT_FOUND)
+                .content("Resource not found".getBytes())
                 .build();
     }
 }

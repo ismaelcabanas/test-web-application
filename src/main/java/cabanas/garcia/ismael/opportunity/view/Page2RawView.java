@@ -1,8 +1,16 @@
 package cabanas.garcia.ismael.opportunity.view;
 
-public class Page2RawView extends View {
+import cabanas.garcia.ismael.opportunity.http.Response;
+import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
+
+import java.net.HttpURLConnection;
+
+public class Page2RawView implements View {
     @Override
-    public String render() {
-        return "Hello";
+    public Response render() {
+        return DefaultResponse.builder()
+                .statusCode(HttpURLConnection.HTTP_OK)
+                .content("Hello".getBytes())
+                .build();
     }
 }
