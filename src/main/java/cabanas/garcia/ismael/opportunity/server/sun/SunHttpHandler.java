@@ -11,6 +11,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.util.Optional;
 
 public class SunHttpHandler implements HttpHandler{
@@ -34,10 +35,17 @@ public class SunHttpHandler implements HttpHandler{
 
             renderResponse(httpExchange, response);
         }
+        else{
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST,
+                    "Bad Request".getBytes().length);
+            OutputStream os = httpExchange.getResponseBody();
+            os.write("Bad Request".getBytes());
+            os.close();
+        }
     }
 
     private void renderResponse(HttpExchange httpExchange, String response) throws IOException {
-        httpExchange.sendResponseHeaders(200, response.getBytes().length);
+        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
         OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
