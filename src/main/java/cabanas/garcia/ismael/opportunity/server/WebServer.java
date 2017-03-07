@@ -5,7 +5,7 @@ package cabanas.garcia.ismael.opportunity.server;
  */
 public interface WebServer {
 
-    void start() throws UnavailableServerException;
+    void start();
 
     void stop();
 

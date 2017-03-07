@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public final class Mapping {
 
-    private Map<String, Class<? extends Controller>> mapper = new HashMap<String, Class<? extends Controller>>();
+    private Map<String, Class<? extends Controller>> mapper = new HashMap<>();
 
     public boolean hasControllers() {
         return !mapper.isEmpty();

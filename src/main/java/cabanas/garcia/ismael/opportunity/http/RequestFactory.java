@@ -4,6 +4,9 @@ import cabanas.garcia.ismael.opportunity.http.imp.DefaultRequest;
 import com.sun.net.httpserver.HttpExchange;
 
 public class RequestFactory {
+
+    private RequestFactory(){}
+
     public static Request create(HttpExchange httpExchange) {
         return DefaultRequest.builder()
                 .path(extractPathFrom(httpExchange))
