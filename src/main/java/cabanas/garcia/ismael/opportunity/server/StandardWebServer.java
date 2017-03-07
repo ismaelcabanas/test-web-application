@@ -26,9 +26,11 @@ public class StandardWebServer {
 
         Mapping controllerMapping = controllerMapper.mapping(controllersScanned);
 
-        server.addConfiguration(new ConfigurationBuilder()
+        Configuration serverConfiguration = new ConfigurationBuilder()
                 .port(port)
-                .controllerMapping(controllerMapping));
+                .controllerMapping(controllerMapping);
+
+        server.addConfiguration(serverConfiguration);
 
         try {
             server.start();
