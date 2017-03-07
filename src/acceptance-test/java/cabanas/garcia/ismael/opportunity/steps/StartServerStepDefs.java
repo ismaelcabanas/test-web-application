@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity;
+package cabanas.garcia.ismael.opportunity.steps;
 
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
 import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
@@ -12,19 +12,18 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerMapper;
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerScanner;
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.standardWebServer;
+
 public class StartServerStepDefs implements En {
 
-    private SunHttpServer httpServer;
-    private StandardWebServer standardWebServer;
-    private ControllerScanner controllerScanner;
-    private ControllerMapper controllerMapper;
-
     public StartServerStepDefs() {
-        Before(() -> {
+        /*Before(() -> {
             controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller");
             controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
             httpServer = new SunHttpServer();
-        });
+        });*/
 
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
             standardWebServer = new StandardWebServer(port, controllerScanner, controllerMapper, new SunHttpServer());
@@ -34,9 +33,11 @@ public class StartServerStepDefs implements En {
             Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(true)));
         });
 
-        After(() -> {
-            standardWebServer.stop();
-        });
+        /*After(() -> {
+            if(standardWebServer.isRunning())
+                standardWebServer.stop();
+        });*/
+
         And("^I stopped it$", () -> {
             standardWebServer.stop();
         });

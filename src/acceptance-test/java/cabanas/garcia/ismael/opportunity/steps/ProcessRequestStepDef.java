@@ -21,22 +21,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerMapper;
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerScanner;
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.standardWebServer;
+
 public class ProcessRequestStepDef implements En {
 
     private String response;
-    private SunHttpServer httpServer;
-    private StandardWebServer standardWebServer;
-    private ControllerScanner controllerScanner;
-    private ControllerMapper controllerMapper;
     private int port;
 
     public ProcessRequestStepDef() {
 
-        Before(() -> {
+/*        Before(() -> {
             controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller");
             controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
             httpServer = new SunHttpServer();
-        });
+        });*/
 
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
@@ -59,9 +59,10 @@ public class ProcessRequestStepDef implements En {
             Assert.assertThat(response, Is.is(IsEqual.equalTo(expected)));
         });
 
-        After(() -> {
-            standardWebServer.stop();
-        });
+        /*After(() -> {
+            if(standardWebServer.isRunning())
+                standardWebServer.stop();
+        });*/
     }
 
     private static String getStringFromInputStream(InputStream is) {

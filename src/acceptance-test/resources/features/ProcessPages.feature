@@ -4,6 +4,6 @@ Feature: Process request to web server
   In order to test that the web server returns the page.
 
   Scenario: Request a page
-    Given the web server is running on port 8000
+    Given the web server is running on port 8002
     When I send a /page1 request to web server
     Then the web server returns Hello

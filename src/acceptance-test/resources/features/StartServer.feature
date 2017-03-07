@@ -3,11 +3,13 @@ Feature: Start Web Server
   I want start a web server
   In order to initiate the technical test to the candidate
 
+  @startServer
   Scenario: Starting Web Server
     When I start the web server on 8000 port
     Then the web server is up
 
+  @startServer
   Scenario: Web Server stopped
-    When I start the web server on 8000 port
+    When I start the web server on 8001 port
     And I stopped it
     Then the web server is down
