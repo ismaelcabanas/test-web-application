@@ -1,7 +1,5 @@
 package cabanas.garcia.ismael.opportunity.internal.creation.instance;
 
-import java.lang.*;
-
 public class ConstructorInstantiator implements Instantiator {
     @Override
     public <T> T newInstance(Class<T> aClass) {
