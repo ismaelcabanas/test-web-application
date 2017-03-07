@@ -1,0 +1,17 @@
+@startuml
+actor StandardWebServer
+participant SunHttpHandler
+participant RequestFactory
+participant DefaultRequest
+participant Controllers
+
+StandardWebServer -> SunHttpHandler : handle(HttpExchange)
+SunHttpHandler -> RequestFactory : create(HttpExchange)
+RequestFactory -> DefaultRequest : new()
+DefaultRequest -> RequestFactory : request : Request
+RequestFactory -> SunHttpHandler : request : Request
+SunHttpHandler -> Controllers : select(Request)
+Controllers -> SunHttpHandler : empty controller
+SunHttpHandler -> SunHttpHandler : processUnknownResponse(View)
+
+@enduml

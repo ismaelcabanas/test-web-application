@@ -11,11 +11,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-public class PageSuccessRequestStub extends HttpExchange {
+public class HttpExchangeSuccessStub extends HttpExchange {
 
     private String path;
 
-    public PageSuccessRequestStub(String path) {
+    public HttpExchangeSuccessStub(String path) {
         this.path = path;
     }
 
