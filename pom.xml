@@ -95,6 +95,11 @@
                                 is true
                             -->
                             <skipTests>${skipTests}</skipTests>
+                            <!--
+                            <includes>
+                                <include>*CucumberRunner.java</include>
+                            </includes>
+                            -->
                         </configuration>
                     </execution>
                 </executions>
@@ -118,10 +123,12 @@
                         <configuration>
                             <sources>
                                 <source>src/itest/java</source>
+                                <source>src/acceptance-test/java</source>
                             </sources>
                             <resources>
                                 <resource>
                                     <directory>src/itest/resources</directory>
+                                    <directory>src/acceptance-test/resources</directory>
                                 </resource>
                             </resources>
                         </configuration>
