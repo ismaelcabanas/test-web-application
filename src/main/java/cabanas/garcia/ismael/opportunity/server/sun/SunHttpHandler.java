@@ -5,6 +5,8 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
+import cabanas.garcia.ismael.opportunity.http.Response;
+import cabanas.garcia.ismael.opportunity.view.UnknownResourceRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -26,28 +28,24 @@ public class SunHttpHandler implements HttpHandler{
 
         Request request = RequestFactory.create(httpExchange);
 
-        Optional<Controller> controller = controllers.select(request);
+        Controller controller = controllers.select(request);
 
-        if(controller.isPresent()) {
-            View view = controller.get().process(request);
+        View view = controller.process(request);
 
-            String response = view.render();
+        Response response = view.render();
 
-            renderResponse(httpExchange, response);
-        }
-        else{
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST,
-                    "Bad Request".getBytes().length);
-            OutputStream os = httpExchange.getResponseBody();
-            os.write("Bad Request".getBytes());
-            os.close();
-        }
+        process(httpExchange, response);
+
     }
 
-    private void renderResponse(HttpExchange httpExchange, String response) throws IOException {
-        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+    private void process(HttpExchange httpExchange, Response response) throws IOException {
+        httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
+        writeResponse(httpExchange, response.getContent());
+    }
+
+    private void writeResponse(HttpExchange httpExchange, byte[] response) throws IOException {
         OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
+        os.write(response);
         os.close();
     }
 }
