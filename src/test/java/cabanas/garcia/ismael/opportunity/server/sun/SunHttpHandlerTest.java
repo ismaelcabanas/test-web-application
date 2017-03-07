@@ -49,7 +49,7 @@ public class SunHttpHandlerTest {
         sut = new SunHttpHandler(controllers);
         httpExchange = new PageSuccessRequestStub("page1");
         request = RequestFactory.create(httpExchange);
-        when(controllers.select(request)).thenReturn(page1Controller);
+        when(controllers.select(request)).thenReturn(java.util.Optional.ofNullable(page1Controller));
         when(page1Controller.process(request)).thenReturn(page1View);
         when(page1View.render()).thenReturn("Hello page1");
     }

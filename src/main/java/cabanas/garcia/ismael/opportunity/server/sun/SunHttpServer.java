@@ -1,5 +1,8 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
+import cabanas.garcia.ismael.opportunity.controller.Controllers;
+import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
+import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.server.Configuration;
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
@@ -21,6 +24,8 @@ public class SunHttpServer implements WebServer {
     private State state;
 
     private HttpServer httpServer;
+
+    private Configuration configuration;
 
     public SunHttpServer(int port) {
         this.port = port;
@@ -58,7 +63,7 @@ public class SunHttpServer implements WebServer {
 
     @Override
     public void addConfiguration(Configuration configuration) {
-
+        this.configuration = configuration;
     }
 
     private void updateStatus(State newState) {
@@ -69,17 +74,13 @@ public class SunHttpServer implements WebServer {
         HttpServer server = null;
         try {
             server = HttpServer.create(new InetSocketAddress(port), 0);
-            HttpHandler handler = new HttpHandler() {
-                @Override
-                public void handle(HttpExchange httpExchange) throws IOException {
-                    String response = "Hello";
-                    httpExchange.sendResponseHeaders(200, response.getBytes().length);
-                    OutputStream out = httpExchange.getResponseBody();
-                    out.write(response.getBytes());
-                    out.flush();
-                    httpExchange.close();
-                }
-            };
+
+            Mapping mapping = configuration.getControllerMapping();
+
+            Controllers controllers = new Controllers(mapping, new ConstructorInstantiator());
+
+            HttpHandler handler = new SunHttpHandler(controllers);
+
             server.createContext("/", handler);
             server.setExecutor(null);
 

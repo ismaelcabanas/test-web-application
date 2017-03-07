@@ -1,15 +1,13 @@
 package cabanas.garcia.ismael.opportunity.util;
 
-import cabanas.garcia.ismael.opportunity.controller.Controller;
+import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.server.Configuration;
 
-import java.util.Map;
-
 public class ConfigurationBuilder implements Configuration {
-    private Map<String, Class<? extends Controller>> controllerMapping;
+    private Mapping controllerMapping;
 
     @Override
-    public Configuration controllerMapping(Map<String, Class<? extends Controller>> controllerMapping) {
+    public Configuration controllerMapping(Mapping controllerMapping) {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         builder.addControllerMapping(controllerMapping);
@@ -17,7 +15,12 @@ public class ConfigurationBuilder implements Configuration {
         return builder;
     }
 
-    private void addControllerMapping(Map<String, Class<? extends Controller>> controllerMapping) {
+    @Override
+    public Mapping getControllerMapping() {
+        return null;
+    }
+
+    private void addControllerMapping(Mapping controllerMapping) {
         this.controllerMapping = controllerMapping;
     }
 }

@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.server;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
+import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.util.ConfigurationBuilder;
 
@@ -24,7 +25,7 @@ public class StandardWebServer {
     public void start() {
         List<Class<? extends Controller>> controllersScanned = controllerScanner.scanner();
 
-        Map<String, Class<? extends Controller>> controllerMapping = controllerMapper.mapping(controllersScanned);
+        Mapping controllerMapping = controllerMapper.mapping(controllersScanned);
 
         server.addConfiguration(new ConfigurationBuilder()
             .controllerMapping(controllerMapping));

@@ -5,12 +5,14 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
+import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Optional;
 
 public class SunHttpHandler implements HttpHandler{
     private final Controllers controllers;
@@ -24,9 +26,9 @@ public class SunHttpHandler implements HttpHandler{
 
         Request request = RequestFactory.create(httpExchange);
 
-        Controller controller = controllers.select(request);
+        Optional<Controller> controller = controllers.select(request);
 
-        View view = controller.process(request);
+        View view = controller.get().process(request);
 
         String response = view.render();
 
