@@ -15,7 +15,7 @@ public final class Mapping {
     }
 
     public Optional<Class<? extends Controller>> getController(String pathController) {
-        return Optional.of(mapper.get(pathController));
+        return Optional.ofNullable(mapper.get(pathController));
     }
 
     public void addMapping(String mappingPath, Class<? extends Controller> aClass) {
