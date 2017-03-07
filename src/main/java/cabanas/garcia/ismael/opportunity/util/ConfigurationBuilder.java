@@ -9,11 +9,9 @@ public class ConfigurationBuilder implements Configuration {
 
     @Override
     public Configuration controllerMapping(Mapping controllerMapping) {
-        ConfigurationBuilder builder = new ConfigurationBuilder();
-
-        builder.addControllerMapping(controllerMapping);
+        this.addControllerMapping(controllerMapping);
         
-        return builder;
+        return this;
     }
 
     @Override

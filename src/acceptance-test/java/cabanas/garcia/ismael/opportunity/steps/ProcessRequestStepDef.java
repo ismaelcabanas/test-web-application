@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity;
+package cabanas.garcia.ismael.opportunity.steps;
 
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
 import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
