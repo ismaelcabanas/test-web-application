@@ -12,9 +12,7 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 
-import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerMapper;
-import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerScanner;
-import static cabanas.garcia.ismael.opportunity.steps.Hooks.standardWebServer;
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
 
 public class StartServerStepDefs implements En {
 

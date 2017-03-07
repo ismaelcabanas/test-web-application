@@ -52,7 +52,7 @@ public class ProcessRequestStepDef implements En {
         Then("^the web server returns (.*)$", (String expected) -> {
             Assert.assertThat(response, Is.is(IsEqual.equalTo(expected)));
         });
-        
+
     }
 
     private static String getStringFromInputStream(InputStream is) {
