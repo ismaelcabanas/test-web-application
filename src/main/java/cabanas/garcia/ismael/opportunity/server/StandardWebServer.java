@@ -21,7 +21,7 @@ public class StandardWebServer {
         this.server = theWebServer;
     }
 
-    public void start() throws UnavailableServerException {
+    public void start() {
         List<Class<? extends Controller>> controllersScanned = controllerScanner.scanner();
 
         Mapping controllerMapping = controllerMapper.mapping(controllersScanned);

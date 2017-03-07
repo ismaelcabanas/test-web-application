@@ -28,7 +28,7 @@ public class SunHttpServer implements WebServer {
     }
 
     @Override
-    public void start() throws UnavailableServerException {
+    public void start() {
 
         httpServer = createServer();
 
@@ -65,7 +65,7 @@ public class SunHttpServer implements WebServer {
         this.state = newState;
     }
 
-    private HttpServer createServer() throws UnavailableServerException {
+    private HttpServer createServer() {
         HttpServer server = null;
         try {
             server = HttpServer.create(new InetSocketAddress(configuration.getPort()), 0);
