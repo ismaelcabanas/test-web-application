@@ -11,12 +11,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-public class HttpExchangeSuccessStub extends HttpExchange {
+public class HttpExchangeSuccessResourceStub extends HttpExchange {
 
     private String path;
+    private OutputStream baos;
 
-    public HttpExchangeSuccessStub(String path) {
+    public HttpExchangeSuccessResourceStub(String path) {
         this.path = path;
+        baos = new ByteArrayOutputStream();
     }
 
     @Override
@@ -96,7 +98,7 @@ public class HttpExchangeSuccessStub extends HttpExchange {
 
     @Override
     public OutputStream getResponseBody() {
-        return new ByteArrayOutputStream();
+        return baos;
     }
 
     @Override
