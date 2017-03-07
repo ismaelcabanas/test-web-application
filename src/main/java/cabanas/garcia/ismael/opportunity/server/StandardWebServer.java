@@ -21,7 +21,7 @@ public class StandardWebServer {
         this.server = theWebServer;
     }
 
-    public void start() {
+    public void start() throws UnavailableServerException {
         List<Class<? extends Controller>> controllersScanned = controllerScanner.scanner();
 
         Mapping controllerMapping = controllerMapper.mapping(controllersScanned);
@@ -32,11 +32,7 @@ public class StandardWebServer {
 
         server.addConfiguration(serverConfiguration);
 
-        try {
-            server.start();
-        } catch (UnavailableServerException e) {
-            throw new RuntimeException(e);
-        }
+        server.start();
     }
 
     public boolean isRunning() {
