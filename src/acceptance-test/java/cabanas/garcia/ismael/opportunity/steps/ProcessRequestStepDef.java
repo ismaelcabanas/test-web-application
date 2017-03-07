@@ -7,6 +7,7 @@ import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
+import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -24,9 +25,13 @@ import java.io.InputStreamReader;
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerMapper;
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.controllerScanner;
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.standardWebServer;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class ProcessRequestStepDef implements En {
 
+    private int statusCode;
     private String response;
     private int port;
 
@@ -43,6 +48,7 @@ public class ProcessRequestStepDef implements En {
             HttpGet httpGet = new HttpGet("http://localhost:" + port + page);
             try {
                 CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+                statusCode = httpResponse.getStatusLine().getStatusCode();
                 response = getStringFromInputStream(httpResponse.getEntity().getContent());
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -50,7 +56,10 @@ public class ProcessRequestStepDef implements En {
         });
 
         Then("^the web server returns (.*)$", (String expected) -> {
-            Assert.assertThat(response, Is.is(IsEqual.equalTo(expected)));
+            assertThat(response, is(equalTo(expected)));
+        });
+        And("^(\\d+) status code$", (Integer statusCode) -> {
+            assertThat(this.statusCode, is(equalTo(statusCode)));
         });
 
     }
