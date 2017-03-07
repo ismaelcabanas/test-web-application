@@ -1,37 +1,24 @@
 package cabanas.garcia.ismael.opportunity.mapper;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
+import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DefaultControllerMapper implements ControllerMapper{
+    private final Instantiator instantiator;
+
+    public DefaultControllerMapper(Instantiator instantiator) {
+        this.instantiator = instantiator;
+    }
+
     @Override
-    public Map<String, Class<? extends Controller>> mapping(List<Class<? extends Controller>> controllers) {
-        Map<String, Class<? extends Controller>> result = new HashMap<>();
-
+    public Mapping mapping(List<Class<? extends Controller>> controllers) {
+        Mapping mapping = new Mapping();
         controllers.forEach(aClass -> {
-
-            try {
-                Class<?> clazz = Class.forName(aClass.getCanonicalName());
-                Constructor<?> ctor = clazz.getConstructor();
-                Controller controller = (Controller) ctor.newInstance();
-                result.put(controller.getMappingPath(), aClass);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
+            Controller instance = instantiator.newInstance(aClass);
+            mapping.addMapping(instance.getMappingPath(), aClass);
         });
-        return result;
+        return mapping;
     }
 }
