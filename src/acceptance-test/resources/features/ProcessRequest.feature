@@ -24,5 +24,5 @@ Feature: Process request to web server
   Scenario: Request unknown page
     Given the web server is running on port 8005
     When I send a /unknownPage request to web server
-    Then the web server returns Resource Unknown
+    Then the web server returns Resource not found
     And 404 status code
