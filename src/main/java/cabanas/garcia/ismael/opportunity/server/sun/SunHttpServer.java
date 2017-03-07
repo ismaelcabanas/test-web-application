@@ -7,19 +7,15 @@ import cabanas.garcia.ismael.opportunity.server.Configuration;
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
-import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
 @Slf4j
 public class SunHttpServer implements WebServer {
-
-    private final int port;
 
     private State state;
 
@@ -27,8 +23,7 @@ public class SunHttpServer implements WebServer {
 
     private Configuration configuration;
 
-    public SunHttpServer(int port) {
-        this.port = port;
+    public SunHttpServer() {
         this.state = State.STOPPED;
     }
 
@@ -73,7 +68,7 @@ public class SunHttpServer implements WebServer {
     private HttpServer createServer() throws UnavailableServerException {
         HttpServer server = null;
         try {
-            server = HttpServer.create(new InetSocketAddress(port), 0);
+            server = HttpServer.create(new InetSocketAddress(configuration.getPort()), 0);
 
             Mapping mapping = configuration.getControllerMapping();
 

@@ -8,7 +8,10 @@ import cabanas.garcia.ismael.opportunity.view.View;
  * Created by XI317311 on 06/03/2017.
  */
 public class Test2Controller extends Controller {
-    private final String path;
+    private String path;
+
+    public Test2Controller() {
+    }
 
     public Test2Controller(String path) {
         super();

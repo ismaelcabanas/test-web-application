@@ -6,7 +6,10 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.view.View;
 
 public class Test1Controller extends Controller {
-    private final String path;
+    private String path;
+
+    public Test1Controller() {
+    }
 
     public Test1Controller(String path) {
         super();

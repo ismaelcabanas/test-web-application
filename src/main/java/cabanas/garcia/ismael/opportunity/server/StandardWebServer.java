@@ -7,7 +7,6 @@ import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.util.ConfigurationBuilder;
 
 import java.util.List;
-import java.util.Map;
 
 public class StandardWebServer {
     private final int port;
@@ -28,7 +27,8 @@ public class StandardWebServer {
         Mapping controllerMapping = controllerMapper.mapping(controllersScanned);
 
         server.addConfiguration(new ConfigurationBuilder()
-            .controllerMapping(controllerMapping));
+                .port(port)
+                .controllerMapping(controllerMapping));
 
         try {
             server.start();
@@ -39,5 +39,9 @@ public class StandardWebServer {
 
     public boolean isRunning() {
         return server.isRunning();
+    }
+
+    public void stop(){
+        server.stop();
     }
 }

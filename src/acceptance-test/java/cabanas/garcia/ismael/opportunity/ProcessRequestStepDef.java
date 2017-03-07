@@ -1,8 +1,12 @@
 package cabanas.garcia.ismael.opportunity;
 
+import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
+import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
+import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
+import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
+import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
+import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
-import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
-import cabanas.garcia.ismael.opportunity.server.WebServer;
 import cucumber.api.java8.En;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -17,24 +21,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/**
- * Created by XI317311 on 02/03/2017.
- */
 public class ProcessRequestStepDef implements En {
 
     private String response;
-    private WebServer standardWebServer;
+    private SunHttpServer httpServer;
+    private StandardWebServer standardWebServer;
+    private ControllerScanner controllerScanner;
+    private ControllerMapper controllerMapper;
     private int port;
 
     public ProcessRequestStepDef() {
+
+        Before(() -> {
+            controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller");
+            controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
+            httpServer = new SunHttpServer();
+        });
+
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
-            standardWebServer = new SunHttpServer(port);
-            try {
-                standardWebServer.start();
-            } catch (UnavailableServerException e) {
-                throw new RuntimeException(e);
-            }
+            standardWebServer = new StandardWebServer(port, controllerScanner, controllerMapper, new SunHttpServer());
+            standardWebServer.start();
         });
 
         When("^I send a (.*) request to web server$", (String page) -> {

@@ -6,4 +6,8 @@ public interface Configuration {
     Configuration controllerMapping(Mapping controllerMapping);
 
     Mapping getControllerMapping();
+
+    Configuration port(int port);
+
+    int getPort();
 }

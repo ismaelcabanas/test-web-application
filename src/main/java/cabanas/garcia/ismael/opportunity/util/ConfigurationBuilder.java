@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.server.Configuration;
 
 public class ConfigurationBuilder implements Configuration {
     private Mapping controllerMapping;
+    private int port;
 
     @Override
     public Configuration controllerMapping(Mapping controllerMapping) {
@@ -17,7 +18,18 @@ public class ConfigurationBuilder implements Configuration {
 
     @Override
     public Mapping getControllerMapping() {
-        return null;
+        return controllerMapping;
+    }
+
+    @Override
+    public Configuration port(int port) {
+        this.port = port;
+        return this;
+    }
+
+    @Override
+    public int getPort() {
+        return port;
     }
 
     private void addControllerMapping(Mapping controllerMapping) {
