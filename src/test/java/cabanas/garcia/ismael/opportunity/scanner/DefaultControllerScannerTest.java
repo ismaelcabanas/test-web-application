@@ -32,7 +32,7 @@ public class DefaultControllerScannerTest {
     @Test
     public void scanner_controllers_in_package_that_not_exist_controllers(){
         // given
-        DefaultControllerScanner sut = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.server");
+        DefaultControllerScanner sut = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.http");
 
         // when
         List<Class<? extends Controller>> actual = sut.scanner();

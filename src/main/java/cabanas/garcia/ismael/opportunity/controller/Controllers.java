@@ -16,16 +16,16 @@ public class Controllers {
         this.instantiator = instantiator;
     }
 
-    public Optional<Controller> select(Request request) {
+    public Controller select(Request request) {
         assert request != null;
 
         Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getPath());
 
         if(aControllerClass.isPresent()){
             Controller instanceControllerSelected = instantiator.newInstance(aControllerClass.get());
-            return Optional.of(instanceControllerSelected);
+            return instanceControllerSelected;
         }
 
-        return Optional.empty();
+        return new UnknownResourceController();
     }
 }

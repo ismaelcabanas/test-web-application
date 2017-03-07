@@ -45,13 +45,12 @@ public class ControllersTest {
         Request request = DefaultRequest.builder().path("/test1").build();
 
         // when
-        Optional<Controller> actual = sut.select(request);
+        Controller actual = sut.select(request);
 
         // then
         verify(instantiator).newInstance(Test1Controller.class);
 
-        assertThat(actual.isPresent(), is(equalTo(true)));
-        assertThat(actual.get().getMappingPath(), is(equalTo("/test1")));
+        assertThat(actual.getMappingPath(), is(equalTo("/test1")));
     }
 
     @Test
@@ -68,11 +67,11 @@ public class ControllersTest {
         Request request = DefaultRequest.builder().path("/test3").build();
 
         // when
-        Optional<Controller> actual = sut.select(request);
+        Controller actual = sut.select(request);
 
         // then
         verifyZeroInteractions(instantiator);
 
-        assertThat(actual.isPresent(), is(equalTo(false)));
+        assertThat(actual.getMappingPath(), is(equalTo(new UnknownResourceController().getMappingPath())));
     }
 }
