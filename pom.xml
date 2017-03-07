@@ -95,11 +95,9 @@
                                 is true
                             -->
                             <skipTests>${skipTests}</skipTests>
-                            <!--
                             <includes>
                                 <include>*CucumberRunner.java</include>
                             </includes>
-                            -->
                         </configuration>
                     </execution>
                 </executions>
