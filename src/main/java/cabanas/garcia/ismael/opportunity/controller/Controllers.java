@@ -2,29 +2,30 @@ package cabanas.garcia.ismael.opportunity.controller;
 
 
 import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
+import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 
-import java.util.List;
 import java.util.Optional;
 
 public class Controllers {
-    private final List<Controller> controllers;
+    private final Mapping mapping;
+    private final Instantiator instantiator;
 
-    public Controllers(List<Controller> controllers) {
-        this.controllers = controllers;
+    public Controllers(Mapping mapping, Instantiator instantiator) {
+        this.mapping = mapping;
+        this.instantiator = instantiator;
     }
 
-    public Controller select(Request request) {
-        assert controllers != null;
+    public Optional<Controller> select(Request request) {
         assert request != null;
 
-        Optional<Controller> optionalController = controllers
-                .stream()
-                .filter(controller -> controller.getMappingPath().equals(request.getPath()))
-                .findFirst();
+        Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getPath());
 
-        if(optionalController.isPresent())
-            return optionalController.get();
+        if(aControllerClass.isPresent()){
+            Controller instanceControllerSelected = instantiator.newInstance(aControllerClass.get());
+            return Optional.of(instanceControllerSelected);
+        }
 
-        return null;
+        return Optional.empty();
     }
 }
