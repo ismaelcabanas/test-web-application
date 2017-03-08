@@ -6,15 +6,12 @@ import cabanas.garcia.ismael.opportunity.controller.Controllers;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.Response;
-import cabanas.garcia.ismael.opportunity.view.UnknownResourceRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.util.Optional;
 
 public class SunHttpHandler implements HttpHandler{
     private final Controllers controllers;

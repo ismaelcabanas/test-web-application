@@ -22,8 +22,7 @@ public class Controllers {
         Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getPath());
 
         if(aControllerClass.isPresent()){
-            Controller instanceControllerSelected = instantiator.newInstance(aControllerClass.get());
-            return instanceControllerSelected;
+            return instantiator.newInstance(aControllerClass.get());
         }
 
         return new UnknownResourceController();
