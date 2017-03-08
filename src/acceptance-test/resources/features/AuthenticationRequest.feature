@@ -14,6 +14,6 @@ Feature:
     And the web server is running on port 8002
     When I send a /page1 request to web server
     Then the web server redirects me to login page
-    And I log in with user Ismael and password changeIt successfully
+    And if I log in with user Ismael and password changeIt successfully
     Then the web server returns Hello Ismael, you are in PAGE1
 

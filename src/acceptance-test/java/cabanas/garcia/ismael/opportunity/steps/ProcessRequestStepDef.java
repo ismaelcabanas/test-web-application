@@ -65,7 +65,7 @@ public class ProcessRequestStepDef implements En {
             // Write code here that turns the phrase above into concrete actions
             throw new PendingException();
         });
-        And("^I log in with user (.*) and password (.*) successfully$", (String user, String password) -> {
+        And("^if I log in with user (.*) and password (.*) successfully$", (String user, String password) -> {
             // Write code here that turns the phrase above into concrete actions
             throw new PendingException();
         });
