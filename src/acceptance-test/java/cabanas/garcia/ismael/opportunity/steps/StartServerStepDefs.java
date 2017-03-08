@@ -7,6 +7,7 @@ import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
+import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -30,6 +31,10 @@ public class StartServerStepDefs implements En {
         });
         Then("^the web server is down$", () -> {
             Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(false)));
+        });
+        Given("^private resource (.*)$", (String resource) -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
         });
     }
 }

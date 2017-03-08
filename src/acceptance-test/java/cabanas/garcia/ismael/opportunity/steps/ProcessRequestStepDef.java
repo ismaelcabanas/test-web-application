@@ -61,6 +61,14 @@ public class ProcessRequestStepDef implements En {
         And("^(\\d+) status code$", (Integer statusCode) -> {
             assertThat(this.statusCode, is(equalTo(statusCode)));
         });
+        Then("^the web server redirects me to login page$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        And("^I log in with user (.*) and password (.*) successfully$", (String user, String password) -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
 
     }
 
