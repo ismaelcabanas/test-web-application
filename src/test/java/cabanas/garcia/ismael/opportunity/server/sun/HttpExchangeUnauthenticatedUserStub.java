@@ -16,9 +16,11 @@ import java.net.URI;
  */
 public class HttpExchangeUnauthenticatedUserStub extends HttpExchange {
     private final String path;
+    private Headers headers;
 
     public HttpExchangeUnauthenticatedUserStub(String path) {
         this.path = path;
+        headers = new Headers();
     }
 
     @Override
@@ -28,7 +30,7 @@ public class HttpExchangeUnauthenticatedUserStub extends HttpExchange {
 
     @Override
     public Headers getResponseHeaders() {
-        return null;
+        return headers;
     }
 
     @Override
