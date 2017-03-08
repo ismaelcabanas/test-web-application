@@ -1,0 +1,13 @@
+@startuml
+actor User
+participant StandardWebServer
+participant HttpSunSecurityFilter
+participant HttpSunHandler
+
+User -> StandardWebServer : sendRequest
+StandardWebServer -> HttpSunSecurityFilter : filter(HttpExchange, Chain)
+HttpSunSecurityFilter -> HttpSunHandler : handle(HttpExchange)
+HttpSunHandler --> HttpSunSecurityFilter
+HttpSunSecurityFilter --> StandardWebServer : request authorized
+StandardWebServer --> User : response
+@enduml

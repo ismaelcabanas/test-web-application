@@ -1,19 +1,18 @@
 @startuml
-actor Evaluator
+actor Main
 participant StandardWebServer
 participant DefaultControllerScanner
-participant ControllerMapper
-participant SunHttpHandler
+participant DefaultControllerMapper
+participant Mapping
 participant SunHttpServer
 
-Evaluator -> StandardWebServer : start()
+Main -> StandardWebServer : new()
 StandardWebServer -> DefaultControllerScanner : scanner()
-DefaultControllerScanner -> StandardWebServer : controllers:List<Class<Controller>>
-StandardWebServer -> ControllerMapper : mapping(List<Class<Controller>>
-ControllerMapper -> StandardWebServer : mapper:Map<String, Class<Controller>>
-StandardWebServer -> SunHttpHandler : new(Map<String, Class<Controller>>)
-SunHttpHandler -> StandardWebServer : httpHandler
-StandardWebServer -> SunHttpServer : new(httpHandler)
-SunHttpHandler -> StandardWebServer : server
-StandardWebServer -> SunHttpServer : start()
+DefaultControllerScanner -> StandardWebServer : controllersScanned:List<Class<Controller>>
+StandardWebServer -> DefaultControllerMapper : mapping(List<Class<Controller>>
+DefaultControllerMapper -> Mapping : new()
+Mapping -> DefaultControllerMapper : mapper : Mapping
+DefaultControllerMapper -> StandardWebServer : mapper:Mapping
+StandardWebServer -> SunHttpServer : addConfiguration()
+SunHttpServer -> StandardWebServer : server configured
 @enduml
