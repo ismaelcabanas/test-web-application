@@ -82,6 +82,10 @@ public class SunHttpServer implements WebServer {
             HttpContext rootContext = server.createContext("/", handler);
 
             SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter();
+            authenticationFilter.getConfiguration().addPrivateResource("/page1");
+            authenticationFilter.getConfiguration().addPrivateResource("/page2");
+            authenticationFilter.getConfiguration().addPrivateResource("/page3");
+            authenticationFilter.getConfiguration().redirectPath("/login");
 
             rootContext.getFilters().add(authenticationFilter);
 
