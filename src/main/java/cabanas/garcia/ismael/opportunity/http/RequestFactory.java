@@ -5,15 +5,20 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class RequestFactory {
 
-    private RequestFactory(){}
+    private RequestFactory(){
+    }
 
     public static Request create(HttpExchange httpExchange) {
-        return DefaultRequest.builder()
-                .path(extractPathFrom(httpExchange))
-                .build();
+        assert httpExchange != null;
+
+        ExtractorHttpExchange extractorHttpExchange = new ExtractorHttpExchange(httpExchange);
+
+        return
+            DefaultRequest.builder()
+                    .path(extractorHttpExchange.extractPathFrom())
+                    .session(extractorHttpExchange.extractSessionFrom())
+                    .build();
     }
 
-    private static String extractPathFrom(HttpExchange httpExchange) {
-        return httpExchange.getRequestURI().getPath();
-    }
+
 }

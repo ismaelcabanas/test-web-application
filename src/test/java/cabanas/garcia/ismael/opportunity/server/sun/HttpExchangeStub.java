@@ -1,25 +1,32 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpPrincipal;
+import com.sun.net.httpserver.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 public class HttpExchangeStub extends HttpExchange {
+    private Headers requestHeaders;
+    private Headers responseHeaders;
+
+    public HttpExchangeStub() {
+        requestHeaders = new Headers();
+        responseHeaders = new Headers();
+    }
+
     @Override
     public Headers getRequestHeaders() {
-        return null;
+        return requestHeaders;
     }
 
     @Override
     public Headers getResponseHeaders() {
-        return null;
+        return responseHeaders;
     }
 
     @Override
@@ -34,7 +41,47 @@ public class HttpExchangeStub extends HttpExchange {
 
     @Override
     public HttpContext getHttpContext() {
-        return null;
+        return new HttpContext() {
+            @Override
+            public HttpHandler getHandler() {
+                return null;
+            }
+
+            @Override
+            public void setHandler(HttpHandler httpHandler) {
+
+            }
+
+            @Override
+            public String getPath() {
+                return "/";
+            }
+
+            @Override
+            public HttpServer getServer() {
+                return null;
+            }
+
+            @Override
+            public Map<String, Object> getAttributes() {
+                return null;
+            }
+
+            @Override
+            public List<Filter> getFilters() {
+                return null;
+            }
+
+            @Override
+            public Authenticator setAuthenticator(Authenticator authenticator) {
+                return null;
+            }
+
+            @Override
+            public Authenticator getAuthenticator() {
+                return null;
+            }
+        };
     }
 
     @Override

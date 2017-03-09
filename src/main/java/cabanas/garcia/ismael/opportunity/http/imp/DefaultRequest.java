@@ -7,11 +7,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Optional;
+
 @Builder
 @EqualsAndHashCode
 @ToString
 @Getter
 public class DefaultRequest implements Request{
     private String path;
-    private Session session;
+    private Optional<Session> session;
 }
