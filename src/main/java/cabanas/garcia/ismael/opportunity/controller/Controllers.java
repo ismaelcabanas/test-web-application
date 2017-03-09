@@ -19,7 +19,7 @@ public class Controllers {
     public Controller select(Request request) {
         assert request != null;
 
-        Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getPath());
+        Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getPath(), request.getMethod());
 
         if(aControllerClass.isPresent()){
             return instantiator.newInstance(aControllerClass.get());
