@@ -1,7 +1,9 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.http.*;
-import cabanas.garcia.ismael.opportunity.view.LoginRawView;
+import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.http.RequestFactory;
+import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
+import cabanas.garcia.ismael.opportunity.http.Session;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -27,8 +29,7 @@ public class SunHttpAuthenticationFilter extends Filter{
             httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
             Optional<Session> session = request.getSession();
             if(!session.isPresent()){
-                Response response = new LoginRawView().render();
-                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, response.getContent().length);
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
                 return;
             }
             chain.doFilter(httpExchange);

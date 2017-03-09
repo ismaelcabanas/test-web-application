@@ -1,8 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.http.Response;
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
-import cabanas.garcia.ismael.opportunity.view.LoginRawView;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -63,14 +61,12 @@ public class SunHttpAuthenticationFilterTest {
 
         HttpExchange httpExchangeSpy = Mockito.spy(httpExchange);
 
-        Response expectedResponse = new LoginRawView().render();
-
         // when
         sut.doFilter(httpExchangeSpy, chain);
 
         // then
         verifyZeroInteractions(chain);
-        verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, expectedResponse.getContent().length);
+        verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
     }
 
     @Test
