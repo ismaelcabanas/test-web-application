@@ -95,6 +95,7 @@ public class HttpExchangeStub extends HttpExchange {
 
     @Override
     public InputStream getRequestBody() {
+
         return null;
     }
 
