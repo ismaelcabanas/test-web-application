@@ -4,7 +4,7 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.view.UnknownResourceRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
-public class UnknownResourceController implements Controller {
+public class UnknownResourceController extends AbstractController {
     @Override
     public View process(Request request) {
         return new UnknownResourceRawView();

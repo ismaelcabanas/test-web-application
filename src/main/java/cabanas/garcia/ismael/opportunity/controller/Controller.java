@@ -7,4 +7,6 @@ public interface Controller {
     View process(Request request);
 
     abstract String getMappingPath();
+
+    String getMethod();
 }

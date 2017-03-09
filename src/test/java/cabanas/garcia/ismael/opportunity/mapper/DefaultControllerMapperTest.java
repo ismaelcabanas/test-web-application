@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.mapper;
 
+import cabanas.garcia.ismael.opportunity.controller.AbstractController;
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
@@ -49,7 +50,7 @@ public class DefaultControllerMapperTest {
         assertThat(actual.getController(TEST4_PATH).get(), is(equalTo(Test4Controller.class)));
     }
 
-    class Test3Controller implements Controller{
+    class Test3Controller extends AbstractController {
         @Override
         public View process(Request request) {
             return null;
@@ -61,7 +62,7 @@ public class DefaultControllerMapperTest {
         }
     }
 
-    class Test4Controller implements Controller{
+    class Test4Controller extends AbstractController{
         @Override
         public View process(Request request) {
             return null;

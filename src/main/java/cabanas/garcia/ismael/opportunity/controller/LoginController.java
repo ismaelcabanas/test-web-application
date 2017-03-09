@@ -4,7 +4,7 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.view.LoginRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
-public class LoginController implements Controller{
+public class LoginController extends AbstractController{
     @Override
     public View process(Request request) {
         return new LoginRawView();

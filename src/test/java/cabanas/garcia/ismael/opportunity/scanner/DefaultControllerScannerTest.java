@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.scanner;
 
+import cabanas.garcia.ismael.opportunity.controller.AbstractController;
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.http.Request;
@@ -42,7 +43,7 @@ public class DefaultControllerScannerTest {
         assertThat(actual.size(), is(equalTo(0)));
     }
 
-    private class Test3Controller implements Controller{
+    private class Test3Controller extends AbstractController{
 
         @Override
         public View process(Request request) {
@@ -55,7 +56,7 @@ public class DefaultControllerScannerTest {
         }
     }
 
-    private class Test4Controller implements Controller{
+    private class Test4Controller extends AbstractController{
 
         @Override
         public View process(Request request) {
