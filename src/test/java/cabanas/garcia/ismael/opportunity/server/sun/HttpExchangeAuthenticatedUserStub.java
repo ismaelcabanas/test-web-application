@@ -1,9 +1,8 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class HttpExchangeAuthenticatedUserStub extends HttpExchangeUnauthenticatedUserStub {
+public class HttpExchangeAuthenticatedUserStub extends HttpExchangeWithSessionCookieStub {
+    private static final String SESSION_ID = "aSessionId";
     public HttpExchangeAuthenticatedUserStub(String path) {
-        super(path);
+        super(path, SESSION_ID);
     }
 }

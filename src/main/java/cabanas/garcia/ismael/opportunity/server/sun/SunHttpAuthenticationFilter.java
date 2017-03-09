@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SunHttpAuthenticationFilter extends Filter{
 
@@ -24,11 +25,13 @@ public class SunHttpAuthenticationFilter extends Filter{
 
         if(isPrivateResource(request.getPath())){
             httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
-            Session session = request.getSession();
-            if(session == null){
+            Optional<Session> session = request.getSession();
+            if(!session.isPresent()){
                 Response response = new LoginRawView().render();
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, response.getContent().length);
+                return;
             }
+            chain.doFilter(httpExchange);
         }
         else {
             chain.doFilter(httpExchange);

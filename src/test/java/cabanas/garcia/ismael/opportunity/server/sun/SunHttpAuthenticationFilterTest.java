@@ -6,13 +6,10 @@ import cabanas.garcia.ismael.opportunity.view.LoginRawView;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.net.HttpURLConnection;
@@ -20,13 +17,42 @@ import java.net.HttpURLConnection;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SunHttpAuthenticationFilterTest {
 
     @Mock
     private Filter.Chain chain;
+
+    @Test
+    public void if_authenticated_user_request_a_private_resource_then_the_request_is_processed() throws Exception{
+        // given
+        HttpExchange httpExchange = new HttpExchangeAuthenticatedUserStub("/page1");
+        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        sut.getConfiguration().addPrivateResource("/page1");
+
+        // when
+        sut.doFilter(httpExchange, chain);
+
+        // then
+        verify(chain).doFilter(httpExchange);
+    }
+
+    @Test
+    public void if_authenticated_user_request_a_non_private_resource_then_the_request_is_processed() throws Exception{
+        // given
+        HttpExchange httpExchange = new HttpExchangeAuthenticatedUserStub("/page2");
+        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        sut.getConfiguration().addPrivateResource("/page1");
+
+        // when
+        sut.doFilter(httpExchange, chain);
+
+        // then
+        verify(chain).doFilter(httpExchange);
+    }
 
     @Test
     public void if_unauthenticated_user_request_a_private_resource_then_redirect_to_login_view() throws Exception{
@@ -65,17 +91,17 @@ public class SunHttpAuthenticationFilterTest {
     }
 
     @Test
-    public void user_request_a_non_private_resource_then_process_request() throws Exception{
+    public void if_unauthenticated_user_request_a_non_private_resource_then_request_is_processed() throws Exception{
         // given
-        HttpExchange httpExchange = new HttpExchangeUnauthenticatedUserStub("/page1");
+        HttpExchange httpExchange = new HttpExchangeUnauthenticatedUserStub("/publicPage");
         SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
-        HttpExchange httpExchangeSpy = Mockito.spy(httpExchange);
+        sut.getConfiguration().addPrivateResource("/page1");
 
         // when
-        sut.doFilter(httpExchangeSpy, chain);
+        sut.doFilter(httpExchange, chain);
 
         // then
-        verify(chain).doFilter(httpExchangeSpy);
+        verify(chain).doFilter(httpExchange);
     }
 
 /*    @Test
