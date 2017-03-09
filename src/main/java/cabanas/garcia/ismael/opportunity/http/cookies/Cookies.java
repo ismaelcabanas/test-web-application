@@ -5,17 +5,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class Cookies {
-    private List<Cookie> cookies = new ArrayList<>();
+    private List<Cookie> cookieList = new ArrayList<>();
 
     public void add(final Cookie cookie) {
-        cookies.add(cookie);
+        cookieList.add(cookie);
     }
 
     public Optional<Cookie> get(String cookieName) {
-        Optional<Cookie> myCookie = cookies.stream().filter(
+        return cookieList.stream().filter(
                 cookie -> cookie.getName().equals(cookieName)
         ).findFirst();
-
-        return myCookie;
     }
 }
