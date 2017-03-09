@@ -16,4 +16,5 @@ import java.util.Optional;
 public class DefaultRequest implements Request{
     private String path;
     private Optional<Session> session;
+    private String method;
 }

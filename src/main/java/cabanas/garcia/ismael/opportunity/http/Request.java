@@ -6,4 +6,6 @@ public interface Request {
     String getPath();
 
     Optional<Session> getSession();
+
+    String getMethod();
 }
