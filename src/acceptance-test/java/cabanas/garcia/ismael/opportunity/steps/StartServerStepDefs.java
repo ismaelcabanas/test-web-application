@@ -33,8 +33,7 @@ public class StartServerStepDefs implements En {
             Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(false)));
         });
         Given("^private resource (.*)$", (String resource) -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
+            // TODO Configure private resources to server here
         });
     }
 }

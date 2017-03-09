@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     features = {"src/acceptance-test/resources/features/"}
+    ,tags = "~@ignore"
 )
 public class CucumberRunner {
 }
