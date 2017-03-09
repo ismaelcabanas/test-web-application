@@ -4,7 +4,7 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.view.View;
 
-public class Test1PostController extends AbstractController {
+public class Test1PostController extends Controller {
     private String path;
 
     public Test1PostController() {

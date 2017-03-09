@@ -1,12 +1,15 @@
 package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.view.View;
 
-public interface Controller {
-    View process(Request request);
+public abstract class Controller {
+    public abstract View process(Request request);
 
-    abstract String getMappingPath();
+    public abstract String getMappingPath();
 
-    String getMethod();
+    public String getMethod() {
+        return RequestMethodConstants.GET;
+    }
 }

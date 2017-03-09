@@ -5,7 +5,7 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.view.View;
 
-public class Test1Controller extends AbstractController {
+public class Test1Controller extends Controller {
     private String path;
 
     public Test1Controller() {
