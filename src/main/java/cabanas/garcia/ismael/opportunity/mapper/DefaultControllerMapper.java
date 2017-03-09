@@ -17,7 +17,7 @@ public class DefaultControllerMapper implements ControllerMapper{
         Mapping mapping = new Mapping();
         controllers.forEach(aClass -> {
             Controller instance = instantiator.newInstance(aClass);
-            mapping.addMapping(instance.getMappingPath(), aClass);
+            mapping.addMapping(instance.getMappingPath(), instance.getMethod(), aClass);
         });
         return mapping;
     }
