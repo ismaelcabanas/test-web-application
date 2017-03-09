@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import com.sun.net.httpserver.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,10 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpExchangeStub extends HttpExchange {
+    private OutputStream baos;
+
     private Headers requestHeaders;
     private Headers responseHeaders;
 
     public HttpExchangeStub() {
+        baos = new ByteArrayOutputStream();
         requestHeaders = new Headers();
         responseHeaders = new Headers();
     }
@@ -96,7 +100,7 @@ public class HttpExchangeStub extends HttpExchange {
 
     @Override
     public OutputStream getResponseBody() {
-        return null;
+        return baos;
     }
 
     @Override
