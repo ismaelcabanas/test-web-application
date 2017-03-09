@@ -8,4 +8,6 @@ public interface Request {
     Optional<Session> getSession();
 
     String getMethod();
+
+    String getParameter(String paramName);
 }
