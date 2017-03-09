@@ -7,6 +7,7 @@ import cabanas.garcia.ismael.opportunity.server.Configuration;
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import java.net.InetSocketAddress;
 
 @Slf4j
 public class SunHttpServer implements WebServer {
+
+    private static SunHttpServer instance;
 
     private State state;
 
@@ -76,7 +79,12 @@ public class SunHttpServer implements WebServer {
 
             HttpHandler handler = new SunHttpHandler(controllers);
 
-            server.createContext("/", handler);
+            HttpContext rootContext = server.createContext("/", handler);
+
+            SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter();
+
+            rootContext.getFilters().add(authenticationFilter);
+
             server.setExecutor(null);
 
         } catch (IOException e) {
@@ -85,4 +93,14 @@ public class SunHttpServer implements WebServer {
         return server;
     }
 
+    public static SunHttpServer getInstance() {
+        if(instance == null){
+            instance = new SunHttpServer();
+        }
+        return instance;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
 }
