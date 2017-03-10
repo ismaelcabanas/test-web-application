@@ -7,11 +7,8 @@ import lombok.ToString;
 
 @Builder
 @EqualsAndHashCode
-@ToString
 @Getter
-public class User {
-    private String username;
-    private String password;
-    private Roles roles;
-
+@ToString
+public class Role {
+    private String name;
 }

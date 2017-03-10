@@ -10,6 +10,8 @@ import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -27,6 +29,9 @@ public class UserCreateControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Captor
+    private ArgumentCaptor<User> userParam;
 
     @Test
     public void method_is_post(){
@@ -66,7 +71,7 @@ public class UserCreateControllerTest {
     }
 
     @Test
-    public void process_request_return_view_with_user_created_data(){
+    public void process_request_return_view_with_status_code_201(){
         // given
         UserCreateController sut = new UserCreateController(userService);
         Request requestWithUserData = createRequestWithUserData("ismael", "changeIt", "Admin,Page1");
@@ -76,6 +81,22 @@ public class UserCreateControllerTest {
 
         // then
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_CREATED)));
+    }
+
+    @Test
+    public void process_request_create_user_with_data_from_request(){
+        // given
+        UserCreateController sut = new UserCreateController(userService);
+        Request requestWithUserData = createRequestWithUserData("ismael", "changeIt", "Admin,Page1");
+
+        // when
+        View actual = sut.process(requestWithUserData);
+
+        // then
+        verify(userService).create(userParam.capture());
+
+        assertThat(userParam.getValue().getUsername(), is(equalTo("ismael")));
+        assertThat(userParam.getValue().getRoles().size(), is(equalTo(2)));
     }
 
     private Request createRequestWithUserData(String username, String password, String roles) {
