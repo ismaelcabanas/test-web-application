@@ -7,11 +7,11 @@ import java.io.InputStream;
 import java.net.URI;
 
 
-public class HttpExchangeWithFailedCredentials extends HttpExchangeStub {
+public class HttpExchangeWithCredentials extends HttpExchangeStub {
     private static final String payload = "username=ismael&" +
             "password=failed";
 
-    public HttpExchangeWithFailedCredentials() {
+    public HttpExchangeWithCredentials() {
         super();
         getRequestHeaders().add("Content-type", "application/x-www-form-urlencoded");
     }

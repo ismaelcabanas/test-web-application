@@ -23,6 +23,9 @@ public class DefaultRequest implements Request{
 
     @Override
     public String getParameter(String paramName) {
+        Optional<Parameter> parameter = parameters.stream().filter(param -> param.getName().equals(paramName)).findFirst();
+        if(parameter.isPresent())
+            return parameter.get().getValue();
         return null;
     }
 }
