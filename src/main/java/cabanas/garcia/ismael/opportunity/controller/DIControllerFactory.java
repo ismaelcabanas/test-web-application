@@ -18,13 +18,15 @@ public class DIControllerFactory {
     }
 
     public Controller getInstance(Class<? extends Controller> clazz) throws InstantiationException {
-        if(clazz.getName().equals(LoginPostController.class.getName())){
+        if(clazz.getName().equals(LoginPostController.class.getName())
+                || clazz.getName().equals(UserCreateController.class.getName())){
             try {
                 return clazz.getConstructor(UserService.class).newInstance(new DefaultUserService());
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
             }
         }
+
 
         return instantiator.newInstance(clazz);
     }
