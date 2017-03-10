@@ -73,7 +73,7 @@ public class ProcessRequestStepDef implements En {
             // Write code here that turns the phrase above into concrete actions
             throw new PendingException();
         });
-        Given("^incorrect credentials (.*)/(.*)", (String user, String password) -> {
+        Given("^credentials (.*)/(.*)", (String user, String password) -> {
             this.username = user;
             this.password = password;
         });

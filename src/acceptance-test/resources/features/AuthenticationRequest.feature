@@ -4,11 +4,18 @@ Feature: Authentication
   In order to only authenticated users can access to private resources
 
   Scenario: Authentication failed
-    Given incorrect credentials ismael/pass
+    Given credentials ismael/pass
     And the web server is running on port 8002
     When I send try to login to web server
     Then the web server returns Unauthorized resource
     And 401 status code
+
+  Scenario: Authentication failed
+    Given credentials ismael/changeIt
+    And the web server is running on port 8002
+    When I send try to login to web server
+    Then the web server returns Home resource
+    And 200 status code
 
   @ignore
   Scenario: Unauthenticated users cannot access to private resources
