@@ -6,6 +6,8 @@ import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Optional;
+
 public class InMemoryUserRepositoryTest {
 
     @Test
@@ -18,9 +20,9 @@ public class InMemoryUserRepositoryTest {
         sut.persist(newUser);
 
         // then
-        User userPersisted = sut.read(newUser.getUsername());
+        Optional<User> userPersisted = sut.read(newUser.getUsername());
 
-        Assert.assertThat(userPersisted.getUsername(), Is.is(IsEqual.equalTo("ismael")));
+        Assert.assertThat(userPersisted.get().getUsername(), Is.is(IsEqual.equalTo("ismael")));
     }
 
     @Test
@@ -34,8 +36,8 @@ public class InMemoryUserRepositoryTest {
         sut = InMemoryUserRepository.getInstance();
 
         // then
-        User userPersisted = sut.read(newUser.getUsername());
+        Optional<User> userPersisted = sut.read(newUser.getUsername());
 
-        Assert.assertThat(userPersisted.getUsername(), Is.is(IsEqual.equalTo("ismael")));
+        Assert.assertThat(userPersisted.get().getUsername(), Is.is(IsEqual.equalTo("ismael")));
     }
 }

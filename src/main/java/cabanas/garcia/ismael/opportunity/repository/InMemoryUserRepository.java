@@ -4,6 +4,7 @@ import cabanas.garcia.ismael.opportunity.model.User;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class InMemoryUserRepository implements UserRepository {
 
@@ -20,8 +21,8 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public User read(String username) {
-        return repository.get(username);
+    public Optional<User> read(String username) {
+        return Optional.ofNullable(repository.get(username));
     }
 
     public static InMemoryUserRepository getInstance(){

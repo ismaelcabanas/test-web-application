@@ -14,12 +14,13 @@ public class DefaultUserService implements UserService{
 
     @Override
     public Optional<User> login(String username, String password) {
-        if(username == null || password == null)
-            return Optional.empty();
-
-        if(username.equalsIgnoreCase("ismael")
-                && password.equalsIgnoreCase("changeIt")){
-            return Optional.of(User.builder().username(username).build());
+        Optional<User> userFromRepository = userRepository.read(username);
+        if(userFromRepository.isPresent()){
+            if(userFromRepository.get().getPassword().equals(password))
+                return Optional.of(User.builder()
+                        .username(userFromRepository.get().getUsername())
+                        .roles(userFromRepository.get().getRoles())
+                        .build());
         }
 
         return Optional.empty();

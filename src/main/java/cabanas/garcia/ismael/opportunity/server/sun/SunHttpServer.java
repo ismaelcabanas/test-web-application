@@ -4,14 +4,14 @@ import cabanas.garcia.ismael.opportunity.controller.Controllers;
 import cabanas.garcia.ismael.opportunity.controller.DIControllerFactory;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
+import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.server.Configuration;
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import cabanas.garcia.ismael.opportunity.server.WebServer;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
+import cabanas.garcia.ismael.opportunity.service.UserService;
+import com.sun.net.httpserver.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -92,7 +92,14 @@ public class SunHttpServer implements WebServer {
             rootContext.getFilters().add(authenticationFilter);
 
             HttpContext userAPIContext = server.createContext("/users", handler);
-
+            BasicAuthenticator restBasicAuthenticator = new BasicAuthenticator("testwebapplication") {
+                @Override
+                public boolean checkCredentials (String username, String password) {
+                    UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
+                    return userService.login(username, password).isPresent();
+                }
+            };
+            userAPIContext.setAuthenticator(restBasicAuthenticator);
             server.setExecutor(null);
 
         } catch (IOException e) {
