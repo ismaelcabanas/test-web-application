@@ -17,4 +17,9 @@ public class DefaultUserService implements UserService{
 
         return Optional.empty();
     }
+
+    @Override
+    public User create(User newUser) {
+        return null;
+    }
 }

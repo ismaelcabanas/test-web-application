@@ -1,11 +1,9 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import com.sun.net.httpserver.HttpExchange;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class HttpExchangeWithCredentialsAndRedirectParam extends HttpExchangeWithCredentials {
+public class HttpExchangeWithCredentialsAndRedirectParam extends HttpExchangeWithCredentialsStub {
     private static final String payload = "username=ismael&" +
             "password=failed&redirect=/page1";
     @Override

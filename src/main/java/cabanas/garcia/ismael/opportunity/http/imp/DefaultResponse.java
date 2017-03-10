@@ -13,4 +13,5 @@ import lombok.ToString;
 public class DefaultResponse implements Response{
     private int statusCode;
     private byte[] content;
+    private Object model;
 }

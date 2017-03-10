@@ -3,7 +3,7 @@ package cabanas.garcia.ismael.opportunity.controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentials;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParam;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
@@ -106,7 +106,7 @@ public class LoginPostControllerTest {
     }
 
     private Request createRequestWithCredentials() {
-        HttpExchange httpExchange = new HttpExchangeWithCredentials();
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsStub();
         return RequestFactory.create(httpExchange);
     }
 }
