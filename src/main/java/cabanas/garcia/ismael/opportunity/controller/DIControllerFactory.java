@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.InstantiationException;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
-import cabanas.garcia.ismael.opportunity.repository.DefaultUserRepository;
+import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class DIControllerFactory {
         if(clazz.getName().equals(LoginPostController.class.getName())
                 || clazz.getName().equals(UserCreateController.class.getName())){
             try {
-                return clazz.getConstructor(UserService.class).newInstance(new DefaultUserService(new DefaultUserRepository()));
+                return clazz.getConstructor(UserService.class).newInstance(new DefaultUserService(new InMemoryUserRepository()));
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
             }
