@@ -13,7 +13,7 @@ public class LoginRawView implements View{
             "\t<p>Introduce your credentials</p>\t\n" +
             "\t<form action=\"/login\" method=\"post\">\n" +
             "\t\t<label for=\"user\">User</label>\n" +
-            "\t\t<input type=\"text\" name=\"user\">\n" +
+            "\t\t<input type=\"text\" name=\"username\">\n" +
             "\t\t<label for=\"password\">Password</label>\n" +
             "\t\t<input type=\"password\" name=\"password\">\n" +
             "\t\t<input type=\"submit\" value=\"Login\">\n" +
