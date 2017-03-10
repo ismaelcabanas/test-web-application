@@ -22,7 +22,7 @@ public class DIControllerFactory {
         if(clazz.getName().equals(LoginPostController.class.getName())
                 || clazz.getName().equals(UserCreateController.class.getName())){
             try {
-                return clazz.getConstructor(UserService.class).newInstance(new DefaultUserService(new InMemoryUserRepository()));
+                return clazz.getConstructor(UserService.class).newInstance(new DefaultUserService(InMemoryUserRepository.getInstance()));
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
             }

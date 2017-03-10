@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryUserRepository implements UserRepository {
+
+    private static InMemoryUserRepository instance = null;
+
+    private InMemoryUserRepository(){}
+
     private Map<String, User> repository = new HashMap<>();
 
     @Override
@@ -17,5 +22,11 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User read(String username) {
         return repository.get(username);
+    }
+
+    public static InMemoryUserRepository getInstance(){
+        if(instance == null)
+            instance = new InMemoryUserRepository();
+        return instance;
     }
 }
