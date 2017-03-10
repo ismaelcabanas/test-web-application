@@ -100,7 +100,7 @@ public class SunHttpHandlerTest {
     }
 
 
-    private class MyController implements Controller{
+    private class MyController extends Controller{
         @Override
         public View process(Request request) {
             return new MyView();

@@ -3,7 +3,6 @@ package cabanas.garcia.ismael.opportunity.controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultRequest;
-import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +21,13 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 public class ControllersTest {
 
     @Mock
-    private Instantiator instantiator;
+    private DIControllerFactory controllerFactory;
 
     @Before
     public void setUp(){
-        Mockito.when(instantiator.newInstance(Test1Controller.class)).thenReturn(new Test1Controller("/test1"));
-        Mockito.when(instantiator.newInstance(Test2Controller.class)).thenReturn(new Test2Controller("/test2"));
-        Mockito.when(instantiator.newInstance(Test1PostController.class)).thenReturn(new Test1PostController("/test1"));
+        Mockito.when(controllerFactory.getInstance(Test1Controller.class)).thenReturn(new Test1Controller("/test1"));
+        Mockito.when(controllerFactory.getInstance(Test2Controller.class)).thenReturn(new Test2Controller("/test2"));
+        Mockito.when(controllerFactory.getInstance(Test1PostController.class)).thenReturn(new Test1PostController("/test1"));
     }
 
     @Test
@@ -42,7 +41,7 @@ public class ControllersTest {
         mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
         mapping.addMapping(controller1Post.getMappingPath(), controller1Post.getMethod(),Test1PostController.class);
 
-        Controllers sut = new Controllers(mapping, instantiator);
+        Controllers sut = new Controllers(mapping, controllerFactory);
 
         Request request = DefaultRequest.builder()
                 .path("/test1")
@@ -53,7 +52,7 @@ public class ControllersTest {
         Controller actual = sut.select(request);
 
         // then
-        verify(instantiator).newInstance(Test1PostController.class);
+        verify(controllerFactory).getInstance(Test1PostController.class);
 
         assertThat(actual.getMappingPath(), is(equalTo("/test1")));
     }
@@ -70,7 +69,7 @@ public class ControllersTest {
         mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
         mapping.addMapping(controller1Post.getMappingPath(), controller1Post.getMethod(),Test1PostController.class);
 
-        Controllers sut = new Controllers(mapping, instantiator);
+        Controllers sut = new Controllers(mapping, controllerFactory);
 
         Request request = DefaultRequest.builder().path("/test1").method(RequestMethodConstants.GET).build();
 
@@ -78,7 +77,7 @@ public class ControllersTest {
         Controller actual = sut.select(request);
 
         // then
-        verify(instantiator).newInstance(Test1Controller.class);
+        verify(controllerFactory).getInstance(Test1Controller.class);
 
         assertThat(actual.getMappingPath(), is(equalTo("/test1")));
     }
@@ -92,7 +91,7 @@ public class ControllersTest {
         mapping.addMapping(controller1.getMappingPath(), Test1Controller.class);
         mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
 
-        Controllers sut = new Controllers(mapping, instantiator);
+        Controllers sut = new Controllers(mapping, controllerFactory);
 
         Request request = DefaultRequest.builder().path("/test3").build();
 
@@ -100,7 +99,7 @@ public class ControllersTest {
         Controller actual = sut.select(request);
 
         // then
-        verifyZeroInteractions(instantiator);
+        verifyZeroInteractions(controllerFactory);
 
         assertThat(actual.getMappingPath(), is(equalTo(new UnknownResourceController().getMappingPath())));
     }

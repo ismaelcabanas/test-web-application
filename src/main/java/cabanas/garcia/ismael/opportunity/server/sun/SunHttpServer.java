@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
+import cabanas.garcia.ismael.opportunity.controller.DIControllerFactory;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.server.Configuration;
@@ -75,7 +76,7 @@ public class SunHttpServer implements WebServer {
 
             Mapping mapping = configuration.getControllerMapping();
 
-            Controllers controllers = new Controllers(mapping, new ConstructorInstantiator());
+            Controllers controllers = new Controllers(mapping, new DIControllerFactory(new ConstructorInstantiator()));
 
             HttpHandler handler = new SunHttpHandler(controllers);
 

@@ -2,18 +2,17 @@ package cabanas.garcia.ismael.opportunity.controller;
 
 
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 
 import java.util.Optional;
 
 public class Controllers {
     private final Mapping mapping;
-    private final Instantiator instantiator;
+    private final DIControllerFactory controllerFactory;
 
-    public Controllers(Mapping mapping, Instantiator instantiator) {
+    public Controllers(Mapping mapping, DIControllerFactory controllerFactory) {
         this.mapping = mapping;
-        this.instantiator = instantiator;
+        this.controllerFactory = controllerFactory;
     }
 
     public Controller select(Request request) {
@@ -22,7 +21,7 @@ public class Controllers {
         Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getPath(), request.getMethod());
 
         if(aControllerClass.isPresent()){
-            return instantiator.newInstance(aControllerClass.get());
+            return controllerFactory.getInstance(aControllerClass.get());
         }
 
         return new UnknownResourceController();
