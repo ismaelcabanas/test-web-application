@@ -25,17 +25,14 @@ public class SunHttpAuthenticationFilter extends Filter{
         String path = extractorHttpExchange.extractPathFrom();
 
         if(isPrivateResource(path)){
-            httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
             Optional<Session> session = extractorHttpExchange.extractSessionFrom();
             if(!session.isPresent()){
+                httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
                 return;
             }
-            chain.doFilter(httpExchange);
         }
-        else {
-            chain.doFilter(httpExchange);
-        }
+        chain.doFilter(httpExchange);
     }
 
     private boolean isPrivateResource(String resource) {
