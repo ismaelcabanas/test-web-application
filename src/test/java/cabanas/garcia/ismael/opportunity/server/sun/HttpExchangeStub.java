@@ -2,10 +2,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import com.sun.net.httpserver.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.List;
@@ -95,8 +92,8 @@ public class HttpExchangeStub extends HttpExchange {
 
     @Override
     public InputStream getRequestBody() {
-
-        return null;
+        InputStream is = new ByteArrayInputStream("".getBytes());
+        return is;
     }
 
     @Override
