@@ -13,7 +13,10 @@ import java.util.Optional;
 
 public class LoginPostController extends Controller{
 
-    private final UserService userService;
+    private UserService userService;
+
+    public LoginPostController() {
+    }
 
     public LoginPostController(UserService userService) {
         this.userService = userService;
