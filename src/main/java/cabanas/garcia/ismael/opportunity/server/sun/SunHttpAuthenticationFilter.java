@@ -1,9 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
-import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.*;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -23,11 +20,13 @@ public class SunHttpAuthenticationFilter extends Filter{
 
     @Override
     public void doFilter(HttpExchange httpExchange, Chain chain) throws IOException {
-        Request request = RequestFactory.create(httpExchange);
+        ExtractorHttpExchange extractorHttpExchange = new ExtractorHttpExchange(httpExchange);
 
-        if(isPrivateResource(request.getPath())){
+        String path = extractorHttpExchange.extractPathFrom();
+
+        if(isPrivateResource(path)){
             httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
-            Optional<Session> session = request.getSession();
+            Optional<Session> session = extractorHttpExchange.extractSessionFrom();
             if(!session.isPresent()){
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
                 return;
