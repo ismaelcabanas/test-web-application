@@ -1,18 +1,50 @@
 @startuml
-actor Main
-participant StandardWebServer
+title Create and Start Server
+hide footbox
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam sequenceParticipant underline
+
+actor Evaluator
+participant Main
+participant SunHttpServer
 participant DefaultControllerScanner
 participant DefaultControllerMapper
 participant Mapping
-participant SunHttpServer
+participant SunHttpHandler as WebHandler <<WebHandler>>
+participant SunHttpHandler as RestHandler <<RestHandler>>
+participant RestBasicAuthenticator
 
-Main -> StandardWebServer : new()
-StandardWebServer -> DefaultControllerScanner : scanner()
-DefaultControllerScanner -> StandardWebServer : controllersScanned:List<Class<Controller>>
-StandardWebServer -> DefaultControllerMapper : mapping(List<Class<Controller>>
-DefaultControllerMapper -> Mapping : new()
-Mapping -> DefaultControllerMapper : mapper : Mapping
-DefaultControllerMapper -> StandardWebServer : mapper:Mapping
-StandardWebServer -> SunHttpServer : addConfiguration()
-SunHttpServer -> StandardWebServer : server configured
+Evaluator -> Main : main()
+activate Main
+
+Main -> Main : configureMappingControllers()
+Main -> Main : configurePermissions()
+Main -> Main : loadDefaultUsers()
+Main -> Main : configureFilters()
+Main -> SunHttpServer : new(port)
+activate SunHttpServer
+
+SunHttpServer --> Main : httpServer
+Main -> Main : webControllers()
+
+Main -> WebHandler : new(webControllers)
+activate WebHandler
+WebHandler --> Main
+
+Main -> SunHttpServer : createContext("/", webHandler, filters)
+SunHttpServer --> Main
+
+Main -> Main : restControllers()
+Main -> RestHandler : new(restControllers)
+activate RestHandler
+RestHandler --> Main
+
+Main -> RestBasicAuthenticator
+activate RestBasicAuthenticator
+RestBasicAuthenticator --> Main
+
+Main -> SunHttpServer : createContext("/users", restHandler, authenticator)
+SunHttpServer --> Main
+
 @enduml
