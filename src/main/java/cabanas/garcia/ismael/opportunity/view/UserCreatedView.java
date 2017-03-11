@@ -19,6 +19,7 @@ public class UserCreatedView implements View {
         return DefaultResponse.builder()
                 .statusCode(HttpURLConnection.HTTP_CREATED)
                 .model(user)
+                .content(user.toString().getBytes())
                 .build();
     }
 
