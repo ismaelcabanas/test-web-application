@@ -1,8 +1,12 @@
 package cabanas.garcia.ismael.opportunity.steps;
 
 import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
+import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
+import com.sun.net.httpserver.BasicAuthenticator;
+import com.sun.net.httpserver.Filter;
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.apache.http.HttpResponse;
@@ -32,9 +36,9 @@ import static org.junit.Assert.assertThat;
 
 public class ProcessRequestStepDef implements En {
 
-    protected int statusCode;
-    protected String response;
-    protected int port;
+    static int statusCode;
+    static String response;
+    static int port;
 
     private String username;
     private String password;
@@ -44,6 +48,12 @@ public class ProcessRequestStepDef implements En {
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
             httpServer = new SunHttpServer(port);
+            SunHttpHandler webHandler = new SunHttpHandler(webControllers);
+            httpServer.createContext("/", webHandler, filters);
+
+            SunHttpHandler restHandler = new SunHttpHandler(restControllers);
+            BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
+            httpServer.createContext("/users", restHandler, basicAuthenticator);
             httpServer.start();
         });
 

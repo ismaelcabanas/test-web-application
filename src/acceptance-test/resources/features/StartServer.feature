@@ -10,6 +10,6 @@ Feature: Start Web Server
 
   @startServer
   Scenario: Web Server stopped
-    When I start the web server on 8001 port
+    When I start the web server on 8000 port
     And I stopped it
     Then the web server is down
