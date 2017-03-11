@@ -1,3 +1,5 @@
+package cabanas.garcia.ismael.opportunity.steps;
+
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 
