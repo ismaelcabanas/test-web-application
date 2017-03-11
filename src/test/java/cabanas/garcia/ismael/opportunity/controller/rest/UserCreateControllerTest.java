@@ -9,6 +9,7 @@ import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithDataForApiSt
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -24,15 +25,21 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserCreateControllerTest {
 
+    public static final String USER_NAME_ISMAEL = "ismael";
+    public static final String PASSWORD = "changeIt";
+    public static final String ADMIN_PAGE1_ROLES = "Admin,Page1";
     @Mock
     private UserService userService;
 
     @Captor
     private ArgumentCaptor<User> userParam;
+
+    private final User newUser = User.builder().username(USER_NAME_ISMAEL).password(PASSWORD).build();
 
     @Test
     public void method_is_post(){
@@ -75,7 +82,8 @@ public class UserCreateControllerTest {
     public void process_request_return_view_with_status_code_201(){
         // given
         UserCreateController sut = new UserCreateController(userService);
-        Request requestWithUserData = createRequestWithUserData("ismael", "changeIt", "Admin,Page1");
+        Request requestWithUserData = createRequestWithUserData(USER_NAME_ISMAEL, PASSWORD, ADMIN_PAGE1_ROLES);
+        when(userService.create(Mockito.any())).thenReturn(newUser);
 
         // when
         View actual = sut.process(requestWithUserData);
@@ -88,7 +96,8 @@ public class UserCreateControllerTest {
     public void process_request_create_user_with_data_from_request(){
         // given
         UserCreateController sut = new UserCreateController(userService);
-        Request requestWithUserData = createRequestWithUserData("ismael", "changeIt", "Admin,Page1");
+        Request requestWithUserData = createRequestWithUserData(USER_NAME_ISMAEL, PASSWORD, ADMIN_PAGE1_ROLES);
+        when(userService.create(Mockito.any())).thenReturn(newUser);
 
         // when
         View actual = sut.process(requestWithUserData);
@@ -96,7 +105,7 @@ public class UserCreateControllerTest {
         // then
         verify(userService).create(userParam.capture());
 
-        assertThat(userParam.getValue().getUsername(), is(equalTo("ismael")));
+        assertThat(userParam.getValue().getUsername(), is(equalTo(USER_NAME_ISMAEL)));
         assertThat(userParam.getValue().getRoles().size(), is(equalTo(2)));
     }
 
