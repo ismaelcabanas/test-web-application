@@ -1,5 +1,7 @@
 package cabanas.garcia.ismael.opportunity.controller;
 
+import cabanas.garcia.ismael.opportunity.controller.rest.UserCreateController;
+import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.InstantiationException;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;

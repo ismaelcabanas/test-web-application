@@ -1,5 +1,6 @@
-package cabanas.garcia.ismael.opportunity.controller;
+package cabanas.garcia.ismael.opportunity.controller.rest;
 
+import cabanas.garcia.ismael.opportunity.controller.rest.UserCreateController;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;

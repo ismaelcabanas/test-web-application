@@ -1,5 +1,6 @@
-package cabanas.garcia.ismael.opportunity.controller;
+package cabanas.garcia.ismael.opportunity.controller.web;
 
+import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.model.User;
