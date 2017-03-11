@@ -1,5 +1,6 @@
-package cabanas.garcia.ismael.opportunity.controller;
+package cabanas.garcia.ismael.opportunity.controller.web;
 
+import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.model.User;
@@ -11,7 +12,7 @@ import cabanas.garcia.ismael.opportunity.view.View;
 
 import java.util.Optional;
 
-public class LoginPostController extends Controller{
+public class LoginPostController extends Controller {
 
     private UserService userService;
 

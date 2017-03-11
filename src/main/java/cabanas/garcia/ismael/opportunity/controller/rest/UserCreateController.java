@@ -1,5 +1,6 @@
-package cabanas.garcia.ismael.opportunity.controller;
+package cabanas.garcia.ismael.opportunity.controller.rest;
 
+import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.model.Role;
@@ -12,7 +13,7 @@ import cabanas.garcia.ismael.opportunity.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserCreateController extends Controller{
+public class UserCreateController extends Controller {
     private UserService userService;
 
     public UserCreateController() {
