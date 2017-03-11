@@ -30,13 +30,10 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-/**
- * Created by XI317311 on 10/03/2017.
- */
 public class ApiUsersStepDefs implements En {
     private static final String DEFAULT_PASSWORD = "1234";
+    private String usernameToUpdate;
     private String newRoles;
-    private String newUsername;
     private String roles;
     private String password;
     private String username;
@@ -90,16 +87,16 @@ public class ApiUsersStepDefs implements En {
             User user = User.builder().username(username).password(DEFAULT_PASSWORD).roles(roles).build();
             userRepository.persist(user);
         });
-        And("^I want update his name to (.*) and to add role (.*)$", (String newUsername, String newRoles) -> {
-            this.newUsername = newUsername;
+        And("^And I want to update roles to (.*) for user (.*)", (String newRoles, String username) -> {
             this.newRoles = newRoles;
+            this.usernameToUpdate = username;
         });
         When("^I use API for updating users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
             HttpClient httpClient = HttpUtil.create();
             HttpPut httpPut = new HttpPut("http://localhost:" + port + "/users");
 
             List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("username", newUsername));
+            urlParameters.add(new BasicNameValuePair("username", usernameToUpdate));
             urlParameters.add(new BasicNameValuePair("roles", newRoles));
 
             String authHeader = getAuthHeader(authUser, authPassword);
