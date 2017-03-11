@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
-import cabanas.garcia.ismael.opportunity.controller.UnknownResourceController;
+import cabanas.garcia.ismael.opportunity.controller.web.UnknownResourceController;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.Response;

@@ -17,20 +17,22 @@ import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
 
 public class StartServerStepDefs implements En {
 
+    private SunHttpServer httpServer;
+
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
-            standardWebServer = new StandardWebServer(port, controllerScanner, controllerMapper, new SunHttpServer());
-            standardWebServer.start();
+            httpServer = new SunHttpServer(port);
+            httpServer.start();
         });
         Then("^the web server is up$", () -> {
-            Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(true)));
+            Assert.assertThat(httpServer.isRunning(), Is.is(IsEqual.equalTo(true)));
         });
 
         And("^I stopped it$", () -> {
-            standardWebServer.stop();
+            httpServer.stop();
         });
         Then("^the web server is down$", () -> {
-            Assert.assertThat(standardWebServer.isRunning(), Is.is(IsEqual.equalTo(false)));
+            Assert.assertThat(httpServer.isRunning(), Is.is(IsEqual.equalTo(false)));
         });
         Given("^private resource (.*)$", (String resource) -> {
             // TODO Configure private resources to server here

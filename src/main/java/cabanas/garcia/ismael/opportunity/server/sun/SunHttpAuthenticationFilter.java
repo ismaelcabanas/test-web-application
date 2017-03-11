@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 import cabanas.garcia.ismael.opportunity.http.*;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class SunHttpAuthenticationFilter extends Filter{
 
     private final AuthenticatorFilterConfiguration configuration;
@@ -20,9 +22,12 @@ public class SunHttpAuthenticationFilter extends Filter{
 
     @Override
     public void doFilter(HttpExchange httpExchange, Chain chain) throws IOException {
+
         ExtractorHttpExchange extractorHttpExchange = new ExtractorHttpExchange(httpExchange);
 
         String path = extractorHttpExchange.extractPathFrom();
+
+        log.info("Filtering resource {}", path);
 
         if(isPrivateResource(path)){
             Optional<Session> session = extractorHttpExchange.extractSessionFrom();

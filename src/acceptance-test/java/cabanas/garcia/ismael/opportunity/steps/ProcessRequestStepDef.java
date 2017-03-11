@@ -43,8 +43,8 @@ public class ProcessRequestStepDef implements En {
 
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
-            standardWebServer = new StandardWebServer(port, controllerScanner, controllerMapper, new SunHttpServer());
-            standardWebServer.start();
+            httpServer = new SunHttpServer(port);
+            httpServer.start();
         });
 
         When("^I send a (.*) request to web server$", (String page) -> {
