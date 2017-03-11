@@ -8,11 +8,12 @@ import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorI
 import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
+import cabanas.garcia.ismael.opportunity.model.Roles;
+import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
-import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
@@ -76,7 +77,19 @@ public class Main {
     }
 
     private static void loadDefaultUsers() {
+
         UserRepository userRepository = InMemoryUserRepository.getInstance();
+
+        User adminUser = getAdminUser();
+
+        userRepository.persist(adminUser);
+    }
+
+    private static User getAdminUser() {
+        Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
+        roles.add(Roles.ADMIN);
+
+        return User.builder().username("admin").password("admin").roles(roles).build();
     }
 
     private static void configurePermissions() {
