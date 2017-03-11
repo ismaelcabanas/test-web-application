@@ -8,6 +8,7 @@ import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorI
 import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
+import cabanas.garcia.ismael.opportunity.model.RoleEnum;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
@@ -87,7 +88,7 @@ public class Main {
 
     private static User getAdminUser() {
         Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
-        roles.add(Roles.ADMIN);
+        roles.add(RoleEnum.ADMIN.getRoleName());
 
         return User.builder().username("admin").password("admin").roles(roles).build();
     }

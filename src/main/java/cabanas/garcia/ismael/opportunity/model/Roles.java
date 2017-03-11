@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 public class Roles {
+
     private List<Role> roleList = new ArrayList<>();
 
     public void add(String roleName) {
