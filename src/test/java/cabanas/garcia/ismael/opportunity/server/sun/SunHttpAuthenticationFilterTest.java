@@ -100,6 +100,17 @@ public class SunHttpAuthenticationFilterTest {
         verify(chain).doFilter(httpExchange);
     }
 
+    @Test
+    public void description(){
+        // given
+        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+
+        // when
+        String actual = sut.description();
+
+        // then
+        assertThat(actual, is(equalTo(SunHttpAuthenticationFilter.DESCRIPTION)));
+    }
 /*    @Test
     public void process_request_made_for_aunthenticated_users() throws Exception{
         // given

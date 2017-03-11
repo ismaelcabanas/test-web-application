@@ -14,6 +14,8 @@ import java.util.Optional;
 @Slf4j
 public class SunHttpAuthenticationFilter extends Filter{
 
+    public static final String DESCRIPTION = "Authentication filter";
+
     private final AuthenticatorFilterConfiguration configuration;
 
     public SunHttpAuthenticationFilter() {
@@ -46,7 +48,7 @@ public class SunHttpAuthenticationFilter extends Filter{
 
     @Override
     public String description() {
-        return "Authentication filter";
+        return DESCRIPTION;
     }
 
     public AuthenticatorFilterConfiguration getConfiguration() {
