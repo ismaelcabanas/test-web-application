@@ -105,4 +105,19 @@ public class ControllersTest {
         assertThat(actual.getMappingPath(), is(equalTo(new UnknownResourceController().getMappingPath())));
     }
 
+    @Test(expected = AssertionError.class)
+    public void throw_exception_when_request_is_null(){
+        // given
+        Controller controller1 = new Test1Controller("/test1");
+        Controller controller2 = new Test2Controller("/test2");
+        Mapping mapping = new Mapping();
+        mapping.addMapping(controller1.getMappingPath(), Test1Controller.class);
+        mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
+
+        Controllers sut = new Controllers(mapping, controllerFactory);
+
+        // when
+        Controller actual = sut.select(null);
+
+    }
 }

@@ -14,12 +14,12 @@ import java.util.Optional;
 
 public class LoginPostController extends Controller {
 
+    public static final String PATH = "/login";
+
     private UserService userService;
 
-    /**
-     * Necessary for instantiations by reflection
-     */
     public LoginPostController() {
+        // Necessary for instantiations by reflection
     }
 
     public LoginPostController(UserService userService) {
@@ -54,7 +54,7 @@ public class LoginPostController extends Controller {
 
     @Override
     public String getMappingPath() {
-        return "/login";
+        return PATH;
     }
 
     @Override

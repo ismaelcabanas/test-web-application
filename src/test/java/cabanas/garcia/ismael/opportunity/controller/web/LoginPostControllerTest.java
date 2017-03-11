@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParam;
@@ -99,6 +100,30 @@ public class LoginPostControllerTest {
         // then
         assertThat(actual, is(not(nullValue())));
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_MOVED_TEMP)));
+    }
+
+    @Test
+    public void mapping_path(){
+        // given
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess);
+
+        // when
+        String actual = sut.getMappingPath();
+
+        // then
+        assertThat(actual, is(equalTo(LoginPostController.PATH)));
+    }
+
+    @Test
+    public void method_path(){
+        // given
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess);
+
+        // when
+        String actual = sut.getMethod();
+
+        // then
+        assertThat(actual, is(equalTo(RequestMethodConstants.POST)));
     }
 
     private Request createRequestWithCredentialsAndRedirectParameter() {
