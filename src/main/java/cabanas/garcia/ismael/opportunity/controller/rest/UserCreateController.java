@@ -16,6 +16,9 @@ import java.util.List;
 public class UserCreateController extends Controller {
     private UserService userService;
 
+    /**
+     * Necessary for instantiations by reflection
+     */
     public UserCreateController() {
     }
 
@@ -44,7 +47,6 @@ public class UserCreateController extends Controller {
         Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
 
         if(stringOfRoles != null){
-            List<Role> rolesList = new ArrayList<>();
             String[] rolesSplitted = stringOfRoles.split(",");
             for(int i=0; i<rolesSplitted.length; i++){
                 roles.add(rolesSplitted[i]);
