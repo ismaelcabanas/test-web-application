@@ -16,6 +16,9 @@ public class LoginPostController extends Controller {
 
     private UserService userService;
 
+    /**
+     * Necessary for instantiations by reflection
+     */
     public LoginPostController() {
     }
 

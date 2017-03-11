@@ -9,10 +9,9 @@ import java.util.Optional;
 public class InMemoryUserRepository implements UserRepository {
 
     private static InMemoryUserRepository instance = null;
+    private Map<String, User> repository = new HashMap<>();
 
     private InMemoryUserRepository(){}
-
-    private Map<String, User> repository = new HashMap<>();
 
     @Override
     public User persist(User newUser) {

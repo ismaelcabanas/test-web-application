@@ -20,7 +20,7 @@ public class DIControllerFactory {
         this.instantiator = instantiator;
     }
 
-    public Controller getInstance(Class<? extends Controller> clazz) throws InstantiationException {
+    public Controller getInstance(Class<? extends Controller> clazz)  {
         if(clazz.getName().equals(LoginPostController.class.getName())
                 || clazz.getName().equals(UserCreateController.class.getName())){
             try {

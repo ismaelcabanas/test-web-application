@@ -21,11 +21,16 @@ import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.Filter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class Main {
+
+    private Main(){}
+
     public static void main(String... args) throws Exception{
 
         configurePermissions();
@@ -45,10 +50,13 @@ public class Main {
         BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
         httpServer.createContext("/users", restHandler, basicAuthenticator);
 
+        log.info("Starting server...");
         httpServer.start();
     }
 
     private static Controllers restControllers() {
+        log.info("Scanning rest controllers...");
+
         ControllerScanner controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller.rest");
         List<Class<? extends Controller>> controllersScanned = controllerScanner.scanner();
         ControllerMapper controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
@@ -57,6 +65,8 @@ public class Main {
     }
 
     private static Controllers webControllers() {
+        log.info("Scanning web controllers...");
+
         ControllerScanner controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller.web");
         List<Class<? extends Controller>> controllersScanned = controllerScanner.scanner();
         ControllerMapper controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
@@ -65,6 +75,8 @@ public class Main {
     }
 
     private static List<Filter> configureFilters() {
+        log.info("Configuring filters...");
+
         SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter();
         authenticationFilter.getConfiguration().addPrivateResource("/page1");
         authenticationFilter.getConfiguration().addPrivateResource("/page2");
@@ -84,6 +96,7 @@ public class Main {
         User adminUser = getAdminUser();
 
         userRepository.persist(adminUser);
+        log.info("User {} persited", adminUser);
     }
 
     private static User getAdminUser() {
@@ -94,7 +107,7 @@ public class Main {
     }
 
     private static void configurePermissions() {
-
+        log.info("Permissions configured");
     }
 
 }

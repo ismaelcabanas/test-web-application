@@ -2,8 +2,6 @@ package cabanas.garcia.ismael.opportunity.mapper;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
 import java.util.Map;

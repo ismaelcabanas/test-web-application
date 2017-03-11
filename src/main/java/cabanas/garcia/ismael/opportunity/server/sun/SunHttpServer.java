@@ -1,6 +1,5 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.server.Configuration;
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
 import com.sun.net.httpserver.BasicAuthenticator;
@@ -21,8 +20,6 @@ public class SunHttpServer {
     private State state;
 
     private HttpServer httpServer;
-
-    private Configuration configuration;
 
     public SunHttpServer() {
         this.state = State.STOPPED;
