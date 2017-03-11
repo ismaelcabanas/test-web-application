@@ -13,6 +13,12 @@ Feature: Update users through REST API
     When I use API for updating users with user admin and password admin
     Then the web server returns 200 status code
 
+  Scenario: Updating non existent user with a valid account
+    Given the web server is running on port 8082
+    And And I want to update roles to Admin for user Ismael
+    When I use API for updating users with user admin and password admin
+    Then the web server returns 404 status code
+
   Scenario: Updating user data with an invalid account
     Given the web server is running on port 8082
     And there is an user in the system called Ismael with role Page1
