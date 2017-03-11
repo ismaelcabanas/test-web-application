@@ -7,15 +7,18 @@ import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +34,9 @@ import static org.junit.Assert.assertThat;
  * Created by XI317311 on 10/03/2017.
  */
 public class ApiUsersStepDefs implements En {
-    private String passwordForAuthentication;
-    private String usernameForAuthentication;
+    private static final String DEFAULT_PASSWORD = "1234";
+    private String newRoles;
+    private String newUsername;
     private String roles;
     private String password;
     private String username;
@@ -47,12 +51,18 @@ public class ApiUsersStepDefs implements En {
         And("^with roles (.*)$", (String roles) -> {
             this.roles = roles;
         });
-        When("^I use API for creating users$", () -> {
+        When("^I use API for creating users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
             HttpClient httpClient = HttpUtil.create();
             HttpPost httpPost = new HttpPost("http://localhost:" + port + "/users");
+
             List<NameValuePair> urlParameters = new ArrayList<>();
             urlParameters.add(new BasicNameValuePair("username", username));
             urlParameters.add(new BasicNameValuePair("password", password));
+            urlParameters.add(new BasicNameValuePair("roles", roles));
+
+            String authHeader = getAuthHeader(authUser, authPassword);
+            httpPost.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+
             try {
                 httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
                 HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -72,9 +82,44 @@ public class ApiUsersStepDefs implements En {
             User newUser = User.builder().username(username).password(password).roles(roles).build();
             userRepository.persist(newUser);
         });
-        And("^I authenticate with user (.*) and password (.*)$", (String username, String password) -> {
-            this.usernameForAuthentication = username;
-            this.passwordForAuthentication = password;
+
+        And("^there is an user in the system called (.*) with role (.*)$", (String username, String role) -> {
+            UserRepository userRepository = InMemoryUserRepository.getInstance();
+            Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
+            roles.add(role);
+            User user = User.builder().username(username).password(DEFAULT_PASSWORD).roles(roles).build();
+            userRepository.persist(user);
         });
+        And("^I want update his name to (.*) and to add role (.*)$", (String newUsername, String newRoles) -> {
+            this.newUsername = newUsername;
+            this.newRoles = newRoles;
+        });
+        When("^I use API for updating users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
+            HttpClient httpClient = HttpUtil.create();
+            HttpPut httpPut = new HttpPut("http://localhost:" + port + "/users");
+
+            List<NameValuePair> urlParameters = new ArrayList<>();
+            urlParameters.add(new BasicNameValuePair("username", newUsername));
+            urlParameters.add(new BasicNameValuePair("roles", newRoles));
+
+            String authHeader = getAuthHeader(authUser, authPassword);
+            httpPut.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+
+            try {
+                httpPut.setEntity(new UrlEncodedFormEntity(urlParameters));
+                HttpResponse httpResponse = httpClient.execute(httpPut);
+                statusCode = httpResponse.getStatusLine().getStatusCode();
+                response = getStringFromInputStream(httpResponse.getEntity().getContent());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private String getAuthHeader(String authUser, String authPassword) {
+        String auth = authUser + ":" + authPassword;
+        byte[] encodedAuth = Base64.encodeBase64(
+                auth.getBytes(Charset.forName("ISO-8859-1")));
+        return "Basic " + new String(encodedAuth);
     }
 }
