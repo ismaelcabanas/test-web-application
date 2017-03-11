@@ -14,10 +14,8 @@ import java.util.ArrayList;
 public class UserCreateController extends Controller {
     private UserService userService;
 
-    /**
-     * Necessary for instantiations by reflection
-     */
     public UserCreateController() {
+        // Necessary for instantiations by reflection
     }
 
     public UserCreateController(UserService userService) {
