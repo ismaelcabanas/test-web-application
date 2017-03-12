@@ -39,7 +39,7 @@ public class UserDeleteController extends Controller{
 
     @Override
     public String getMappingPath() {
-        return "/users";
+        return "^/users/.*";
     }
 
     @Override

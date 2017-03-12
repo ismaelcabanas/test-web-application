@@ -41,7 +41,7 @@ public class UserUpdateController extends Controller{
 
     @Override
     public String getMappingPath() {
-        return "/users";
+        return "^/users/.*";
     }
 
     @Override

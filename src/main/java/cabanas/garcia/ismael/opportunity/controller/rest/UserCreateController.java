@@ -54,7 +54,7 @@ public class UserCreateController extends Controller {
 
     @Override
     public String getMappingPath() {
-        return "/users";
+        return "^/users$";
     }
 
     @Override
