@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithDataForApiStub;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithPathVariableStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
@@ -119,8 +120,8 @@ public class UserUpdateControllerTest {
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_NOT_FOUND)));
     }
 
-    private Request createUpdateUserRequest(String username, String roles) {
-        HttpExchange httpExchange = new HttpExchangeWithDataForApiStub(username, roles);
+    private Request createUpdateUserRequest(String pathVariable, String roles) {
+        HttpExchange httpExchange = new HttpExchangeWithPathVariableStub("/users", pathVariable, roles);
         return RequestFactory.create(httpExchange);
     }
 
