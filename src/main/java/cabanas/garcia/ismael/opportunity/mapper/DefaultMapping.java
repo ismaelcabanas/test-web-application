@@ -4,11 +4,9 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.util.ExpressionRegularValidator;
 
-import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public final class DefaultMapping implements Mapping{
 
@@ -49,7 +47,7 @@ public final class DefaultMapping implements Mapping{
         }
 
         public boolean match(String path, String method){
-            return ExpressionRegularValidator.isPathValidate(this.pattern, path)
+            return ExpressionRegularValidator.isValidate(this.pattern, path)
                     && this.method.equals(method);
         }
 

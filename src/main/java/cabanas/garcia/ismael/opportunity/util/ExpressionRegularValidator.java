@@ -5,9 +5,10 @@ import java.util.regex.Pattern;
 
 public class ExpressionRegularValidator {
 
-    public static boolean isPathValidate(String pattern, String pathToCheck){
+    public static boolean isValidate(String pattern, String pathToCheck){
 
-        assert pattern != null && pathToCheck != null;
+        if(pattern == null || pathToCheck == null)
+            return false;
 
         Pattern p = Pattern.compile(pattern);
         Matcher matcher = p.matcher(pathToCheck);

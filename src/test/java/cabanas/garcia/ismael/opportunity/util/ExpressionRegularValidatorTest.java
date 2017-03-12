@@ -18,8 +18,8 @@ public class ExpressionRegularValidatorTest {
         String stringToCheck2 = "/users/ismael";
 
         //when
-        boolean resultMatcher1 = ExpressionRegularValidator.isPathValidate(pattern1,stringToCheck1);
-        boolean resultMatcher2 = ExpressionRegularValidator.isPathValidate(pattern2,stringToCheck2);
+        boolean resultMatcher1 = ExpressionRegularValidator.isValidate(pattern1,stringToCheck1);
+        boolean resultMatcher2 = ExpressionRegularValidator.isValidate(pattern2,stringToCheck2);
 
         //then
         assertThat(resultMatcher1 , is(equalTo(true)));
@@ -34,7 +34,7 @@ public class ExpressionRegularValidatorTest {
         String stringToCheck = "/users1/ismael";
 
         //when
-        boolean resultMatcher = ExpressionRegularValidator.isPathValidate(pattern,stringToCheck);
+        boolean resultMatcher = ExpressionRegularValidator.isValidate(pattern,stringToCheck);
 
         //then
         assertThat(resultMatcher , is(equalTo(false)));
