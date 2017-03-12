@@ -54,6 +54,22 @@ public class DefaultMappingTest {
     }
 
     @Test
+    public void mapping_get_controller_for_path_and_post_method_with_regular_expression(){
+        // given
+        DefaultMapping sut = new DefaultMapping();
+        sut.addMapping("^/path1$", Test1Controller.class);
+        sut.addMapping("^/path2$", Test2Controller.class);
+        sut.addMapping("^/path1/.*$", RequestMethodConstants.POST, Test1PostController.class);
+
+        // when
+        Optional<Class<? extends Controller>> controller = sut.getController("/path1/test", RequestMethodConstants.POST);
+
+        // then
+        assertThat(controller.isPresent(), is(true));
+        assertThat(controller.get().getName(), is(IsEqual.equalTo(Test1PostController.class.getName())));
+    }
+
+    @Test
     public void mapping_get_controller_for_path_and_post_method(){
         // given
         DefaultMapping sut = new DefaultMapping();

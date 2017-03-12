@@ -2,10 +2,13 @@ package cabanas.garcia.ismael.opportunity.mapper;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.util.ExpressionRegularValidator;
 
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public final class DefaultMapping implements Mapping{
 
@@ -29,17 +32,25 @@ public final class DefaultMapping implements Mapping{
     }
 
     public Optional<Class<? extends Controller>> getController(String mappingPath, String method) {
-        KeyMapper keyMapper = KeyMapper.builder().path(mappingPath).method(method).build();
-        return Optional.ofNullable(mapper.get(keyMapper));
+        for (Map.Entry<KeyMapper, Class<? extends Controller>> entry : mapper.entrySet()) {
+            if(entry.getKey().match(mappingPath, method))
+                return Optional.of(entry.getValue());
+        }
+        return Optional.empty();
     }
 
     private static class KeyMapper {
-        private String path;
+        private String pattern;
         private String method;
 
         public KeyMapper(String mappingPath, String method) {
-            this.path = mappingPath;
+            this.pattern = mappingPath;
             this.method = method;
+        }
+
+        public boolean match(String path, String method){
+            return ExpressionRegularValidator.isPathValidate(this.pattern, path)
+                    && this.method.equals(method);
         }
 
         public static KeyMapperBuilder builder(){
@@ -53,13 +64,13 @@ public final class DefaultMapping implements Mapping{
 
             KeyMapper keyMapper = (KeyMapper) o;
 
-            if (path != null ? !path.equals(keyMapper.path) : keyMapper.path != null) return false;
+            if (pattern != null ? !pattern.equals(keyMapper.pattern) : keyMapper.pattern != null) return false;
             return method != null ? method.equals(keyMapper.method) : keyMapper.method == null;
         }
 
         @Override
         public int hashCode() {
-            int result = path != null ? path.hashCode() : 0;
+            int result = pattern != null ? pattern.hashCode() : 0;
             result = 31 * result + (method != null ? method.hashCode() : 0);
             return result;
         }
