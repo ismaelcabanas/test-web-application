@@ -106,7 +106,7 @@ public class UserUpdateControllerTest {
     }
 
     @Test
-    public void process_request_return_resource_not_foud_with_status_code_200_when_not_exist_user_to_update(){
+    public void process_request_return_resource_not_foud_with_status_code_204_when_not_exist_user_to_update(){
         // given
         UserUpdateController sut = new UserUpdateController(userService);
         Request updateUserRequest = createUpdateUserRequest(USER_NAME_ISMAEL, ADMIN_PAGE1_ROLES);
