@@ -36,8 +36,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UserUpdateControllerTest {
 
-    public static final String USER_NAME_ISMAEL = "ismael";
-    public static final String ADMIN_PAGE1_ROLES = "Admin,Page1";
+    private static final String USER_NAME_ISMAEL = "ismael";
+    private static final String ADMIN_PAGE1_ROLES = "Admin,Page1";
 
     @Mock
     private UserService userService;
