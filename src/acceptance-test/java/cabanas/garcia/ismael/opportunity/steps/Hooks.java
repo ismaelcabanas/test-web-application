@@ -35,6 +35,9 @@ public class Hooks implements En{
         After(() -> {
             if(httpServer.isRunning())
                 httpServer.stop();
+
+            UserRepository userRepository = InMemoryUserRepository.getInstance();
+            userRepository.deleteAll();
         });
 
         Before(() -> {
