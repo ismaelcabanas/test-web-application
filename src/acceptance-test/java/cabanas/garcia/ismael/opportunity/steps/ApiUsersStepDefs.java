@@ -13,6 +13,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.message.BasicNameValuePair;
@@ -32,6 +33,7 @@ import static org.junit.Assert.assertThat;
 
 public class ApiUsersStepDefs implements En {
     private static final String DEFAULT_PASSWORD = "1234";
+    private String usernameToDelete;
     private String usernameToUpdate;
     private String newRoles;
     private String roles;
@@ -105,6 +107,25 @@ public class ApiUsersStepDefs implements En {
             try {
                 httpPut.setEntity(new UrlEncodedFormEntity(urlParameters));
                 HttpResponse httpResponse = httpClient.execute(httpPut);
+                statusCode = httpResponse.getStatusLine().getStatusCode();
+                response = getStringFromInputStream(httpResponse.getEntity().getContent());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        And("^And I want to delete user (.*)$", (String username) -> {
+            this.usernameToDelete = username;
+        });
+        When("^I use API for deleting users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
+            HttpClient httpClient = HttpUtil.create();
+            HttpDelete httpDelete = new HttpDelete("http://localhost:" + port + "/users/" + usernameToDelete);
+
+            String authHeader = getAuthHeader(authUser, authPassword);
+            httpDelete.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+
+            try {
+                HttpResponse httpResponse = httpClient.execute(httpDelete);
                 statusCode = httpResponse.getStatusLine().getStatusCode();
                 response = getStringFromInputStream(httpResponse.getEntity().getContent());
             } catch (IOException e) {
