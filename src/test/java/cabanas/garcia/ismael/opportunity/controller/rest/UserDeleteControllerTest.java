@@ -96,7 +96,7 @@ public class UserDeleteControllerTest {
     }
 
     @Test
-    public void process_request_return_resource_not_found_with_status_code_204_when_not_exist_user_to_update(){
+    public void process_request_return_resource_not_found_with_status_code_404_when_not_exist_user_to_update(){
         // given
         Request deleteUserRequest = createDeleteUserRequest(USER_NAME_ISMAEL);
         when(userService.findByUsername(anyString())).thenReturn(Optional.empty());
