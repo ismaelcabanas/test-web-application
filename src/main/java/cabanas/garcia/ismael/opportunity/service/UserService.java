@@ -12,4 +12,6 @@ public interface UserService {
     Optional<User> findByUsername(String username);
 
     User update(User updateUser);
+
+    void delete(String username);
 }

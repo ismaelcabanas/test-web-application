@@ -46,4 +46,9 @@ public class DefaultUserService implements UserService{
         User userUpdated = userRepository.update(updateUser);
         return newUserWithoutPassword(userUpdated);
     }
+
+    @Override
+    public void delete(String username) {
+
+    }
 }
