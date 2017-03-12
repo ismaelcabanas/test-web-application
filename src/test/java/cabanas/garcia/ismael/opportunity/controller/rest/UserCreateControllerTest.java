@@ -62,7 +62,7 @@ public class UserCreateControllerTest {
         String actual = sut.getMappingPath();
 
         // then
-        assertThat(actual, is(equalTo("/users")));
+        assertThat(actual, is(equalTo("^/users$")));
     }
 
     @Test
