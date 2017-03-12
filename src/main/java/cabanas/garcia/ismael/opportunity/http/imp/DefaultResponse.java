@@ -14,4 +14,9 @@ public class DefaultResponse implements Response{
     private int statusCode;
     private byte[] content;
     private Object model;
+
+    public static class DefaultResponseBuilder{
+        private static final String EMPTY_CONTENT = "";
+        private byte[] content = EMPTY_CONTENT.getBytes();
+    }
 }
