@@ -22,10 +22,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -68,10 +72,11 @@ public class UserUpdateControllerTest {
     }
 
     @Test
-    public void process_should_be_update_user(){
+    public void process_should_update_user(){
         // given
         UserUpdateController sut = new UserUpdateController(userService);
         Request updateUserRequest = createUpdateUserRequest(USER_NAME_ISMAEL, ADMIN_PAGE1_ROLES);
+        when(userService.findByUsername(anyString())).thenReturn(Optional.of(mock(User.class)));
 
         // when
         View actual = sut.process(updateUserRequest);
@@ -90,13 +95,28 @@ public class UserUpdateControllerTest {
         // given
         UserUpdateController sut = new UserUpdateController(userService);
         Request updateUserRequest = createUpdateUserRequest(USER_NAME_ISMAEL, ADMIN_PAGE1_ROLES);
-        when(userService.update(Mockito.any())).thenReturn(updateUser);
+        when(userService.findByUsername(anyString())).thenReturn(Optional.of(mock(User.class)));
+        when(userService.update(any())).thenReturn(updateUser);
 
         // when
         View actual = sut.process(updateUserRequest);
 
         // then
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_OK)));
+    }
+
+    @Test
+    public void process_request_return_resource_not_foud_with_status_code_200_when_not_exist_user_to_update(){
+        // given
+        UserUpdateController sut = new UserUpdateController(userService);
+        Request updateUserRequest = createUpdateUserRequest(USER_NAME_ISMAEL, ADMIN_PAGE1_ROLES);
+        when(userService.findByUsername(anyString())).thenReturn(Optional.empty());
+
+        // when
+        View actual = sut.process(updateUserRequest);
+
+        // then
+        assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_NOT_FOUND)));
     }
 
     private Request createUpdateUserRequest(String username, String roles) {

@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.controller.rest.UserCreateController;
+import cabanas.garcia.ismael.opportunity.controller.rest.UserUpdateController;
 import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.InstantiationException;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
@@ -22,7 +23,8 @@ public class DIControllerFactory {
 
     public Controller getInstance(Class<? extends Controller> clazz)  {
         if(clazz.getName().equals(LoginPostController.class.getName())
-                || clazz.getName().equals(UserCreateController.class.getName())){
+                || clazz.getName().equals(UserCreateController.class.getName())
+                || clazz.getName().equals(UserUpdateController.class.getName())){
             try {
                 return clazz.getConstructor(UserService.class).newInstance(new DefaultUserService(InMemoryUserRepository.getInstance()));
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

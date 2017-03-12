@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.view.ResourceNotFoundView;
 import cabanas.garcia.ismael.opportunity.view.UserUpdatedView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
@@ -29,9 +30,13 @@ public class UserUpdateController extends Controller{
 
         Optional<User> existentUser = userService.findByUsername(userFromRequest.getUsername());
 
-        User userUpdated = userService.update(userFromRequest);
-
-        return new UserUpdatedView(userUpdated);
+        if(existentUser.isPresent()) {
+            User userUpdated = userService.update(userFromRequest);
+            return new UserUpdatedView(userUpdated);
+        }
+        else{
+            return new ResourceNotFoundView();
+        }
     }
 
     @Override
