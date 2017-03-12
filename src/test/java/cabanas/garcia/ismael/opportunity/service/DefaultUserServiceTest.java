@@ -96,7 +96,7 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void findByUsername_should_return_user(){
+    public void findByUsername_should_return_user_from_repository(){
         // given
         DefaultUserService sut = new DefaultUserService(userRepository);
         User newUser = User.builder().username(USERNAME).password(PASSWORD).roles(ROLES).build();
@@ -115,7 +115,7 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void findByUsername_should_return_empty_user(){
+    public void findByUsername_should_return_empty_user_if_user_not_exist_in_repository(){
         // given
         DefaultUserService sut = new DefaultUserService(userRepository);
         when(userRepository.read(Mockito.anyString())).thenReturn(Optional.empty());
@@ -130,7 +130,7 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void update_should_update_user_roles(){
+    public void update_should_update_user_roles_in_repository(){
         // given
         Roles newRoles = Roles.builder().build();
         newRoles.add("Page1");
@@ -150,5 +150,17 @@ public class DefaultUserServiceTest {
         assertThat(actual.getUsername(), is(equalTo(USERNAME)));
         assertThat(actual.getPassword(),is(nullValue()));
         assertThat(actual.getRoles(),is(equalTo(newRoles)));
+    }
+
+    @Test
+    public void delete_should_delete_user_from_repository(){
+        // given
+        DefaultUserService sut = new DefaultUserService(userRepository);
+
+        // when
+        sut.delete(USERNAME);
+
+        // then
+        verify(userRepository).delete(USERNAME);
     }
 }

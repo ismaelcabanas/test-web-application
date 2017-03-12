@@ -49,6 +49,6 @@ public class DefaultUserService implements UserService{
 
     @Override
     public void delete(String username) {
-
+        userRepository.delete(username);
     }
 }
