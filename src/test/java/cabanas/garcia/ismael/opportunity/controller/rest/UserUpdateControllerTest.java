@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithDataForApiStub;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithPathVariableStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
@@ -106,7 +107,7 @@ public class UserUpdateControllerTest {
     }
 
     @Test
-    public void process_request_return_resource_not_foud_with_status_code_204_when_not_exist_user_to_update(){
+    public void process_request_return_resource_not_foud_with_status_code_404_when_not_exist_user_to_update(){
         // given
         UserUpdateController sut = new UserUpdateController(userService);
         Request updateUserRequest = createUpdateUserRequest(USER_NAME_ISMAEL, ADMIN_PAGE1_ROLES);
@@ -119,8 +120,8 @@ public class UserUpdateControllerTest {
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_NOT_FOUND)));
     }
 
-    private Request createUpdateUserRequest(String username, String roles) {
-        HttpExchange httpExchange = new HttpExchangeWithDataForApiStub(username, roles);
+    private Request createUpdateUserRequest(String pathVariable, String roles) {
+        HttpExchange httpExchange = new HttpExchangeWithPathVariableStub("/users", pathVariable, roles);
         return RequestFactory.create(httpExchange);
     }
 

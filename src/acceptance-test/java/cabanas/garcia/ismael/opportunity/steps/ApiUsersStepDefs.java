@@ -14,6 +14,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.message.BasicNameValuePair;
@@ -33,6 +34,7 @@ import static org.junit.Assert.assertThat;
 
 public class ApiUsersStepDefs implements En {
     private static final String DEFAULT_PASSWORD = "1234";
+    private String usernameToFind;
     private String usernameToDelete;
     private String usernameToUpdate;
     private String newRoles;
@@ -95,10 +97,9 @@ public class ApiUsersStepDefs implements En {
         });
         When("^I use API for updating users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
             HttpClient httpClient = HttpUtil.create();
-            HttpPut httpPut = new HttpPut("http://localhost:" + port + "/users");
+            HttpPut httpPut = new HttpPut("http://localhost:" + port + "/users/" + usernameToUpdate);
 
             List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("username", usernameToUpdate));
             urlParameters.add(new BasicNameValuePair("roles", newRoles));
 
             String authHeader = getAuthHeader(authUser, authPassword);
@@ -132,6 +133,25 @@ public class ApiUsersStepDefs implements En {
                 throw new RuntimeException(e);
             }
         });
+        And("^And I want to get data for user (.*)", (String username) -> {
+            this.usernameToFind = username;
+        });
+        When("^I use API for getting users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
+            HttpClient httpClient = HttpUtil.create();
+            HttpGet httpGet = new HttpGet("http://localhost:" + port + "/users/" + usernameToFind);
+
+            String authHeader = getAuthHeader(authUser, authPassword);
+            httpGet.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+
+            try {
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                statusCode = httpResponse.getStatusLine().getStatusCode();
+                response = getStringFromInputStream(httpResponse.getEntity().getContent());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 
     private String getAuthHeader(String authUser, String authPassword) {

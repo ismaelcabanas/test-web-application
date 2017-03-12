@@ -26,9 +26,13 @@ public class UserUpdateController extends Controller{
 
     @Override
     public View process(Request request) {
-        User userFromRequest = extractUserDataFrom(request);
+        String username = extractUsernameFromRequestPath(request.getPath());
 
-        Optional<User> existentUser = userService.findByUsername(userFromRequest.getUsername());
+        Roles roles = extractRolesFromRequest(request);
+
+        User userFromRequest = User.builder().username(username).roles(roles).build();
+
+        Optional<User> existentUser = userService.findByUsername(username);
 
         if(existentUser.isPresent()) {
             User userUpdated = userService.update(userFromRequest);
@@ -68,5 +72,14 @@ public class UserUpdateController extends Controller{
         }
 
         return roles;
+    }
+
+    private String extractUsernameFromRequestPath(String path) {
+        String[] pathSplitted = path.split("/");
+        return pathSplitted[pathSplitted.length-1];
+    }
+
+    private Roles extractRolesFromRequest(final Request request) {
+        return getRolesFromRequest(request.getParameter("roles"));
     }
 }
