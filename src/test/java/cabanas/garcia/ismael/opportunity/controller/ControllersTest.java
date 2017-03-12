@@ -4,6 +4,7 @@ import cabanas.garcia.ismael.opportunity.controller.web.UnknownResourceControlle
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultRequest;
+import cabanas.garcia.ismael.opportunity.mapper.DefaultMapping;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class ControllersTest {
         Controller controller1 = new Test1Controller("/test1");
         Controller controller2 = new Test2Controller("/test2");
         Controller controller1Post = new Test1PostController("/test1");
-        Mapping mapping = new Mapping();
+        Mapping mapping = new DefaultMapping();
         mapping.addMapping(controller1.getMappingPath(), Test1Controller.class);
         mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
         mapping.addMapping(controller1Post.getMappingPath(), controller1Post.getMethod(),Test1PostController.class);
@@ -65,7 +66,7 @@ public class ControllersTest {
         Controller controller2 = new Test2Controller("/test2");
         Controller controller1Post = new Test1PostController("/test1");
 
-        Mapping mapping = new Mapping();
+        Mapping mapping = new DefaultMapping();
         mapping.addMapping(controller1.getMappingPath(), Test1Controller.class);
         mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
         mapping.addMapping(controller1Post.getMappingPath(), controller1Post.getMethod(),Test1PostController.class);
@@ -88,7 +89,7 @@ public class ControllersTest {
         // given
         Controller controller1 = new Test1Controller("/test1");
         Controller controller2 = new Test2Controller("/test2");
-        Mapping mapping = new Mapping();
+        Mapping mapping = new DefaultMapping();
         mapping.addMapping(controller1.getMappingPath(), Test1Controller.class);
         mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
 
@@ -110,7 +111,7 @@ public class ControllersTest {
         // given
         Controller controller1 = new Test1Controller("/test1");
         Controller controller2 = new Test2Controller("/test2");
-        Mapping mapping = new Mapping();
+        Mapping mapping = new DefaultMapping();
         mapping.addMapping(controller1.getMappingPath(), Test1Controller.class);
         mapping.addMapping(controller2.getMappingPath(), Test2Controller.class);
 

@@ -10,12 +10,12 @@ import java.util.Optional;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class MappingTest {
+public class DefaultMappingTest {
 
     @Test
     public void mapping_has_not_controllers(){
         // given
-        Mapping sut = new Mapping();
+        DefaultMapping sut = new DefaultMapping();
 
         // when
         boolean actual = sut.hasControllers();
@@ -27,7 +27,7 @@ public class MappingTest {
     @Test
     public void mapping_has_controllers(){
         // given
-        Mapping sut = new Mapping();
+        DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path", Test1Controller.class);
 
         // when
@@ -40,7 +40,7 @@ public class MappingTest {
     @Test
     public void mapping_get_controller_for_path_and_get_method(){
         // given
-        Mapping sut = new Mapping();
+        DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
         sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);
@@ -56,7 +56,7 @@ public class MappingTest {
     @Test
     public void mapping_get_controller_for_path_and_post_method(){
         // given
-        Mapping sut = new Mapping();
+        DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
         sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);
@@ -72,7 +72,7 @@ public class MappingTest {
     @Test
     public void mapping_get_empty_controller_for_not_matched_path(){
         // given
-        Mapping sut = new Mapping();
+        DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
         sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);
@@ -87,7 +87,7 @@ public class MappingTest {
     @Test
     public void mapping_get_empty_controller_for_matched_path_but_unmatched_method(){
         // given
-        Mapping sut = new Mapping();
+        DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
         sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);

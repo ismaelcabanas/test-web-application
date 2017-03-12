@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server;
 
+import cabanas.garcia.ismael.opportunity.mapper.DefaultMapping;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.util.ConfigurationBuilder;
 import org.hamcrest.core.Is;
@@ -16,7 +17,7 @@ public class ConfigurationBuilderTest {
         ConfigurationBuilder sut = new ConfigurationBuilder();
 
         // when
-        Configuration actual = sut.controllerMapping(new Mapping()).port(8000);
+        Configuration actual = sut.controllerMapping(new DefaultMapping()).port(8000);
 
         // then
         Assert.assertThat(actual.getPort(), Is.is(IsEqual.equalTo(8000)));

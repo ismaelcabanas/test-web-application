@@ -14,7 +14,7 @@ public class DefaultControllerMapper implements ControllerMapper{
 
     @Override
     public Mapping mapping(List<Class<? extends Controller>> controllers) {
-        Mapping mapping = new Mapping();
+        Mapping mapping = new DefaultMapping();
         controllers.forEach(aClass -> {
             Controller instance = instantiator.newInstance(aClass);
             mapping.addMapping(instance.getMappingPath(), instance.getMethod(), aClass);
