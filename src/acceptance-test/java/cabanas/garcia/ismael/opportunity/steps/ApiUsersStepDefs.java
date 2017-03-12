@@ -128,7 +128,6 @@ public class ApiUsersStepDefs implements En {
             try {
                 HttpResponse httpResponse = httpClient.execute(httpDelete);
                 statusCode = httpResponse.getStatusLine().getStatusCode();
-                response = getStringFromInputStream(httpResponse.getEntity().getContent());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
