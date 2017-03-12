@@ -17,10 +17,7 @@ public class DefaultUserService implements UserService{
         Optional<User> userFromRepository = userRepository.read(username);
         if(userFromRepository.isPresent()){
             if(userFromRepository.get().getPassword().equals(password))
-                return Optional.of(User.builder()
-                        .username(userFromRepository.get().getUsername())
-                        .roles(userFromRepository.get().getRoles())
-                        .build());
+                return Optional.of(newUserWithoutPassword(userFromRepository.get()));
         }
 
         return Optional.empty();
@@ -30,16 +27,23 @@ public class DefaultUserService implements UserService{
     public User create(User newUser) {
         User userPersisted = userRepository.persist(newUser);
 
-        return User.builder().username(userPersisted.getUsername()).roles(userPersisted.getRoles()).build();
+        return newUserWithoutPassword(userPersisted);
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return null;
+        Optional<User> userPersisted = userRepository.read(username);
+
+        return userPersisted.isPresent() ? Optional.of(newUserWithoutPassword(userPersisted.get())) : Optional.empty();
+    }
+
+    private User newUserWithoutPassword(User user) {
+        return User.builder().username(user.getUsername()).roles(user.getRoles()).build();
     }
 
     @Override
     public User update(User updateUser) {
-        return null;
+        User userUpdated = userRepository.update(updateUser);
+        return newUserWithoutPassword(userUpdated);
     }
 }
