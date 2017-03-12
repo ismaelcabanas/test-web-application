@@ -97,10 +97,9 @@ public class ApiUsersStepDefs implements En {
         });
         When("^I use API for updating users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
             HttpClient httpClient = HttpUtil.create();
-            HttpPut httpPut = new HttpPut("http://localhost:" + port + "/users");
+            HttpPut httpPut = new HttpPut("http://localhost:" + port + "/users/" + usernameToUpdate);
 
             List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("username", usernameToUpdate));
             urlParameters.add(new BasicNameValuePair("roles", newRoles));
 
             String authHeader = getAuthHeader(authUser, authPassword);
