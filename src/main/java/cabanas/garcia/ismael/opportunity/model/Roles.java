@@ -23,4 +23,8 @@ public class Roles {
     public int size() {
         return roleList.size();
     }
+
+    public static class RolesBuilder{
+        private List<Role> roleList = new ArrayList<>();
+    }
 }
