@@ -31,7 +31,6 @@ public class UserGetController extends Controller{
         Optional<User> existentUser = userService.findByUsername(username);
 
         if(existentUser.isPresent()) {
-            userService.delete(username);
             return new UserGetView(existentUser.get());
         }
         else{

@@ -17,6 +17,9 @@ public class UserGetView implements View {
 
     @Override
     public Response render() {
-        return DefaultResponse.builder().statusCode(HttpURLConnection.HTTP_OK).build();
+        return DefaultResponse.builder()
+                .statusCode(HttpURLConnection.HTTP_OK)
+                .content(user.toString().getBytes())
+                .build();
     }
 }
