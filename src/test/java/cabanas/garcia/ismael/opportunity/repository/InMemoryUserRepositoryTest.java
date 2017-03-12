@@ -5,7 +5,9 @@ import cabanas.garcia.ismael.opportunity.model.User;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,10 +22,21 @@ public class InMemoryUserRepositoryTest {
 
     public static final String USER_NAME_ISMAEL = "ismael";
 
+    private InMemoryUserRepository sut;
+
+    @Before
+    public void setUp(){
+        sut = InMemoryUserRepository.getInstance();
+    }
+
+    @After
+    public void tearDown(){
+        sut.deleteAll();
+    }
+
     @Test
     public void persist_user(){
         // given
-        InMemoryUserRepository sut = InMemoryUserRepository.getInstance();
         User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").build();
 
         // when
@@ -37,8 +50,6 @@ public class InMemoryUserRepositoryTest {
     @Test
     public void update_user(){
         // given
-        InMemoryUserRepository sut = InMemoryUserRepository.getInstance();
-
         Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
         roles.add("Admin");
         User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").roles(roles).build();
@@ -60,7 +71,6 @@ public class InMemoryUserRepositoryTest {
     @Test
     public void in_memory_persitent_storage(){
         // given
-        InMemoryUserRepository sut = InMemoryUserRepository.getInstance();
         User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").build();
         sut.persist(newUser);
 
@@ -71,5 +81,40 @@ public class InMemoryUserRepositoryTest {
         Optional<User> userPersisted = sut.read(newUser.getUsername());
 
         assertThat(userPersisted.get().getUsername(), is(equalTo(USER_NAME_ISMAEL)));
+    }
+
+    @Test
+    public void deleteAll(){
+        // given
+        User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").build();
+        sut.persist(newUser);
+
+        // when
+        sut.deleteAll();
+
+        // then
+        assertThat(sut.isEmpty(), is(true));
+    }
+
+    @Test
+    public void isEmpty_should_return_false_when_there_is_records_in_repository(){
+        // given
+        User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").build();
+        sut.persist(newUser);
+
+        // when
+        boolean actual = sut.isEmpty();
+
+        // then
+        assertThat(actual, is(false));
+    }
+
+    @Test
+    public void isEmpty_should_return_true_when_not_exist_records_in_repository(){
+        // when
+        boolean actual = sut.isEmpty();
+
+        // then
+        assertThat(actual, is(true));
     }
 }

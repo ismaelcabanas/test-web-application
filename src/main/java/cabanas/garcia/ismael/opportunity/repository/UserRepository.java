@@ -10,4 +10,6 @@ public interface UserRepository {
     Optional<User> read(String username);
 
     User update(User updateUser);
+
+    void deleteAll();
 }

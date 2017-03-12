@@ -39,4 +39,13 @@ public class InMemoryUserRepository implements UserRepository {
                 .roles(updateUser.getRoles())
                 .build();
     }
+
+    @Override
+    public void deleteAll() {
+        repository.clear();
+    }
+
+    public boolean isEmpty() {
+        return repository.isEmpty();
+    }
 }
