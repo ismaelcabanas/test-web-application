@@ -17,6 +17,10 @@ public class HttpExchangeWithDataForApiStub extends HttpExchangeStub {
         getRequestHeaders().add("Content-type", "application/x-www-form-urlencoded");
     }
 
+    public HttpExchangeWithDataForApiStub(String username, String roles) {
+        this(username, "", roles);
+    }
+
     @Override
     public InputStream getRequestBody() {
         String payload ="username=" + username + "&password=" + password + "&roles=" + roles;

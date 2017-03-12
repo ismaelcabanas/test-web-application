@@ -8,4 +8,6 @@ public interface UserRepository {
     User persist(User newUser);
 
     Optional<User> read(String username);
+
+    User update(User updateUser);
 }

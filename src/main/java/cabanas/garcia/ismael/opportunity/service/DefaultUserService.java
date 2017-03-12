@@ -32,4 +32,14 @@ public class DefaultUserService implements UserService{
 
         return User.builder().username(userPersisted.getUsername()).roles(userPersisted.getRoles()).build();
     }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public User update(User updateUser) {
+        return null;
+    }
 }

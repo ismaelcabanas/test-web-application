@@ -29,4 +29,14 @@ public class InMemoryUserRepository implements UserRepository {
             instance = new InMemoryUserRepository();
         return instance;
     }
+
+    @Override
+    public User update(User updateUser) {
+        Optional<User> user = read(updateUser.getUsername());
+        return User.builder()
+                .username(user.get().getUsername())
+                .password(user.get().getPassword())
+                .roles(updateUser.getRoles())
+                .build();
+    }
 }
