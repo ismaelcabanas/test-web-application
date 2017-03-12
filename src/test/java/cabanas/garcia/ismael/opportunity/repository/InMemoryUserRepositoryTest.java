@@ -97,6 +97,20 @@ public class InMemoryUserRepositoryTest {
     }
 
     @Test
+    public void delete_user_from_repository(){
+        // given
+        User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").build();
+        sut.persist(newUser);
+
+        // when
+        sut.delete(USER_NAME_ISMAEL);
+
+        // then
+        Optional<User> user = sut.read(USER_NAME_ISMAEL);
+        assertThat(user.isPresent(), is(false));
+    }
+
+    @Test
     public void isEmpty_should_return_false_when_there_is_records_in_repository(){
         // given
         User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").build();

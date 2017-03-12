@@ -48,4 +48,9 @@ public class InMemoryUserRepository implements UserRepository {
     public boolean isEmpty() {
         return repository.isEmpty();
     }
+
+    @Override
+    public void delete(String username) {
+        repository.remove(username);
+    }
 }
