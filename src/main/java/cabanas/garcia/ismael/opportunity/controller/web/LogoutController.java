@@ -37,7 +37,7 @@ public class LogoutController extends Controller{
 
             theSession.invalidate();
 
-            request.setSession(theSession);
+            request.setSession(null);
         }
 
         return new RedirectView(redirectPath);

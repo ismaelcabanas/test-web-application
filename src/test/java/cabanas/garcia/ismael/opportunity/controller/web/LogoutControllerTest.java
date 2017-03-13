@@ -60,8 +60,8 @@ public class LogoutControllerTest {
         sut.process(request);
 
         // then
-        assertThat(request.getSession().isPresent(), is(equalTo(true)));
-        assertThat(request.getSession().get().hasExpired(), is(equalTo(true)));
+        assertThat(request.getSession().isPresent(), is(equalTo(false)));
+        //assertThat(request.getSession().get().hasExpired(), is(equalTo(true)));
     }
 
     @Test
