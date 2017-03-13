@@ -5,7 +5,6 @@ import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
-import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
@@ -82,8 +81,9 @@ public class LogoutControllerTest {
     @Test
     public void process_request_should_return_redirect_view(){
         // given
+        String redirectPath = "/login";
         String aSessionId = "aSessionId";
-        LogoutController sut = new LogoutController(sessionRepository);
+        LogoutController sut = new LogoutController(sessionRepository, redirectPath);
         Request request = createRequestWithValidSession(aSessionId);
 
         // when
@@ -91,6 +91,7 @@ public class LogoutControllerTest {
 
         // then
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_MOVED_TEMP)));
+        assertThat(actual.render().getRedirectPath(), is(equalTo(redirectPath)));
     }
 
     private Request createRequestWithValidSession(String aSessionId) {

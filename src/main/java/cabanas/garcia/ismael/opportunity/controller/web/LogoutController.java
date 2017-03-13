@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public class LogoutController extends Controller{
     protected static final String PATH = "/logout";
+    private String redirectPath;
     private SessionRepository sessionRepository;
 
     public LogoutController() {
@@ -18,7 +19,12 @@ public class LogoutController extends Controller{
     }
 
     public LogoutController(SessionRepository sessionRepository) {
+        this(sessionRepository, "");
+    }
+
+    public LogoutController(SessionRepository sessionRepository, String redirectPath) {
         this.sessionRepository = sessionRepository;
+        this.redirectPath = redirectPath;
     }
 
     @Override
@@ -34,7 +40,7 @@ public class LogoutController extends Controller{
             request.setSession(theSession);
         }
 
-        return new RedirectView();
+        return new RedirectView(redirectPath);
     }
 
     @Override
