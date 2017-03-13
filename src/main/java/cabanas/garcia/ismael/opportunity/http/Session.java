@@ -12,8 +12,8 @@ import java.util.UUID;
 @Builder
 @Getter
 @ToString
-@EqualsAndHashCode(exclude={"user"})
-public class Session {
+@EqualsAndHashCode(exclude={"user", "lastAccess", "timeout"})
+public class Session implements Cloneable{
     private String sessionId;
     private User user;
     private long lastAccess;
@@ -35,5 +35,18 @@ public class Session {
 
     public boolean hasExpired() {
         return (timeout != -1 && !(DateUtil.now() < lastAccess + timeout));
+    }
+
+    public void resetLastAccess() {
+        this.lastAccess = DateUtil.now();
+    }
+
+    public Session makeClone(){
+        try {
+            return (Session) this.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

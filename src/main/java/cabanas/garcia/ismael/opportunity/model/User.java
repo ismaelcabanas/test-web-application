@@ -9,7 +9,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Getter
-public class User {
+public class User implements Cloneable{
     private String username;
     private String password;
     private Roles roles;
