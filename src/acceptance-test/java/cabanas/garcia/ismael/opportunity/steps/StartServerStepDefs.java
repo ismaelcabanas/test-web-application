@@ -6,12 +6,18 @@ import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
+import com.sun.net.httpserver.Filter;
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
 
@@ -32,8 +38,15 @@ public class StartServerStepDefs implements En {
         Then("^the web server is down$", () -> {
             Assert.assertThat(httpServer.isRunning(), Is.is(IsEqual.equalTo(false)));
         });
-        Given("^private resource (.*)$", (String resource) -> {
-            // TODO Configure private resources to server here
+        Given("^private resources (.*)$", (String resources) -> {
+            String[] resourcesSplitted = resources.split(",");
+
+            SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter();
+
+            Arrays.stream(resourcesSplitted).forEach(resource -> authenticationFilter.getConfiguration().addPrivateResource(resource));
+            authenticationFilter.getConfiguration().redirectPath("/login");
+
+            filters.add(authenticationFilter);
         });
     }
 }

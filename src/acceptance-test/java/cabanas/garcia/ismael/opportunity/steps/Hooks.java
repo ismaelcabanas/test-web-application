@@ -28,7 +28,7 @@ public class Hooks implements En{
     public static SunHttpServer httpServer;
     public final static Controllers webControllers = webControllers();
     public final static Controllers restControllers = restControllers();
-    public final static List<Filter> filters = configureFilters();
+    public static List<Filter> filters = null;
 
     public Hooks(){
 
@@ -41,6 +41,7 @@ public class Hooks implements En{
         });
 
         Before(() -> {
+            filters = new ArrayList<>();
             /*configurePermissions();
 
             List<Filter> filters = configureFilters();

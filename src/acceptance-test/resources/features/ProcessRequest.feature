@@ -10,7 +10,7 @@ Feature: Process request to web server
     And 200 status code
 
   Scenario: Request unknown page
-    Given the web server is running on port 8005
+    Given the web server is running on port 8002
     When I send a /unknownPage request to web server
     Then the web server returns Resource not found resource
     And 404 status code

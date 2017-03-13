@@ -1,24 +1,18 @@
 package cabanas.garcia.ismael.opportunity.steps;
 
-import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import com.sun.net.httpserver.BasicAuthenticator;
-import com.sun.net.httpserver.Filter;
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedReader;
@@ -79,30 +73,34 @@ public class ProcessRequestStepDef implements En {
             assertThat(this.statusCode, is(equalTo(200)));
             assertThat(this.response, containsString("Login"));
         });
-        And("^if I login with user (.*) and password (.*) successfully$", (String user, String password) -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
-        });
+
         Given("^credentials (.*)/(.*)", (String user, String password) -> {
             this.username = user;
             this.password = password;
         });
         When("^I send try to login to web server$", () -> {
-            HttpClient httpClient = HttpUtil.create();
-            HttpPost httpPost = new HttpPost("http://localhost:" + port + "/login");
-            List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("username", username));
-            urlParameters.add(new BasicNameValuePair("password", password));
-            try {
-                httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                statusCode = httpResponse.getStatusLine().getStatusCode();
-                response = getStringFromInputStream(httpResponse.getEntity().getContent());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            login(username, password);
+        });
+        And("^I log in with (.*)/(.*) credentials$", (String username, String password) -> {
+            login(username, password);
         });
 
+    }
+
+    private void login(String username, String password) {
+        HttpClient httpClient = HttpUtil.create();
+        HttpPost httpPost = new HttpPost("http://localhost:" + port + "/login");
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("username", username));
+        urlParameters.add(new BasicNameValuePair("password", password));
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            statusCode = httpResponse.getStatusLine().getStatusCode();
+            response = getStringFromInputStream(httpResponse.getEntity().getContent());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected static String getStringFromInputStream(InputStream is) {
