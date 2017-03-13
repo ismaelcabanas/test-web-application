@@ -37,6 +37,8 @@ public class SunHttpAuthenticationFilterTest {
         SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
         sut.getConfiguration().addPrivateResource("/page1");
 
+        when(sessionRepository.read(anyString())).thenReturn(Optional.empty());
+
         // when
         sut.doFilter(httpExchange, chain);
 
@@ -126,7 +128,7 @@ public class SunHttpAuthenticationFilterTest {
 
         // then
         verify(sessionRepository).read(session.getSessionId());
-        verify(httpExchangeSpy).setAttribute("session", session);
+        verify(httpExchangeSpy).setAttribute("session", Optional.of(session));
     }
 
     @Test

@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.HomeRawView;
 import cabanas.garcia.ismael.opportunity.view.RedirectView;
@@ -17,14 +18,17 @@ public class LoginPostController extends Controller {
 
     public static final String PATH = "/login";
 
+    private SessionRepository sessionRepository;
+
     private UserService userService;
 
     public LoginPostController() {
         // Necessary for instantiations by reflection
     }
 
-    public LoginPostController(UserService userService) {
+    public LoginPostController(UserService userService, SessionRepository sessionRepository) {
         this.userService = userService;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -49,6 +53,8 @@ public class LoginPostController extends Controller {
     private void createSession(final User user, Request request) {
         Session session = Session.create(user);
         request.setSession(session);
+
+        sessionRepository.persist(session);
     }
 
     private boolean redirect(Request request) {
