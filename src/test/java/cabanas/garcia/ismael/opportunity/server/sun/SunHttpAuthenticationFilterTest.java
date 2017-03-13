@@ -44,7 +44,8 @@ public class SunHttpAuthenticationFilterTest {
         SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
         sut.getConfiguration().addPrivateResource("/page1");
 
-        when(sessionRepository.read(anyString())).thenReturn(Optional.empty());
+        Session nonExpiredSession = Session.builder().timeout(-1).sessionId("aSessionId").user(User.builder().username("ismael").build()).build();
+        when(sessionRepository.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
 
         // when
         sut.doFilter(httpExchange, chain);

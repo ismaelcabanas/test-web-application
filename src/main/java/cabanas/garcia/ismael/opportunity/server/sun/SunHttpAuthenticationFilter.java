@@ -45,7 +45,7 @@ public class SunHttpAuthenticationFilter extends Filter{
             log.debug("is a secure resource...");
             Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
             if(!sessionCookie.isPresent()){
-                log.info("Not exist a valid user session, redirecting for authentication to {}", configuration.getRedirectPath());
+                log.info("Not exist a valid cookie session, redirecting for authentication to {}", configuration.getRedirectPath());
                 HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
                 return;
             }
@@ -53,18 +53,23 @@ public class SunHttpAuthenticationFilter extends Filter{
             if(session.isPresent()){
                 Session theSession = session.get();
                 if(!theSession.hasExpired()) {
+                    log.debug("Session non expired");
                     theSession.resetLastAccess();
                     sessionRepository.persist(theSession);
                     log.debug("Updated session {}", theSession);
                     httpExchange.setAttribute("session", theSession);
                 }
                 else{
-                    log.debug("Deleting session {}", theSession.getSessionId());
+                    log.debug("Session expired. Deleting session {}", theSession.getSessionId());
                     sessionRepository.delete(theSession.getSessionId());
                     log.info("Session expired, redirecting for authentication to {}", configuration.getRedirectPath());
                     HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
                     return;
                 }
+            }else{
+                log.info("Non exist user session. Redirect to {} ", configuration.getRedirectPath());
+                HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
+                return;
             }
         }
         chain.doFilter(httpExchange);
