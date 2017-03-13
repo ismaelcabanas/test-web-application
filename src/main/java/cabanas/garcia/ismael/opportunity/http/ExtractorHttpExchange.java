@@ -25,7 +25,7 @@ public class ExtractorHttpExchange {
         return httpExchange.getRequestURI().getPath();
     }
 
-    public Optional<Session> extractSessionFrom() {
+    public Optional<Session> extractSessionCookie() {
         Headers headers = httpExchange.getRequestHeaders();
         if(!headers.isEmpty()) {
             List<String> headerCookies = headers.get(RequestHeadersConstants.COOKIE);

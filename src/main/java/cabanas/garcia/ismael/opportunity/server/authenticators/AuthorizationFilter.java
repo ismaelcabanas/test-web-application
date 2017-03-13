@@ -20,7 +20,7 @@ public class AuthorizationFilter extends Filter{
 
         log.info("Filtering resource {}", path);
 
-      /*  Optional<Session> session = extractorHttpExchange.extractSessionFrom();
+      /*  Optional<Session> session = extractorHttpExchange.extractSessionCookie();
         if(!session.isPresent() && session.getUser() != null){
             PermissionChecker permissionChecker = new PermissionChecker(Permissions.getInstance());
             if (!permissionChecker.check(path, session.getUser().gerRoles())) {
