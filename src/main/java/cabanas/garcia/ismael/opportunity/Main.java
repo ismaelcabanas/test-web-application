@@ -40,7 +40,7 @@ public class Main {
         loadDefaultUsers();
 
         SunHttpServer httpServer = new SunHttpServer(8080);
-        httpServer.getConfiguration().add("session_timeout", 30);
+        httpServer.getConfiguration().add("session_timeout", 6000);
 
         Controllers webControllers = webControllers();
         SunHttpHandler webHandler = new SunHttpHandler(webControllers);
