@@ -6,6 +6,7 @@ Feature: Session handling
   Background:
     Given there is the user admin/admin with Admin role in the system
 
+  @ignore
   Scenario: Create user session when authenticate
     Given private resources /page1, /page2
     Given the web server is running on port 8002
