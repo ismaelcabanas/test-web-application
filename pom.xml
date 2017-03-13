@@ -103,7 +103,7 @@
                     <!--
                         Ensures that both integration-test and verify goals of the Failsafe Maven
                         plugin are executed.
-
+                    -->
                     <execution>
                         <id>acceptance-tests</id>
                         <goals>
@@ -118,7 +118,7 @@
                             </includes>
                         </configuration>
                     </execution>
-                    -->
+
                 </executions>
                 <configuration>
                     <skipITs>${skipITs}</skipITs>
