@@ -33,7 +33,7 @@ public class Session {
                 .build();
     }
 
-    public boolean isExpired() {
+    public boolean hasExpired() {
         return (timeout != -1 && !(DateUtil.now() < lastAccess + timeout));
     }
 }

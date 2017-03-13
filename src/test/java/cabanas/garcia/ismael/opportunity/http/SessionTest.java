@@ -35,7 +35,7 @@ public class SessionTest {
         assertThat(actual.getUser().getUsername(), is(equalTo(ISMAEL_USERNAME)));
         assertThat(actual.getTimeout(), is(equalTo(-1)));
         assertThat(actual.getLastAccess(), is(notNullValue()));
-        assertThat(actual.isExpired(), is(false));
+        assertThat(actual.hasExpired(), is(false));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class SessionTest {
         assertThat(actual.getUser().getUsername(), is(equalTo(ISMAEL_USERNAME)));
         assertThat(actual.getTimeout(), is(equalTo(30)));
         assertTrue(actual.getLastAccess() > 0);
-        assertThat(actual.isExpired(), is(false));
+        assertThat(actual.hasExpired(), is(false));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class SessionTest {
         Session actual = Session.create(anUser, timeoutInMilliSeconds);
 
         // then
-        assertThat(actual.isExpired(), is(true));
+        assertThat(actual.hasExpired(), is(true));
 
     }
 }
