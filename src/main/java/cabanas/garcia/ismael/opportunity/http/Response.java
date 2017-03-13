@@ -4,4 +4,6 @@ public interface Response {
     int getStatusCode();
 
     byte[] getContent();
+
+    boolean isRedirect();
 }

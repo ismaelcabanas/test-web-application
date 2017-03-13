@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.net.HttpURLConnection;
+
 @Builder
 @EqualsAndHashCode
 @ToString
@@ -18,5 +20,10 @@ public class DefaultResponse implements Response{
     public static class DefaultResponseBuilder{
         private static final String EMPTY_CONTENT = "";
         private byte[] content = EMPTY_CONTENT.getBytes();
+    }
+
+    @Override
+    public boolean isRedirect() {
+        return statusCode == HttpURLConnection.HTTP_MOVED_TEMP;
     }
 }
