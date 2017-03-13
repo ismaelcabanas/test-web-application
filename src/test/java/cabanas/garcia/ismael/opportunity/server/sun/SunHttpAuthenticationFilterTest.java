@@ -1,6 +1,9 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
+import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -15,8 +18,7 @@ import java.net.HttpURLConnection;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SunHttpAuthenticationFilterTest {
@@ -24,11 +26,14 @@ public class SunHttpAuthenticationFilterTest {
     @Mock
     private Filter.Chain chain;
 
+    @Mock
+    private SessionRepository sessionRepository;
+
     @Test
     public void if_authenticated_user_request_a_private_resource_then_the_request_is_processed() throws Exception{
         // given
         HttpExchange httpExchange = new HttpExchangeAuthenticatedUserStub("/page1");
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
         sut.getConfiguration().addPrivateResource("/page1");
 
         // when
@@ -98,6 +103,29 @@ public class SunHttpAuthenticationFilterTest {
 
         // then
         verify(chain).doFilter(httpExchange);
+    }
+
+    @Test
+    public void if_request_with_valid_session_cookie_to_a_non_private_resource_then_session_is_generated() throws Exception{
+        // given
+        String aSessionId = "aSessionId";
+        HttpExchange httpExchange = new HttpExchangeWithSessionCookieStub("/page1", aSessionId);
+
+        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
+        sut.getConfiguration().addPrivateResource("/page1");
+
+        HttpExchange httpExchangeSpy = spy(httpExchange);
+
+        Session session = Session.builder().sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
+
+        when(sessionRepository.findBy(anyString())).thenReturn(session);
+
+        // when
+        sut.doFilter(httpExchangeSpy, chain);
+
+        // then
+        verify(sessionRepository).findBy(session.getSessionId());
+        verify(httpExchangeSpy).setAttribute("session", session);
     }
 
     @Test

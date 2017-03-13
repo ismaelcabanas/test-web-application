@@ -1,6 +1,8 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.http.*;
+import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
+import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +18,17 @@ public class SunHttpAuthenticationFilter extends Filter{
 
     public static final String AUTHENTICATION_FILTER = "Authentication filter";
 
+    private SessionRepository sessionRepository;
+
     private final AuthenticatorFilterConfiguration configuration;
 
     public SunHttpAuthenticationFilter() {
         this.configuration = new AuthenticatorFilterConfiguration();
+    }
+
+    public SunHttpAuthenticationFilter(SessionRepository sessionRepository) {
+        this();
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -33,15 +42,21 @@ public class SunHttpAuthenticationFilter extends Filter{
 
         if(isPrivateResource(path)){
             log.info("Looking for valid user session...");
-            Optional<Session> session = extractorHttpExchange.extractSessionCookie();
-            if(!session.isPresent()){
+            Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
+            if(!sessionCookie.isPresent()){
                 log.info("Not exist a valid user session, redirecting for authentication to " + configuration.getRedirectPath());
                 httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
                 return;
             }
+            Session session = getSession(sessionCookie.get());
+            httpExchange.setAttribute("session", session);
         }
         chain.doFilter(httpExchange);
+    }
+
+    private Session getSession(final Cookie sessionCookie) {
+        return sessionRepository.findBy(sessionCookie.getValue());
     }
 
     private boolean isPrivateResource(String resource) {
