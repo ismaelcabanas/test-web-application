@@ -33,4 +33,9 @@ public class DefaultRequest implements Request{
     public void setSession(Session session) {
         this.session = Optional.ofNullable(session);
     }
+
+    @Override
+    public boolean hasRedirectParameter() {
+        return getParameter("redirect") != null;
+    }
 }

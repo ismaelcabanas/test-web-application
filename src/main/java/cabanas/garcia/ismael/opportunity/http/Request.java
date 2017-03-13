@@ -12,4 +12,6 @@ public interface Request {
     String getParameter(String paramName);
 
     void setSession(Session session);
+
+    boolean hasRedirectParameter();
 }
