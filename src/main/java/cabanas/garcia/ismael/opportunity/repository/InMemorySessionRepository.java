@@ -37,6 +37,11 @@ public class InMemorySessionRepository implements SessionRepository{
         repository.clear();
     }
 
+    @Override
+    public void delete(String sessionId) {
+        repository.remove(sessionId);
+    }
+
     public boolean isEmpty() {
         return repository.isEmpty();
     }

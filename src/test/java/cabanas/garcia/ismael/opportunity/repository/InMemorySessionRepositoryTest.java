@@ -30,6 +30,21 @@ public class InMemorySessionRepositoryTest {
     }
 
     @Test
+    public void delete_existent_session(){
+        // given
+        String aSessionId = "aSessionId";
+
+        sut.persist(Session.builder().sessionId(aSessionId).build());
+
+        // when
+        sut.delete(aSessionId);
+
+        // then
+        Optional<Session> actual = sut.read(aSessionId);
+        assertThat(actual.isPresent(), is(false));
+    }
+
+    @Test
     public void find_existent_session(){
         // given
         String aSessionId = "aSessionId";
