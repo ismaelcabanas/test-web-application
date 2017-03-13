@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.HomeRawView;
@@ -34,6 +35,7 @@ public class LoginPostController extends Controller {
         Optional<User> user = userService.login(username, password);
 
         if(isValidUser(user)){
+            createSession(user.get(), request);
             if(redirect(request)){
                 return new RedirectView();
             }
@@ -42,6 +44,11 @@ public class LoginPostController extends Controller {
         else{
             return new UnAuthorizedRawView();
         }
+    }
+
+    private void createSession(final User user, Request request) {
+        Session session = Session.create(user);
+        request.setSession(session);
     }
 
     private boolean redirect(Request request) {

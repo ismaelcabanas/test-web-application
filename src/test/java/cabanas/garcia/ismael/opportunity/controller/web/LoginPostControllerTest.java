@@ -4,12 +4,14 @@ import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParam;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
+import org.hamcrest.core.IsNot;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +25,7 @@ import java.util.Optional;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
@@ -32,6 +35,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginPostControllerTest {
 
+    public static final String USERNAME_ISMAEL = "ismael";
     @Mock
     private UserService userServiceLoginSuccess;
 
@@ -42,7 +46,7 @@ public class LoginPostControllerTest {
     public void setUp(){
         when(userServiceLoginFailed.login(anyString(), anyString())).thenReturn(Optional.empty());
 
-        Optional<User> ismael = Optional.of(User.builder().username("ismael").build());
+        Optional<User> ismael = Optional.of(User.builder().username(USERNAME_ISMAEL).build());
         when(userServiceLoginSuccess.login(anyString(), anyString())).thenReturn(ismael);
     }
 
@@ -126,8 +130,26 @@ public class LoginPostControllerTest {
         assertThat(actual, is(equalTo(RequestMethodConstants.POST)));
     }
 
+    @Test
+    public void should_create_a_user_session_when_login_successfully(){
+        // given
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess);
+        Request request = createRequestWithCredentialsAndRedirectParameter();
+
+        // when
+        View actual = sut.process(request);
+
+        // then
+        Optional<Session> session = request.getSession();
+
+        assertThat(session.isPresent(), is(equalTo(true)));
+        assertThat(session.get().getSessionId(), is(notNullValue()));
+        assertThat(session.get().getUser(), is(notNullValue()));
+        assertThat(session.get().getUser().getUsername(), is(equalTo(USERNAME_ISMAEL)));
+    }
+
     private Request createRequestWithCredentialsAndRedirectParameter() {
-        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParam();
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParam(USERNAME_ISMAEL, "changeIt", "/page1");
         return RequestFactory.create(httpExchange);
     }
 
