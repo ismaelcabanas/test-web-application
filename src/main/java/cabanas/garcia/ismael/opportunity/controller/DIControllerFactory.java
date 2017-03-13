@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.controller.rest.UserDeleteController;
 import cabanas.garcia.ismael.opportunity.controller.rest.UserGetController;
 import cabanas.garcia.ismael.opportunity.controller.rest.UserUpdateController;
 import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
+import cabanas.garcia.ismael.opportunity.controller.web.LogoutController;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.InstantiationException;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
@@ -44,6 +45,17 @@ public class DIControllerFactory {
                                 new DefaultUserService(InMemoryUserRepository.getInstance())
                                 , InMemorySessionRepository.getInstance()
                                 , (Integer) ServerConfiguration.getInstance().get(ServerConfiguration.SESSION_TIMEOUT)
+                        );
+            } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
+            }
+        }
+        else if(clazz.getName().equals(LogoutController.class.getName())){
+            try {
+                return clazz.getConstructor(SessionRepository.class, String.class)
+                        .newInstance(
+                                InMemorySessionRepository.getInstance()
+                                , (String) ServerConfiguration.getInstance().get(ServerConfiguration.REDIRECT_LOGOUT)
                         );
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
