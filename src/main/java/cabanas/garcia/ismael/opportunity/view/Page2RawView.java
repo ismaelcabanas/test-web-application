@@ -8,8 +8,6 @@ import java.net.HttpURLConnection;
 
 public class Page2RawView implements WebView {
 
-    private static String rawContent = "Hello %s, you are in %s";
-
     private User model;
 
     public Page2RawView(User model) {
@@ -22,7 +20,7 @@ public class Page2RawView implements WebView {
 
     @Override
     public Response render() {
-        String content = String.format(rawContent, model.getUsername(), getName());
+        String content = String.format(RAW_CONTENT, model.getUsername(), getName());
         return DefaultResponse.builder()
                 .statusCode(HttpURLConnection.HTTP_OK)
                 .content(content.getBytes())
