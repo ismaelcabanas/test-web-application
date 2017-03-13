@@ -38,7 +38,7 @@ public class LoginPostController extends Controller {
 
         Optional<User> user = userService.login(username, password);
 
-        if(isValidUser(user)){
+        if(user.isPresent()){
             createSession(user.get(), request);
             if(redirect(request)){
                 return new RedirectView();
@@ -59,10 +59,6 @@ public class LoginPostController extends Controller {
 
     private boolean redirect(Request request) {
         return request.getParameter("redirect") != null;
-    }
-
-    private boolean isValidUser(Optional<User> user) {
-        return user.isPresent();
     }
 
     @Override

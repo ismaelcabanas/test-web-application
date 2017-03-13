@@ -33,11 +33,19 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User update(User updateUser) {
         Optional<User> user = read(updateUser.getUsername());
-        return User.builder()
-                .username(user.get().getUsername())
-                .password(user.get().getPassword())
-                .roles(updateUser.getRoles())
-                .build();
+        if(user.isPresent()) {
+            User userFounded = user.get();
+
+            User userUpdated = User.builder()
+                    .username(userFounded.getUsername())
+                    .password(userFounded.getPassword())
+                    .roles(updateUser.getRoles())
+                    .build();
+            repository.put(userFounded.getUsername(), userUpdated);
+
+            return userUpdated;
+        }
+        return null;
     }
 
     @Override
