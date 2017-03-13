@@ -9,6 +9,7 @@ import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiatio
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
+import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class DIControllerFactory {
         }
         else if(clazz.getName().equals(LoginPostController.class.getName())){
             try {
-                return clazz.getConstructor(UserService.class)
+                return clazz.getConstructor(UserService.class, SessionRepository.class)
                         .newInstance(
                                 new DefaultUserService(InMemoryUserRepository.getInstance())
                                 , InMemorySessionRepository.getInstance()
