@@ -7,6 +7,7 @@ import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
 import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.UnknownResourceRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.Headers;
@@ -122,6 +123,22 @@ public class SunHttpHandlerTest {
         verifyCookieResponseHeader(httpExchange, session);
     }
 
+    @Test
+    public void handle_redirect() throws Exception {
+        // given
+        HttpExchange httpExchange = new HttpExchangeSuccessResourceStub("/page1");
+        Request request = RequestFactory.create(httpExchange);
+        HttpExchange httpExchangeSpy = spy(httpExchange);
+
+        when(controllers.select(request)).thenReturn(new MyRedirectController());
+
+        // when
+        sut.handle(httpExchangeSpy);
+
+        // then
+        verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
+    }
+
     private void verifyCookieResponseHeader(HttpExchange httpExchange, Session session) {
         Headers responseHeaders = httpExchange.getResponseHeaders();
         List<String> setCookieHeader = responseHeaders.get(ResponseHeaderConstants.SET_COOKIE);
@@ -166,6 +183,18 @@ public class SunHttpHandlerTest {
         public View process(Request request) {
             request.setSession(session);
             return super.process(request);
+        }
+
+        @Override
+        public String getMappingPath() {
+            return null;
+        }
+    }
+
+    private class MyRedirectController extends Controller {
+        @Override
+        public View process(Request request) {
+            return new RedirectView("/login");
         }
 
         @Override

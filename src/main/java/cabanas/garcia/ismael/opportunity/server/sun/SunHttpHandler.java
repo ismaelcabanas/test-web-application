@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
 import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
+import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -41,11 +42,15 @@ public class SunHttpHandler implements HttpHandler{
     private void process(HttpExchange httpExchange, final Request request, final Response response) throws IOException {
         httpExchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
 
-        addCookieResponseHeader(httpExchange, request);
+        if(!response.isRedirect()) {
+            addCookieResponseHeader(httpExchange, request);
 
-        httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
+            httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
 
-        writeResponse(httpExchange, response.getContent());
+            writeResponse(httpExchange, response.getContent());
+        }
+        else
+            HttpExchangeUtil.redirect(httpExchange, response.getRedirectPath());
     }
 
     private void addCookieResponseHeader(HttpExchange httpExchange, final Request request) {
