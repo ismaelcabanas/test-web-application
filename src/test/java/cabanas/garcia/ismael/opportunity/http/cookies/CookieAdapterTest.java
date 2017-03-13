@@ -41,4 +41,19 @@ public class CookieAdapterTest {
         Assert.assertThat(cookies, is(notNullValue()));
         Assert.assertThat(cookies.get("cookieName1").get(), is(IsEqual.equalTo(Cookie.builder().name("cookieName1").value("cookieValue1").build())));
     }
+
+    @Test
+    public void toCookies_complex_with_white_spaces(){
+        // given
+        String complexRawCookie = "cookieName1=cookieValue1; cookieName2=cookieValue2";
+        List<String> cookieList = Arrays.asList(complexRawCookie);
+
+        // when
+        Cookies cookies = CookieAdapter.toCookies(cookieList);
+
+        // then
+        Assert.assertThat(cookies, is(notNullValue()));
+        Assert.assertThat(cookies.get("cookieName1").get(), is(IsEqual.equalTo(Cookie.builder().name("cookieName1").value("cookieValue1").build())));
+        Assert.assertThat(cookies.get("cookieName2").get(), is(IsEqual.equalTo(Cookie.builder().name("cookieName2").value("cookieValue2").build())));
+    }
 }
