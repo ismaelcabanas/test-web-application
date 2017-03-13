@@ -38,10 +38,11 @@ public class SunHttpAuthenticationFilter extends Filter{
 
         String path = extractorHttpExchange.extractPathFrom();
 
-        log.info("Filtering resource {}", path);
+        log.debug("Filtering resource {}", path);
 
         if(isPrivateResource(path)){
-            log.info("Looking for valid user session...");
+            log.debug("is a secure resource...");
+            log.debug("Looking for session cookie");
             Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
             if(!sessionCookie.isPresent()){
                 log.info("Not exist a valid user session, redirecting for authentication to {}", configuration.getRedirectPath());
@@ -54,7 +55,7 @@ public class SunHttpAuthenticationFilter extends Filter{
                 if(!theSession.hasExpired()) {
                     theSession.resetLastAccess();
                     sessionRepository.persist(theSession);
-                    log.info("Updated session {}", theSession);
+                    log.debug("Updated session {}", theSession);
                     httpExchange.setAttribute("session", theSession);
                 }
                 else{

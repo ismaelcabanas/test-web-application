@@ -1,11 +1,13 @@
 package cabanas.garcia.ismael.opportunity.repository;
 
 import cabanas.garcia.ismael.opportunity.model.User;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 public class InMemoryUserRepository implements UserRepository {
 
     private static InMemoryUserRepository instance = null;
@@ -15,12 +17,14 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User persist(User newUser) {
+        log.debug("Persist user {} in repository", newUser);
         repository.put(newUser.getUsername(), newUser);
         return newUser;
     }
 
     @Override
     public Optional<User> read(String username) {
+        log.debug("Getting user {} from repository", username);
         return Optional.ofNullable(repository.get(username));
     }
 
@@ -32,6 +36,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User update(User updateUser) {
+        log.debug("Updating user {} in repository", updateUser);
         Optional<User> user = read(updateUser.getUsername());
         if(user.isPresent()) {
             User userFounded = user.get();
@@ -59,6 +64,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void delete(String username) {
+        log.debug("Deleting user {} from repository", username);
         repository.remove(username);
     }
 }

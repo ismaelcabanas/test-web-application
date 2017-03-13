@@ -49,11 +49,16 @@ public class SunHttpHandler implements HttpHandler{
     }
 
     private void addCookieResponseHeader(HttpExchange httpExchange, final Request request) {
+        log.debug("Adding cookie response header...");
         if(request.getSession().isPresent()){
             Session session = request.getSession().get();
+            String cookieValue = String.format("%s=%s", Cookie.SESSION_TOKEN, session.getSessionId());
+            log.debug("Setting {} header with value {}", ResponseHeaderConstants.SET_COOKIE, cookieValue);
             httpExchange.getResponseHeaders()
-                    .add(ResponseHeaderConstants.SET_COOKIE, String.format("%s=%s", Cookie.SESSION_TOKEN, session.getSessionId()));
+                    .add(ResponseHeaderConstants.SET_COOKIE, cookieValue);
         }
+        else
+            log.debug("No session cookie set, not exist session");
     }
 
     private void writeResponse(HttpExchange httpExchange, byte[] response) throws IOException {

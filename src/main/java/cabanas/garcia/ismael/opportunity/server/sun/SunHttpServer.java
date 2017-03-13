@@ -30,6 +30,7 @@ public class SunHttpServer {
 
     public SunHttpServer(int port) {
         this.port = port;
+        this.configuration = ServerConfiguration.getInstance();
         try {
             this.httpServer = HttpServer.create(new InetSocketAddress(this.port), 0);
             this.httpServer.setExecutor(null);
