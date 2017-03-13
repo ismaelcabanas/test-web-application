@@ -49,14 +49,15 @@ public class SunHttpAuthenticationFilter extends Filter{
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
                 return;
             }
-            Session session = getSession(sessionCookie.get());
-            httpExchange.setAttribute("session", session);
+            Optional<Session> session = getSession(sessionCookie.get());
+            if(session.isPresent())
+                httpExchange.setAttribute("session", session);
         }
         chain.doFilter(httpExchange);
     }
 
-    private Session getSession(final Cookie sessionCookie) {
-        return sessionRepository.findBy(sessionCookie.getValue());
+    private Optional<Session> getSession(final Cookie sessionCookie) {
+        return sessionRepository.read(sessionCookie.getValue());
     }
 
     private boolean isPrivateResource(String resource) {

@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.net.HttpURLConnection;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -118,13 +119,13 @@ public class SunHttpAuthenticationFilterTest {
 
         Session session = Session.builder().sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
 
-        when(sessionRepository.findBy(anyString())).thenReturn(session);
+        when(sessionRepository.read(anyString())).thenReturn(Optional.of(session));
 
         // when
         sut.doFilter(httpExchangeSpy, chain);
 
         // then
-        verify(sessionRepository).findBy(session.getSessionId());
+        verify(sessionRepository).read(session.getSessionId());
         verify(httpExchangeSpy).setAttribute("session", session);
     }
 
