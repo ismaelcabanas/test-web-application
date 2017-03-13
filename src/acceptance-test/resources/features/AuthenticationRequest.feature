@@ -3,15 +3,18 @@ Feature: Authentication
   I want an authentication mechanism
   In order to only authenticated users can access to private resources
 
+  Background:
+    Given there is the user admin/admin with Admin role in the system
+
   Scenario: Authentication failed
-    Given credentials ismael/pass
+    Given credentials ismael/wrongpassword
     And the web server is running on port 8002
     When I send try to login to web server
     Then the web server returns Unauthorized resource
     And 401 status code
 
   Scenario: Authentication failed
-    Given credentials ismael/changeIt
+    Given credentials admin/admin
     And the web server is running on port 8002
     When I send try to login to web server
     Then the web server returns Home resource

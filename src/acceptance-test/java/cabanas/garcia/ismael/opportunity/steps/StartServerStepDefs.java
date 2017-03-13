@@ -17,8 +17,6 @@ import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
 
 public class StartServerStepDefs implements En {
 
-    private SunHttpServer httpServer;
-
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
             httpServer = new SunHttpServer(port);
