@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.http.imp;
 import cabanas.garcia.ismael.opportunity.http.Parameter;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.Session;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,5 +28,10 @@ public class DefaultRequest implements Request{
         if(parameter.isPresent())
             return parameter.get().getValue();
         return null;
+    }
+
+    @Override
+    public void setSession(Session session) {
+        this.session = Optional.of(session);
     }
 }

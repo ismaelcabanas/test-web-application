@@ -10,4 +10,6 @@ public interface Request {
     String getMethod();
 
     String getParameter(String paramName);
+
+    void setSession(Session session);
 }
