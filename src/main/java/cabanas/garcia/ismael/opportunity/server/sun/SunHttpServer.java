@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
+import com.sun.corba.se.spi.activation.Server;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpContext;
@@ -20,9 +21,11 @@ public class SunHttpServer {
     private State state;
 
     private HttpServer httpServer;
+    private ServerConfiguration configuration;
 
     public SunHttpServer() {
         this.state = State.STOPPED;
+        configuration = ServerConfiguration.getInstance();
     }
 
     public SunHttpServer(int port) {
@@ -73,5 +76,9 @@ public class SunHttpServer {
     public void createContext(String contextPath, SunHttpHandler handler, BasicAuthenticator authenticator) {
         HttpContext context = this.httpServer.createContext(contextPath, handler);
         context.setAuthenticator(authenticator);
+    }
+
+    public ServerConfiguration getConfiguration() {
+        return this.configuration;
     }
 }
