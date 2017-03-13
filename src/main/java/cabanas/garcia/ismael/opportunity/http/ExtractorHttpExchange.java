@@ -26,12 +26,15 @@ public class ExtractorHttpExchange {
     }
 
     public Optional<Cookie> extractSessionCookie() {
+        log.debug("Looking for session cookie");
         Headers headers = httpExchange.getRequestHeaders();
         if(!headers.isEmpty()) {
             List<String> headerCookies = headers.get(RequestHeadersConstants.COOKIE);
             if(headerCookies != null) {
                 Cookies cookies = CookieAdapter.toCookies(headerCookies);
-                return cookies.get(Cookie.SESSION_TOKEN);
+                Optional<Cookie> cookie = cookies.get(Cookie.SESSION_TOKEN);
+                log.debug("Cookie founded {}", cookie.get());
+                return cookie;
             }
         }
         return Optional.empty();

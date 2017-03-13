@@ -11,6 +11,7 @@ import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.model.RoleEnum;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
@@ -79,7 +80,7 @@ public class Main {
     private static List<Filter> configureFilters() {
         log.info("Configuring filters...");
 
-        SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter();
+        SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter(InMemorySessionRepository.getInstance());
         authenticationFilter.getConfiguration().addPrivateResource("/page1");
         authenticationFilter.getConfiguration().addPrivateResource("/page2");
         authenticationFilter.getConfiguration().addPrivateResource("/page3");

@@ -42,7 +42,6 @@ public class SunHttpAuthenticationFilter extends Filter{
 
         if(isPrivateResource(path)){
             log.debug("is a secure resource...");
-            log.debug("Looking for session cookie");
             Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
             if(!sessionCookie.isPresent()){
                 log.info("Not exist a valid user session, redirecting for authentication to {}", configuration.getRedirectPath());
@@ -72,13 +71,17 @@ public class SunHttpAuthenticationFilter extends Filter{
 
     private void redirect(HttpExchange httpExchange) throws IOException {
         httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
+        httpExchange.getResponseHeaders().remove(ResponseHeaderConstants.SET_COOKIE);
         httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
     }
 
     private Optional<Session> getSession(final Cookie sessionCookie) {
+        log.debug("Load session {} from repository", sessionCookie.getValue());
         Optional<Session> sessionFromRepository = sessionRepository.read(sessionCookie.getValue());
         if(sessionFromRepository.isPresent()){
-            return Optional.of(sessionFromRepository.get().makeClone());
+            Session session = sessionFromRepository.get().makeClone();
+            log.debug("Session {} loaded", session);
+            return Optional.of(session);
         }
         return Optional.empty();
     }

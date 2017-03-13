@@ -25,8 +25,8 @@ public final class CookieAdapter {
         String[] rawCookieSplitted = rawCookie.split("=");
         if(rawCookieSplitted.length == 2){
             return Optional.of(Cookie.builder()
-                                .name(rawCookieSplitted[0])
-                                .value(rawCookieSplitted[1])
+                                .name(rawCookieSplitted[0].trim())
+                                .value(rawCookieSplitted[1].trim())
                                 .build());
         }
         return Optional.empty();

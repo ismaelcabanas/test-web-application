@@ -43,7 +43,7 @@ public class DIControllerFactory {
                         .newInstance(
                                 new DefaultUserService(InMemoryUserRepository.getInstance())
                                 , InMemorySessionRepository.getInstance()
-                                , (Integer) ServerConfiguration.getInstance().get("session_timeout")
+                                , (Integer) ServerConfiguration.getInstance().get(ServerConfiguration.SESSION_TIMEOUT)
                         );
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
