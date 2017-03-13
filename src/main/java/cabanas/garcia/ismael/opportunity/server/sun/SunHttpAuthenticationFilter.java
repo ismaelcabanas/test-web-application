@@ -51,8 +51,11 @@ public class SunHttpAuthenticationFilter extends Filter{
             Optional<Session> session = getSession(sessionCookie.get());
             if(session.isPresent()){
                 Session theSession = session.get();
-                if(!theSession.hasExpired())
+                if(!theSession.hasExpired()) {
+                    theSession.resetLastAccess();
+                    sessionRepository.persist(theSession);
                     httpExchange.setAttribute("session", theSession);
+                }
                 else{
                     log.debug("Deleting session {}", theSession.getSessionId());
                     sessionRepository.delete(theSession.getSessionId());
@@ -71,7 +74,11 @@ public class SunHttpAuthenticationFilter extends Filter{
     }
 
     private Optional<Session> getSession(final Cookie sessionCookie) {
-        return sessionRepository.read(sessionCookie.getValue());
+        Optional<Session> sessionFromRepository = sessionRepository.read(sessionCookie.getValue());
+        if(sessionFromRepository.isPresent()){
+            return Optional.of(sessionFromRepository.get().makeClone());
+        }
+        return Optional.empty();
     }
 
     private boolean isPrivateResource(String resource) {

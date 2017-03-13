@@ -9,6 +9,8 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -19,7 +21,9 @@ import java.util.Optional;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.greaterThan;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SunHttpAuthenticationFilterTest {
@@ -29,6 +33,9 @@ public class SunHttpAuthenticationFilterTest {
 
     @Mock
     private SessionRepository sessionRepository;
+
+    @Captor
+    private ArgumentCaptor<Session> sessionCaptor;
 
     @Test
     public void if_authenticated_user_request_a_private_resource_then_the_request_is_processed() throws Exception{
@@ -132,6 +139,33 @@ public class SunHttpAuthenticationFilterTest {
     }
 
     @Test
+    public void if_request_with_valid_session_cookie_to_a_non_private_resource_then_session_is_updated() throws Exception{
+        // given
+        String aSessionId = "aSessionId";
+        HttpExchange httpExchange = new HttpExchangeWithSessionCookieStub("/page1", aSessionId);
+
+        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
+        sut.getConfiguration().addPrivateResource("/page1");
+
+        HttpExchange httpExchangeSpy = spy(httpExchange);
+
+        Session nonExpiredSession = Session.builder().timeout(-1).sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
+
+        when(sessionRepository.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
+
+        // when
+        sut.doFilter(httpExchangeSpy, chain);
+
+        // then
+        verify(sessionRepository).read(nonExpiredSession.getSessionId());
+        verify(sessionRepository).persist(any());
+        verify(httpExchangeSpy).setAttribute(Mockito.anyString(), sessionCaptor.capture());
+
+        Session sessionUpdated = sessionCaptor.getValue();
+        assertThat(sessionUpdated.getLastAccess(), is(greaterThan(nonExpiredSession.getLastAccess())));
+    }
+
+    @Test
     public void should_delete_session_from_repository_if_session_has_expired() throws Exception{
         // given
         String aSessionId = "aSessionId";
@@ -142,7 +176,7 @@ public class SunHttpAuthenticationFilterTest {
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
-        Session session = expiredSession();
+        Session session = Session.builder().timeout(1).sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
 
         when(sessionRepository.read(anyString())).thenReturn(Optional.of(session));
 
