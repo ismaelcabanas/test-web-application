@@ -21,4 +21,8 @@ public final class ServerConfiguration {
     public void add(String propertyName, Object propertyValue) {
         this.configuration.put(propertyName, propertyValue);
     }
+
+    public Object get(String propertyName) {
+        return this.configuration.get(propertyName);
+    }
 }
