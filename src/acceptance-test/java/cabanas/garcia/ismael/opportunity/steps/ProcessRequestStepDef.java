@@ -91,6 +91,18 @@ public class ProcessRequestStepDef implements En {
         And("^I log in with (.*)/(.*) credentials$", (String username, String password) -> {
             login(username, password);
         });
+        When("^I logout$", () -> {
+            HttpClient httpClient = HttpUtil.create();
+            HttpGet httpGet = new HttpGet("http://localhost:" + port + "/logout");
+            try {
+                httpGet.addHeader(sessionTokenHeader);
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                statusCode = httpResponse.getStatusLine().getStatusCode();
+                response = getStringFromInputStream(httpResponse.getEntity().getContent());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
     }
 
