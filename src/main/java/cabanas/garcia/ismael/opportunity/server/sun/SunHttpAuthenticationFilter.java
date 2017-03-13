@@ -32,8 +32,10 @@ public class SunHttpAuthenticationFilter extends Filter{
         log.info("Filtering resource {}", path);
 
         if(isPrivateResource(path)){
+            log.info("Looking for valid user session...");
             Optional<Session> session = extractorHttpExchange.extractSessionFrom();
             if(!session.isPresent()){
+                log.info("Not exist a valid user session, redirecting for authentication to " + configuration.getRedirectPath());
                 httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
                 return;
