@@ -16,6 +16,7 @@ public class DefaultResponse implements Response{
     private int statusCode;
     private byte[] content;
     private Object model;
+    private String redirectPath;
 
     public static class DefaultResponseBuilder{
         private static final String EMPTY_CONTENT = "";
@@ -26,4 +27,5 @@ public class DefaultResponse implements Response{
     public boolean isRedirect() {
         return statusCode == HttpURLConnection.HTTP_MOVED_TEMP;
     }
+
 }

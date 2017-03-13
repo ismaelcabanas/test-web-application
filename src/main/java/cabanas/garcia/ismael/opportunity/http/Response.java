@@ -6,4 +6,6 @@ public interface Response {
     byte[] getContent();
 
     boolean isRedirect();
+
+    String getRedirectPath();
 }
