@@ -32,4 +32,8 @@ public class Session {
                 .timeout(timeoutInMilliseconds) // session don't expire
                 .build();
     }
+
+    public boolean isExpired() {
+        return (timeout != -1 && !(DateUtil.now() < lastAccess + timeout));
+    }
 }
