@@ -14,7 +14,7 @@ public final class CookieAdapter {
             StringTokenizer rawCookieTokenized = new StringTokenizer(rawCookie, ";");
             while(rawCookieTokenized.hasMoreElements()){
                 Optional<Cookie> cookie = toCookie(rawCookieTokenized.nextToken());
-                if(cookie.isPresent())
+                if(cookie.isPresent() && cookie.get().hasValue())
                     cookies.add(cookie.get());
             }
         });
