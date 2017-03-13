@@ -3,9 +3,8 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
-import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.Response;
+import cabanas.garcia.ismael.opportunity.http.*;
+import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -35,14 +34,25 @@ public class SunHttpHandler implements HttpHandler{
 
         Response response = view.render();
 
-        process(httpExchange, response);
+        process(httpExchange, request, response);
 
     }
 
-    private void process(HttpExchange httpExchange, Response response) throws IOException {
+    private void process(HttpExchange httpExchange, final Request request, final Response response) throws IOException {
         httpExchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
         httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
+
+        handlingSession(httpExchange, request);
+
         writeResponse(httpExchange, response.getContent());
+    }
+
+    private void handlingSession(HttpExchange httpExchange, final Request request) {
+        if(request.getSession().isPresent()){
+            Session session = request.getSession().get();
+            httpExchange.getResponseHeaders()
+                    .add(ResponseHeaderConstants.SET_COOKIE, String.format("%s=%s", Cookie.SESSION_TOKEN, session.getSessionId()));
+        }
     }
 
     private void writeResponse(HttpExchange httpExchange, byte[] response) throws IOException {
