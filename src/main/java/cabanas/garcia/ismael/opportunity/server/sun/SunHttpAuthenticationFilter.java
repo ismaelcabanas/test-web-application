@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
+import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public class SunHttpAuthenticationFilter extends Filter{
             Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
             if(!sessionCookie.isPresent()){
                 log.info("Not exist a valid user session, redirecting for authentication to {}", configuration.getRedirectPath());
-                redirect(httpExchange);
+                HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
                 return;
             }
             Optional<Session> session = getSession(sessionCookie.get());
@@ -61,18 +62,12 @@ public class SunHttpAuthenticationFilter extends Filter{
                     log.debug("Deleting session {}", theSession.getSessionId());
                     sessionRepository.delete(theSession.getSessionId());
                     log.info("Session expired, redirecting for authentication to {}", configuration.getRedirectPath());
-                    redirect(httpExchange);
+                    HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
                     return;
                 }
             }
         }
         chain.doFilter(httpExchange);
-    }
-
-    private void redirect(HttpExchange httpExchange) throws IOException {
-        httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
-        httpExchange.getResponseHeaders().remove(ResponseHeaderConstants.SET_COOKIE);
-        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
     }
 
     private Optional<Session> getSession(final Cookie sessionCookie) {
