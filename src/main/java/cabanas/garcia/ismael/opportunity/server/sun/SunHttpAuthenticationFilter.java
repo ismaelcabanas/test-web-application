@@ -54,6 +54,7 @@ public class SunHttpAuthenticationFilter extends Filter{
                 if(!theSession.hasExpired()) {
                     theSession.resetLastAccess();
                     sessionRepository.persist(theSession);
+                    log.info("Updated session {}", theSession);
                     httpExchange.setAttribute("session", theSession);
                 }
                 else{
