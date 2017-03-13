@@ -44,16 +44,30 @@ public class SunHttpAuthenticationFilter extends Filter{
             log.info("Looking for valid user session...");
             Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
             if(!sessionCookie.isPresent()){
-                log.info("Not exist a valid user session, redirecting for authentication to " + configuration.getRedirectPath());
-                httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
-                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
+                log.info("Not exist a valid user session, redirecting for authentication to {}", configuration.getRedirectPath());
+                redirect(httpExchange);
                 return;
             }
             Optional<Session> session = getSession(sessionCookie.get());
-            if(session.isPresent())
-                httpExchange.setAttribute("session", session.get());
+            if(session.isPresent()){
+                Session theSession = session.get();
+                if(!theSession.hasExpired())
+                    httpExchange.setAttribute("session", theSession);
+                else{
+                    log.debug("Deleting session {}", theSession.getSessionId());
+                    sessionRepository.delete(theSession.getSessionId());
+                    log.info("Session expired, redirecting for authentication to {}", configuration.getRedirectPath());
+                    redirect(httpExchange);
+                    return;
+                }
+            }
         }
         chain.doFilter(httpExchange);
+    }
+
+    private void redirect(HttpExchange httpExchange) throws IOException {
+        httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, configuration.getRedirectPath());
+        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
     }
 
     private Optional<Session> getSession(final Cookie sessionCookie) {

@@ -10,4 +10,6 @@ public interface SessionRepository {
     Session persist(Session session);
 
     void deleteAll();
+
+    void delete(String sessionId);
 }

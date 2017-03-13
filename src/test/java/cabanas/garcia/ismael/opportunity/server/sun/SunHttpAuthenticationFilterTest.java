@@ -119,7 +119,30 @@ public class SunHttpAuthenticationFilterTest {
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
-        Session session = Session.builder().sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
+        Session nonExpiredSession = Session.builder().timeout(-1).sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
+
+        when(sessionRepository.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
+
+        // when
+        sut.doFilter(httpExchangeSpy, chain);
+
+        // then
+        verify(sessionRepository).read(nonExpiredSession.getSessionId());
+        verify(httpExchangeSpy).setAttribute("session", nonExpiredSession);
+    }
+
+    @Test
+    public void should_delete_session_from_repository_if_session_has_expired() throws Exception{
+        // given
+        String aSessionId = "aSessionId";
+        HttpExchange httpExchange = new HttpExchangeWithSessionCookieStub("/page1", aSessionId);
+
+        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
+        sut.getConfiguration().addPrivateResource("/page1");
+
+        HttpExchange httpExchangeSpy = spy(httpExchange);
+
+        Session session = expiredSession();
 
         when(sessionRepository.read(anyString())).thenReturn(Optional.of(session));
 
@@ -127,8 +150,7 @@ public class SunHttpAuthenticationFilterTest {
         sut.doFilter(httpExchangeSpy, chain);
 
         // then
-        verify(sessionRepository).read(session.getSessionId());
-        verify(httpExchangeSpy).setAttribute("session", session);
+        verify(sessionRepository).delete(session.getSessionId());
     }
 
     @Test
@@ -142,62 +164,12 @@ public class SunHttpAuthenticationFilterTest {
         // then
         assertThat(actual, is(equalTo(SunHttpAuthenticationFilter.AUTHENTICATION_FILTER)));
     }
-/*    @Test
-    public void process_request_made_for_aunthenticated_users() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeSuccessResourceStub("page1");
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
-        HttpExchange httpExchangeSpy = Mockito.spy(httpExchange);
 
-        // when
-        sut.doFilter(httpExchangeSpy, chain);
+    private Session expiredSession() {
+        Session sessionExpired = mock(Session.class);
+        when(sessionExpired.hasExpired()).thenReturn(true);
 
-        // then
-        verify(chain).doFilter(httpExchangeSpy);
-        verify(httpExchangeSpy, times(0)).sendResponseHeaders(anyInt(), any());
+        return sessionExpired;
     }
 
-    @Test
-    public void generate_cookie_if_authenticated_user() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeStub();
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
-
-        // when
-        sut.doFilter(httpExchange, chain);
-
-        // then
-        Headers headers = httpExchange.getResponseHeaders();
-        String cookieHeaderValue = headers.getFirst(ResponseHeaderConstants.SET_COOKIE);
-        assertThat(cookieHeaderValue, is(not(nullValue())));
-    }
-
-    @Test
-    public void not_generate_cookie_if_not_authenticated_user() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeStub();
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
-
-        // when
-        sut.doFilter(httpExchange, chain);
-
-        // then
-        Headers headers = httpExchange.getResponseHeaders();
-        String cookieHeaderValue = headers.getFirst(ResponseHeaderConstants.SET_COOKIE);
-        assertThat(cookieHeaderValue, is(nullValue()));
-    }
-
-    @Test
-    public void process_request_when_user_authenticated_previously() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeWithAuthenticatedCookieStub();
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
-        HttpExchange httpExchangeSpy = Mockito.spy(httpExchange);
-
-        // when
-        sut.doFilter(httpExchangeSpy, chain);
-
-        // then
-        //verify(httpExchangeSpy).get
-    }*/
 }
