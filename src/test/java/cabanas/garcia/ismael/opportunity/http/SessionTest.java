@@ -29,5 +29,36 @@ public class SessionTest {
         assertThat(actual.getSessionId(), is(notNullValue()));
         assertThat(actual.getUser(), is(notNullValue()));
         assertThat(actual.getUser().getUsername(), is(equalTo(ISMAEL_USERNAME)));
+        assertThat(actual.getTimeout(), is(equalTo(-1)));
+        assertThat(actual.getLastAccess(), is(notNullValue()));
     }
+
+    @Test
+    public void create_session_with_timeout(){
+        // given
+        User anUser = User.builder().username(ISMAEL_USERNAME).build();
+        int timeoutInSeconds = 30;
+
+        // when
+        Session actual = Session.create(anUser, timeoutInSeconds);
+
+        // then
+        assertThat(actual, is(notNullValue()));
+        assertThat(actual.getSessionId(), is(notNullValue()));
+        assertThat(actual.getUser(), is(notNullValue()));
+        assertThat(actual.getUser().getUsername(), is(equalTo(ISMAEL_USERNAME)));
+        assertThat(actual.getTimeout(), is(equalTo(30)));
+        assertThat(actual.getLastAccess(), is(notNullValue()));
+    }
+
+/*    @Test
+    public void session_expired(){
+        // given
+        User anUser = User.builder().username(ISMAEL_USERNAME).build();
+        int timeoutInSeconds = 30;
+
+        // when
+        Session actual = Session.create(anUser, timeoutInSeconds);
+
+    }*/
 }
