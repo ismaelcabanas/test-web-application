@@ -49,8 +49,8 @@ public class LoginPostController extends Controller {
 
         if(user.isPresent()){
             createSession(user.get(), request);
-            if(redirect(request)){
-                return new RedirectView();
+            if(request.hasRedirectParameter()){
+                return new RedirectView("/login");
             }
             return new HomeRawView();
         }
@@ -65,10 +65,6 @@ public class LoginPostController extends Controller {
         request.setSession(session);
 
         sessionRepository.persist(session);
-    }
-
-    private boolean redirect(Request request) {
-        return request.getParameter("redirect") != null;
     }
 
     @Override
