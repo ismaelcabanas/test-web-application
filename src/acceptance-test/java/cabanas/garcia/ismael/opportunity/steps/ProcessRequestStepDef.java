@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.steps;
 
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
+import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
@@ -45,6 +46,8 @@ public class ProcessRequestStepDef implements En {
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
             httpServer = new SunHttpServer(port);
+
+            httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
             SunHttpHandler webHandler = new SunHttpHandler(webControllers);
             httpServer.createContext("/", webHandler, filters);
 
