@@ -30,6 +30,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -138,7 +139,8 @@ public class LoginPostControllerTest {
     @Test
     public void should_create_a_user_session_when_login_successfully(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
+        int sessionTimeout = 3600;
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository, sessionTimeout);
         Request request = createRequestWithCredentialsAndRedirectParameter();
 
         // when
@@ -151,6 +153,8 @@ public class LoginPostControllerTest {
         assertThat(session.get().getSessionId(), is(notNullValue()));
         assertThat(session.get().getUser(), is(notNullValue()));
         assertThat(session.get().getUser().getUsername(), is(equalTo(USERNAME_ISMAEL)));
+        assertThat(session.get().getTimeout(), is(equalTo(sessionTimeout)));
+        assertTrue(session.get().getLastAccess() > 0);
     }
 
     @Test

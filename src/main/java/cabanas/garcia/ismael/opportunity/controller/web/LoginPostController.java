@@ -18,6 +18,8 @@ public class LoginPostController extends Controller {
 
     public static final String PATH = "/login";
 
+    private int sessionTimeout;
+
     private SessionRepository sessionRepository;
 
     private UserService userService;
@@ -27,8 +29,13 @@ public class LoginPostController extends Controller {
     }
 
     public LoginPostController(UserService userService, SessionRepository sessionRepository) {
+        this(userService, sessionRepository, -1);
+    }
+
+    public LoginPostController(UserService userService, SessionRepository sessionRepository, int sessionTimeout) {
         this.userService = userService;
         this.sessionRepository = sessionRepository;
+        this.sessionTimeout = sessionTimeout;
     }
 
     @Override
@@ -51,7 +58,7 @@ public class LoginPostController extends Controller {
     }
 
     private void createSession(final User user, Request request) {
-        Session session = Session.create(user);
+        Session session = Session.create(user, sessionTimeout);
         request.setSession(session);
 
         sessionRepository.persist(session);
