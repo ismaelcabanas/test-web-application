@@ -5,12 +5,16 @@ import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
+import cabanas.garcia.ismael.opportunity.view.RedirectView;
+import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.net.HttpURLConnection;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -73,6 +77,20 @@ public class LogoutControllerTest {
 
         // then
         Mockito.verify(sessionRepository).delete(aSessionId);
+    }
+
+    @Test
+    public void process_request_should_return_redirect_view(){
+        // given
+        String aSessionId = "aSessionId";
+        LogoutController sut = new LogoutController(sessionRepository);
+        Request request = createRequestWithValidSession(aSessionId);
+
+        // when
+        View actual = sut.process(request);
+
+        // then
+        assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_MOVED_TEMP)));
     }
 
     private Request createRequestWithValidSession(String aSessionId) {

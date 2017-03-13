@@ -4,6 +4,7 @@ import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
+import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class LogoutController extends Controller{
             request.setSession(theSession);
         }
 
-        return null;
+        return new RedirectView();
     }
 
     @Override
