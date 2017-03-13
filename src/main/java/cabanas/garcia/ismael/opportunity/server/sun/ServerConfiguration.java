@@ -6,6 +6,7 @@ import java.util.Map;
 public final class ServerConfiguration {
 
     public static final String SESSION_TIMEOUT = "session_timeout";
+    public static final String REDIRECT_LOGOUT = "redirect_logout";
 
     private static ServerConfiguration instance = null;
     private Map<String, Object> configuration;
