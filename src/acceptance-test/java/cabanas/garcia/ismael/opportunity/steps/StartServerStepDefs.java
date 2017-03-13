@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.steps;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
 import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
+import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
@@ -41,7 +42,7 @@ public class StartServerStepDefs implements En {
         Given("^private resources (.*)$", (String resources) -> {
             String[] resourcesSplitted = resources.split(",");
 
-            SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter();
+            SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter(InMemorySessionRepository.getInstance());
 
             Arrays.stream(resourcesSplitted).forEach(resource -> authenticationFilter.getConfiguration().addPrivateResource(resource));
             authenticationFilter.getConfiguration().redirectPath("/login");
