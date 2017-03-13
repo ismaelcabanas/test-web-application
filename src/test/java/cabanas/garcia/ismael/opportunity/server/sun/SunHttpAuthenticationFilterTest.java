@@ -128,7 +128,7 @@ public class SunHttpAuthenticationFilterTest {
 
         // then
         verify(sessionRepository).read(session.getSessionId());
-        verify(httpExchangeSpy).setAttribute("session", Optional.of(session));
+        verify(httpExchangeSpy).setAttribute("session", session);
     }
 
     @Test

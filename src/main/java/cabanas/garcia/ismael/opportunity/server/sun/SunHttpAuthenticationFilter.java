@@ -51,7 +51,7 @@ public class SunHttpAuthenticationFilter extends Filter{
             }
             Optional<Session> session = getSession(sessionCookie.get());
             if(session.isPresent())
-                httpExchange.setAttribute("session", session);
+                httpExchange.setAttribute("session", session.get());
         }
         chain.doFilter(httpExchange);
     }
