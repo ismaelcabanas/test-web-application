@@ -11,9 +11,11 @@ import cabanas.garcia.ismael.opportunity.view.HomeRawView;
 import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.UnAuthorizedRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 public class LoginPostController extends Controller {
 
     public static final String PATH = "/login";
@@ -32,7 +34,7 @@ public class LoginPostController extends Controller {
         this(userService, sessionRepository, -1);
     }
 
-    public LoginPostController(UserService userService, SessionRepository sessionRepository, int sessionTimeout) {
+    public LoginPostController(UserService userService, SessionRepository sessionRepository, Integer sessionTimeout) {
         this.userService = userService;
         this.sessionRepository = sessionRepository;
         this.sessionTimeout = sessionTimeout;
@@ -59,6 +61,7 @@ public class LoginPostController extends Controller {
 
     private void createSession(final User user, Request request) {
         Session session = Session.create(user, sessionTimeout);
+        log.debug("Session created {}", session);
         request.setSession(session);
 
         sessionRepository.persist(session);
