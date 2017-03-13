@@ -17,6 +17,7 @@ import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
+import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
@@ -41,7 +42,8 @@ public class Main {
         loadDefaultUsers();
 
         SunHttpServer httpServer = new SunHttpServer(8080);
-        httpServer.getConfiguration().add("session_timeout", 60000);
+        httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
+        httpServer.getConfiguration().add(ServerConfiguration.REDIRECT_LOGOUT, "/login");
 
         Controllers webControllers = webControllers();
         SunHttpHandler webHandler = new SunHttpHandler(webControllers);
