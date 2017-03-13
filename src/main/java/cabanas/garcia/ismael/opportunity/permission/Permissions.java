@@ -1,8 +1,8 @@
 package cabanas.garcia.ismael.opportunity.permission;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class Permissions {
 
@@ -27,7 +27,7 @@ public class Permissions {
     }
 
     public Optional<Permission> getPermissions(String resource){
-        String[] roles =  permissions.entrySet().stream()
+        /*String[] roles =  permissions.entrySet().stream()
                 .filter(map -> resource.equals(map.getValue()))
                 .map(map -> map.getValue())
                 .collect(Collectors.joining());
@@ -35,6 +35,7 @@ public class Permissions {
         return Optional.of(Permission.builder()
                 .resource(resource)
                 .roles(roles)
-                .build());
+                .build());*/
+        return Optional.empty();
     }
 }
