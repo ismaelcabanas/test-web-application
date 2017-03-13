@@ -32,7 +32,7 @@ public class RequestFactoryTest {
     public void create_request_instance_with_session(){
         // given
         String aSessionId = "mysessionid";
-        HttpExchange httpExchange = new HttpExchangeWithSessionCookieStub(PATH_PAGE1, aSessionId);
+        HttpExchange httpExchange = new HttpExchangeWithSessionStub("/page1", aSessionId);
 
         // when
         Request request = RequestFactory.create(httpExchange);
@@ -45,7 +45,7 @@ public class RequestFactoryTest {
     @Test
     public void create_request_instance_without_session(){
         // given
-        HttpExchange httpExchange = new HttpExchangeSuccessResourceStub(PATH_PAGE1);
+        HttpExchange httpExchange = new HttpExchangeWithSessionStub("/page1");
 
         // when
         Request request = RequestFactory.create(httpExchange);

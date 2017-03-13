@@ -25,16 +25,13 @@ public class ExtractorHttpExchange {
         return httpExchange.getRequestURI().getPath();
     }
 
-    public Optional<Session> extractSessionCookie() {
+    public Optional<Cookie> extractSessionCookie() {
         Headers headers = httpExchange.getRequestHeaders();
         if(!headers.isEmpty()) {
             List<String> headerCookies = headers.get(RequestHeadersConstants.COOKIE);
             if(headerCookies != null) {
                 Cookies cookies = CookieAdapter.toCookies(headerCookies);
-                Optional<Cookie> cookie = cookies.get(Cookie.SESSION_TOKEN);
-                if (cookie.isPresent()) {
-                    return Optional.of(Session.builder().sessionId(cookie.get().getValue()).build());
-                }
+                return cookies.get(Cookie.SESSION_TOKEN);
             }
         }
         return Optional.empty();
@@ -60,5 +57,9 @@ public class ExtractorHttpExchange {
 
     public String getMethod() {
         return httpExchange.getRequestMethod();
+    }
+
+    public Optional<Session> extractSession() {
+        return Optional.ofNullable((Session)httpExchange.getAttribute("session"));
     }
 }
