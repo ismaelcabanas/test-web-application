@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.http.cookies;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.StringTokenizer;
 
 public final class CookieAdapter {
     private CookieAdapter(){}
@@ -10,9 +11,12 @@ public final class CookieAdapter {
         Cookies cookies = new Cookies();
 
         cookiesList.forEach(rawCookie -> {
-            Optional<Cookie> cookie = toCookie(rawCookie);
-            if(cookie.isPresent())
-                cookies.add(cookie.get());
+            StringTokenizer rawCookieTokenized = new StringTokenizer(rawCookie, ";");
+            while(rawCookieTokenized.hasMoreElements()){
+                Optional<Cookie> cookie = toCookie(rawCookieTokenized.nextToken());
+                if(cookie.isPresent())
+                    cookies.add(cookie.get());
+            }
         });
         return cookies;
     }
