@@ -19,4 +19,8 @@ public class Cookie {
     public String toString(){
         return name + "=" + value;
     }
+
+    public boolean hasValue() {
+        return value != null;
+    }
 }
