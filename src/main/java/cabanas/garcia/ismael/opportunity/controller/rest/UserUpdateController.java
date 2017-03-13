@@ -53,13 +53,6 @@ public class UserUpdateController extends Controller{
         return RequestMethodConstants.PUT;
     }
 
-    private User extractUserDataFrom(final Request request) {
-        return User.builder()
-                .username(request.getParameter("username"))
-                .password(request.getParameter("password"))
-                .roles(getRolesFromRequest(request.getParameter("roles")))
-                .build();
-    }
 
     private Roles getRolesFromRequest(String stringOfRoles) {
         Roles roles = Roles.builder().roleList(new ArrayList<>()).build();

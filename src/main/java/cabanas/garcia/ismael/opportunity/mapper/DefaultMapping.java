@@ -12,23 +12,28 @@ public final class DefaultMapping implements Mapping{
 
     private Map<KeyMapper, Class<? extends Controller>> mapper = new HashMap<>();
 
+    @Override
     public boolean hasControllers() {
         return !mapper.isEmpty();
     }
 
+    @Override
     public Optional<Class<? extends Controller>> getController(String mappingPath) {
         return getController(mappingPath, RequestMethodConstants.GET);
     }
 
+    @Override
     public void addMapping(String mappingPath, Class<? extends Controller> aClass) {
         addMapping(mappingPath, RequestMethodConstants.GET, aClass);
     }
 
+    @Override
     public void addMapping(String mappingPath, String method, Class<? extends Controller> aClass) {
         KeyMapper keyMapper = KeyMapper.builder().path(mappingPath).method(method).build();
         mapper.put(keyMapper, aClass);
     }
 
+    @Override
     public Optional<Class<? extends Controller>> getController(String mappingPath, String method) {
         for (Map.Entry<KeyMapper, Class<? extends Controller>> entry : mapper.entrySet()) {
             if(entry.getKey().match(mappingPath, method))

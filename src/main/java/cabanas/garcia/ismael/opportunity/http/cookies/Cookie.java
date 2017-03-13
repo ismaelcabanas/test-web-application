@@ -11,6 +11,7 @@ public class Cookie {
     private String name;
     private String value;
 
+    @Override
     public String toString(){
         return name + "=" + value;
     }

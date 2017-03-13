@@ -17,6 +17,7 @@ public class Page3RawView implements WebView {
     }
 
     public Page3RawView() {
+        // TODO Improve this...
     }
 
     @Override

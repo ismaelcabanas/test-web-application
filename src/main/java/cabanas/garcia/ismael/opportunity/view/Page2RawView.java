@@ -17,6 +17,7 @@ public class Page2RawView implements WebView {
     }
 
     public Page2RawView() {
+        // TODO Improve this...
     }
 
     @Override

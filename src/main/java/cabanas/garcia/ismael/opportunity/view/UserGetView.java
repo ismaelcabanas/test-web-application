@@ -1,6 +1,5 @@
 package cabanas.garcia.ismael.opportunity.view;
 
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.http.Response;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
 import cabanas.garcia.ismael.opportunity.model.User;

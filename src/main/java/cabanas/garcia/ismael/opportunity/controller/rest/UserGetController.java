@@ -7,7 +7,6 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.ResourceNotFoundView;
-import cabanas.garcia.ismael.opportunity.view.UserDeletedView;
 import cabanas.garcia.ismael.opportunity.view.UserGetView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
