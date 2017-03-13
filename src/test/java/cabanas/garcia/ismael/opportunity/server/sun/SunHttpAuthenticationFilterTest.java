@@ -109,7 +109,7 @@ public class SunHttpAuthenticationFilterTest {
         String actual = sut.description();
 
         // then
-        assertThat(actual, is(equalTo(SunHttpAuthenticationFilter.DESCRIPTION)));
+        assertThat(actual, is(equalTo(SunHttpAuthenticationFilter.AUTHENTICATION_FILTER)));
     }
 /*    @Test
     public void process_request_made_for_aunthenticated_users() throws Exception{
