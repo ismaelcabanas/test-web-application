@@ -40,14 +40,15 @@ public class SunHttpHandler implements HttpHandler{
 
     private void process(HttpExchange httpExchange, final Request request, final Response response) throws IOException {
         httpExchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
-        httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
 
-        handlingSession(httpExchange, request);
+        addCookieResponseHeader(httpExchange, request);
+
+        httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
 
         writeResponse(httpExchange, response.getContent());
     }
 
-    private void handlingSession(HttpExchange httpExchange, final Request request) {
+    private void addCookieResponseHeader(HttpExchange httpExchange, final Request request) {
         if(request.getSession().isPresent()){
             Session session = request.getSession().get();
             httpExchange.getResponseHeaders()
