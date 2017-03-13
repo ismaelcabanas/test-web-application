@@ -18,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class LoginPostController extends Controller {
 
-    public static final String PATH = "/login";
+    protected static final String PATH = "/login";
 
     private int sessionTimeout;
 
