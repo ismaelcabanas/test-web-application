@@ -31,6 +31,6 @@ public class DefaultRequest implements Request{
 
     @Override
     public void setSession(Session session) {
-        this.session = Optional.of(session);
+        this.session = Optional.ofNullable(session);
     }
 }
