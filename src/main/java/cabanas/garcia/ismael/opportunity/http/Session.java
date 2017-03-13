@@ -45,8 +45,13 @@ public class Session implements Cloneable{
         try {
             return (Session) this.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error cloning session", e);
         }
-        return null;
+    }
+
+    public void invalidate() {
+        this.sessionId = null;
+        this.lastAccess = 0;
+        this.user = null;
     }
 }

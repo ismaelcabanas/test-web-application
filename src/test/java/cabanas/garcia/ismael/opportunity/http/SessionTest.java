@@ -11,6 +11,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -75,5 +76,23 @@ public class SessionTest {
         // then
         assertThat(actual.hasExpired(), is(true));
 
+    }
+
+    @Test
+    public void session_invalidate(){
+        // given
+        User anUser = User.builder().username(ISMAEL_USERNAME).build();
+        int timeoutInMilliSeconds = 30;
+        Session session = Session.create(anUser, timeoutInMilliSeconds);
+
+        // when
+        session.invalidate();
+
+        // then
+        assertThat(session, is(notNullValue()));
+        assertThat(session.getSessionId(), is(nullValue()));
+        assertThat(session.getUser(), is(nullValue()));
+        assertThat(session.getLastAccess(), is(equalTo(0L)));
+        assertThat(session.hasExpired(), is(true));
     }
 }
