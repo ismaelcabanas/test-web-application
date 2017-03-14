@@ -45,23 +45,30 @@ public class LoginPostController extends Controller {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        log.debug("Authenticating user {} ...", username);
         Optional<User> user = userService.login(username, password);
 
         if(user.isPresent()){
+            log.debug("Login successfully");
             createSession(user.get(), request);
             if(request.hasRedirectParameter()){
+                log.debug("The request had redirect parameter, then redirect it");
                 return new RedirectView("/login");
             }
+            log.debug("Going to home view");
             return new HomeRawView();
         }
         else{
+            log.debug("Authentication failed, redirecting to unauthorized page");
             return new UnAuthorizedRawView();
         }
     }
 
     private void createSession(final User user, Request request) {
         Session session = Session.create(user, sessionTimeout);
+
         log.debug("Session created {}", session);
+
         request.setSession(session);
 
         sessionRepository.persist(session);
