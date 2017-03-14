@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.mapper;
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,8 +57,8 @@ public class DefaultControllerMapperTest {
         }
 
         @Override
-        public String getMappingPath() {
-            return TEST3_PATH;
+        public Resource getMappingPath() {
+            return Resource.builder().path(TEST3_PATH).build();
         }
     }
 
@@ -68,8 +69,8 @@ public class DefaultControllerMapperTest {
         }
 
         @Override
-        public String getMappingPath() {
-            return TEST4_PATH;
+        public Resource getMappingPath() {
+            return Resource.builder().path(TEST4_PATH).build();
         }
     }
 }

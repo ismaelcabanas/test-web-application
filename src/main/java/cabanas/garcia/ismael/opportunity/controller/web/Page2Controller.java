@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.Page2RawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
@@ -18,7 +19,7 @@ public class Page2Controller extends Controller {
     }
 
     @Override
-    public String getMappingPath() {
-        return "/page2";
+    public Resource getMappingPath() {
+        return Resource.builder().path("/page2").build();
     }
 }

@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.scanner;
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
 import org.junit.Test;
 
@@ -50,8 +51,8 @@ public class DefaultControllerScannerTest {
         }
 
         @Override
-        public String getMappingPath() {
-            return "/test3";
+        public Resource getMappingPath() {
+            return Resource.builder().path("/test3").build();
         }
     }
 
@@ -63,8 +64,8 @@ public class DefaultControllerScannerTest {
         }
 
         @Override
-        public String getMappingPath() {
-            return "/test4";
+        public Resource getMappingPath() {
+            return Resource.builder().path("/test4").build();
         }
     }
 }

@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.UserCreatedView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
@@ -53,9 +54,10 @@ public class UserCreateController extends Controller {
     }
 
     @Override
-    public String getMappingPath() {
-        return "^/users$";
+    public Resource getMappingPath() {
+        return Resource.builder().path("^/users$").build();
     }
+
 
     @Override
     public RequestMethodEnum getMethod() {

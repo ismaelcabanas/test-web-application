@@ -40,10 +40,13 @@ public class StartServerStepDefs implements En {
         Given("^private resources (.*)$", (String resources) -> {
             String[] resourcesSplitted = resources.split(",");
 
-            SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(InMemorySessionRepository.getInstance());
+            SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
+                    new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
 
-            Arrays.stream(resourcesSplitted).forEach(resource -> authenticationFilter.getConfiguration().addPrivateResource(resource.trim()));
-            authenticationFilter.getConfiguration().redirectPath("/login");
+            Arrays.stream(resourcesSplitted).forEach(resource -> configuration.addPrivateResource(resource.trim()));
+            configuration.redirectPath("/login");
+
+            SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(configuration, InMemorySessionRepository.getInstance());
 
             filters.add(authenticationFilter);
         });

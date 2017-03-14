@@ -7,6 +7,7 @@ import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
 import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.UnknownResourceRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
@@ -154,7 +155,7 @@ public class SunHttpHandlerTest {
         }
 
         @Override
-        public String getMappingPath() {
+        public Resource getMappingPath() {
             return null;
         }
     }
@@ -186,7 +187,7 @@ public class SunHttpHandlerTest {
         }
 
         @Override
-        public String getMappingPath() {
+        public Resource getMappingPath() {
             return null;
         }
     }
@@ -198,7 +199,7 @@ public class SunHttpHandlerTest {
         }
 
         @Override
-        public String getMappingPath() {
+        public Resource getMappingPath() {
             return null;
         }
     }

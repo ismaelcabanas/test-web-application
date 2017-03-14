@@ -7,6 +7,7 @@ import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.HomeRawView;
 import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.UnAuthorizedRawView;
@@ -75,8 +76,8 @@ public class LoginPostController extends Controller {
     }
 
     @Override
-    public String getMappingPath() {
-        return PATH;
+    public Resource getMappingPath() {
+        return Resource.builder().path(PATH).build();
     }
 
     @Override

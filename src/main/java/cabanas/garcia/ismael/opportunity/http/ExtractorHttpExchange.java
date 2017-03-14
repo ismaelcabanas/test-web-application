@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.http;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.http.cookies.CookieAdapter;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookies;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,8 @@ public class ExtractorHttpExchange {
         this.httpExchange = httpExchange;
     }
 
-    public String extractPathFrom() {
-        return httpExchange.getRequestURI().getPath();
+    public Resource extractPathFrom() {
+        return Resource.builder().path(httpExchange.getRequestURI().getPath()).build();
     }
 
     public Optional<Cookie> extractSessionCookie() {

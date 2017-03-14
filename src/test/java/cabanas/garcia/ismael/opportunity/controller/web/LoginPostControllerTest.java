@@ -9,6 +9,7 @@ import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParam;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
@@ -116,10 +117,10 @@ public class LoginPostControllerTest {
         LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
 
         // when
-        String actual = sut.getMappingPath();
+        Resource actual = sut.getMappingPath();
 
         // then
-        assertThat(actual, is(equalTo(LoginPostController.PATH)));
+        assertThat(actual.getPath(), is(equalTo(LoginPostController.PATH)));
     }
 
     @Test

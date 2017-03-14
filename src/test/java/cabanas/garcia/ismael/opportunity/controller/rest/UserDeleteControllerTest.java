@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithPathVariableStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
@@ -59,10 +60,10 @@ public class UserDeleteControllerTest {
     @Test
     public void path_is_users(){
         // when
-        String actual = sut.getMappingPath();
+        Resource actual = sut.getMappingPath();
 
         // then
-        assertThat(actual, is(equalTo("^/users/.*")));
+        assertThat(actual.getPath(), is(equalTo("^/users/.*$")));
     }
 
     @Test

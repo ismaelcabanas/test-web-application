@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity.server.authenticators;
 
 import cabanas.garcia.ismael.opportunity.http.ExtractorHttpExchange;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ public class AuthorizationFilter extends Filter{
     public void doFilter(HttpExchange httpExchange, Chain chain) throws IOException {
 
         ExtractorHttpExchange extractorHttpExchange = new ExtractorHttpExchange(httpExchange);
-        String path = extractorHttpExchange.extractPathFrom();
+        Resource path = extractorHttpExchange.extractPathFrom();
 
         log.info("Filtering resource {}", path);
 

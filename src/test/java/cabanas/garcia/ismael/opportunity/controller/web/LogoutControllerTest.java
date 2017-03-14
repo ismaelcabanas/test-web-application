@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
@@ -31,10 +32,10 @@ public class LogoutControllerTest {
         LogoutController sut = new LogoutController();
 
         // when
-        String actual = sut.getMappingPath();
+        Resource actual = sut.getMappingPath();
 
         // then
-        assertThat(actual, is(equalTo(LogoutController.PATH)));
+        assertThat(actual.getPath(), is(equalTo(LogoutController.PATH)));
     }
 
     @Test

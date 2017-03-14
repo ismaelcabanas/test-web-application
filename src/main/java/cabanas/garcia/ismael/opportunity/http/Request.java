@@ -1,9 +1,11 @@
 package cabanas.garcia.ismael.opportunity.http;
 
+import cabanas.garcia.ismael.opportunity.support.Resource;
+
 import java.util.Optional;
 
 public interface Request {
-    String getPath();
+    Resource getPath();
 
     Optional<Session> getSession();
 

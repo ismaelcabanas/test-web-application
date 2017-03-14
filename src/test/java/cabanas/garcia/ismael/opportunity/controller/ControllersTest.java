@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultRequest;
 import cabanas.garcia.ismael.opportunity.mapper.DefaultMapping;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,8 +46,9 @@ public class ControllersTest {
 
         Controllers sut = new Controllers(mapping, controllerFactory);
 
+        Resource test1Resouce = Resource.builder().path("/test1").build();
         Request request = DefaultRequest.builder()
-                .path("/test1")
+                .path(test1Resouce)
                 .method(RequestMethodEnum.POST)
                 .build();
 
@@ -56,7 +58,7 @@ public class ControllersTest {
         // then
         verify(controllerFactory).getInstance(Test1PostController.class);
 
-        assertThat(actual.getMappingPath(), is(equalTo("/test1")));
+        assertThat(actual.getMappingPath(), is(equalTo(test1Resouce)));
     }
 
     @Test
@@ -73,7 +75,8 @@ public class ControllersTest {
 
         Controllers sut = new Controllers(mapping, controllerFactory);
 
-        Request request = DefaultRequest.builder().path("/test1").method(RequestMethodEnum.GET).build();
+        Resource test1Resource = Resource.builder().path("/test1").build();
+        Request request = DefaultRequest.builder().path(test1Resource).method(RequestMethodEnum.GET).build();
 
         // when
         Controller actual = sut.select(request);
@@ -81,7 +84,7 @@ public class ControllersTest {
         // then
         verify(controllerFactory).getInstance(Test1Controller.class);
 
-        assertThat(actual.getMappingPath(), is(equalTo("/test1")));
+        assertThat(actual.getMappingPath(), is(equalTo(test1Resource)));
     }
 
     @Test
@@ -95,7 +98,8 @@ public class ControllersTest {
 
         Controllers sut = new Controllers(mapping, controllerFactory);
 
-        Request request = DefaultRequest.builder().path("/test3").build();
+        Resource test3Resource = Resource.builder().path("/test3").build();
+        Request request = DefaultRequest.builder().path(test3Resource).build();
 
         // when
         Controller actual = sut.select(request);

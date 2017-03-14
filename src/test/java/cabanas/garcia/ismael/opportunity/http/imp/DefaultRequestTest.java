@@ -3,6 +3,7 @@ package cabanas.garcia.ismael.opportunity.http.imp;
 import cabanas.garcia.ismael.opportunity.http.Parameter;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -19,10 +20,11 @@ public class DefaultRequestTest {
     @Test
     public void request_with_path(){
         // when
-        Request actual = DefaultRequest.builder().path("/page1").build();
+        Resource resourcePage1 = Resource.builder().path("/page1").build();
+        Request actual = DefaultRequest.builder().path(resourcePage1).build();
 
         // then
-        assertThat(actual.getPath(), is(equalTo("/page1")));
+        assertThat(actual.getPath(), is(equalTo(resourcePage1)));
     }
 
     @Test

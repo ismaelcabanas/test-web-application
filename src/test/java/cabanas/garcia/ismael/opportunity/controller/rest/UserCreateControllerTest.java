@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithDataForApiStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
@@ -57,10 +58,10 @@ public class UserCreateControllerTest {
         UserCreateController sut = new UserCreateController(userService);
 
         // when
-        String actual = sut.getMappingPath();
+        Resource actual = sut.getMappingPath();
 
         // then
-        assertThat(actual, is(equalTo("^/users$")));
+        assertThat(actual.getPath(), is(equalTo("^/users$")));
     }
 
     @Test

@@ -75,11 +75,12 @@ public class Hooks implements En{
     }
 
     private static List<Filter> configureFilters() {
-        SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter();
-        authenticationFilter.getConfiguration().addPrivateResource("/page1");
-        authenticationFilter.getConfiguration().addPrivateResource("/page2");
-        authenticationFilter.getConfiguration().addPrivateResource("/page3");
-        authenticationFilter.getConfiguration().redirectPath("/login");
+        SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration = new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
+        configuration.addPrivateResource("/page1");
+        configuration.addPrivateResource("/page2");
+        configuration.addPrivateResource("/page3");
+        configuration.redirectPath("/login");
+        SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(configuration);
 
         List<Filter> filters = new ArrayList<>();
         filters.add(authenticationFilter);

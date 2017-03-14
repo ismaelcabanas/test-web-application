@@ -3,6 +3,8 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
+import cabanas.garcia.ismael.opportunity.support.PrivateResources;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
@@ -17,17 +19,21 @@ import java.util.Optional;
 public class SunHttpAuthorizationFilter extends Filter{
 
     public static final String AUTHENTICATION_FILTER = "Authentication filter";
+    private PrivateResources privateResources;
 
     private SessionRepository sessionRepository;
 
-    private final AuthenticatorFilterConfiguration configuration;
+    private AuthorizationFilterConfiguration configuration;
 
-    public SunHttpAuthorizationFilter() {
-        this.configuration = new AuthenticatorFilterConfiguration();
+    public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration) {
+        this.configuration = configuration;
+
+        this.privateResources = new PrivateResources();
+        this.configuration.getPrivateResources().stream().forEach(resource -> this.privateResources.add(resource));
     }
 
-    public SunHttpAuthorizationFilter(SessionRepository sessionRepository) {
-        this();
+    public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration, SessionRepository sessionRepository) {
+        this(configuration);
         this.sessionRepository = sessionRepository;
     }
 
@@ -36,11 +42,11 @@ public class SunHttpAuthorizationFilter extends Filter{
 
         ExtractorHttpExchange extractorHttpExchange = new ExtractorHttpExchange(httpExchange);
 
-        String path = extractorHttpExchange.extractPathFrom();
+        Resource resource = extractorHttpExchange.extractPathFrom();
 
-        log.debug("Filtering resource {}", path);
+        log.debug("Filtering resource {}", resource);
 
-        if(isPrivateResource(path)){
+        if(this.privateResources.hasResource(resource)){
             log.debug("is a secure resource...");
             Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
             if(!sessionCookie.isPresent()){
@@ -85,29 +91,25 @@ public class SunHttpAuthorizationFilter extends Filter{
         return Optional.empty();
     }
 
-    private boolean isPrivateResource(String resource) {
-        return configuration.getPrivateResources().has(resource);
-    }
-
     @Override
     public String description() {
         return AUTHENTICATION_FILTER;
     }
 
-    public AuthenticatorFilterConfiguration getConfiguration() {
+    public AuthorizationFilterConfiguration getConfiguration() {
         return configuration;
     }
 
-    public static class AuthenticatorFilterConfiguration {
+    public static class AuthorizationFilterConfiguration {
         private String redirectPath;
-        private PrivateResources privateResources = new PrivateResources();
+        private List<Resource> privateResources = new ArrayList<>();
 
         public void redirectPath(String redirectPath) {
             this.redirectPath = redirectPath;
         }
 
         public void addPrivateResource(String privateResource) {
-            this.privateResources.add(privateResource);
+            this.privateResources.add(Resource.builder().path(privateResource).build());
         }
 
 
@@ -115,20 +117,9 @@ public class SunHttpAuthorizationFilter extends Filter{
             return redirectPath;
         }
 
-        public PrivateResources getPrivateResources() {
+        public List<Resource> getPrivateResources() {
             return privateResources;
         }
     }
 
-    private static class PrivateResources {
-        private List<String> resources = new ArrayList<>();
-
-        public void add(String privateResource) {
-            this.resources.add(privateResource);
-        }
-
-        public boolean has(String resource) {
-            return resources.contains(resource);
-        }
-    }
 }

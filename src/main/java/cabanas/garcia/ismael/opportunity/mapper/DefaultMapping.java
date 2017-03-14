@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.mapper;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.util.ExpressionRegularValidator;
 
 import java.util.HashMap;
@@ -19,22 +20,37 @@ public final class DefaultMapping implements Mapping{
 
     @Override
     public Optional<Class<? extends Controller>> getController(String mappingPath) {
-        return getController(mappingPath, RequestMethodEnum.GET);
+        return getController(Resource.builder().path(mappingPath).build());
+    }
+
+    @Override
+    public Optional<Class<? extends Controller>> getController(Resource resource) {
+        return getController(resource, RequestMethodEnum.GET);
     }
 
     @Override
     public void addMapping(String mappingPath, Class<? extends Controller> aClass) {
-        addMapping(mappingPath, RequestMethodEnum.GET, aClass);
+        addMapping(Resource.builder().path(mappingPath).build(), RequestMethodEnum.GET, aClass);
     }
 
     @Override
-    public void addMapping(String mappingPath, RequestMethodEnum method, Class<? extends Controller> aClass) {
-        KeyMapper keyMapper = KeyMapper.builder().path(mappingPath).method(method).build();
+    public void addMapping(Resource resource, Class<? extends Controller> aClass) {
+        addMapping(resource, RequestMethodEnum.GET, aClass);
+    }
+
+    @Override
+    public void addMapping(Resource resource, RequestMethodEnum method, Class<? extends Controller> aClass) {
+        KeyMapper keyMapper = KeyMapper.builder().path(resource).method(method).build();
         mapper.put(keyMapper, aClass);
     }
 
     @Override
-    public Optional<Class<? extends Controller>> getController(String mappingPath, RequestMethodEnum method) {
+    public void addMapping(String mappingPath, RequestMethodEnum method, Class<? extends Controller> aClass) {
+        addMapping(Resource.builder().path(mappingPath).build(), method, aClass);
+    }
+
+    @Override
+    public Optional<Class<? extends Controller>> getController(Resource mappingPath, RequestMethodEnum method) {
         for (Map.Entry<KeyMapper, Class<? extends Controller>> entry : mapper.entrySet()) {
             if(entry.getKey().match(mappingPath, method))
                 return Optional.of(entry.getValue());
@@ -42,17 +58,22 @@ public final class DefaultMapping implements Mapping{
         return Optional.empty();
     }
 
+    @Override
+    public Optional<Class<? extends Controller>> getController(String mappingPath, RequestMethodEnum method) {
+        return this.getController(Resource.builder().path(mappingPath).build(), method);
+    }
+
     private static class KeyMapper {
-        private String pattern;
+        private Resource pattern;
         private RequestMethodEnum method;
 
-        public KeyMapper(String mappingPath, RequestMethodEnum method) {
+        public KeyMapper(Resource mappingPath, RequestMethodEnum method) {
             this.pattern = mappingPath;
             this.method = method;
         }
 
-        public boolean match(String path, RequestMethodEnum method){
-            return ExpressionRegularValidator.isValidate(this.pattern, path)
+        public boolean match(Resource path, RequestMethodEnum method){
+            return ExpressionRegularValidator.isValidate(this.pattern.getPath(), path.getPath())
                     && this.method.equals(method);
         }
 
@@ -79,10 +100,10 @@ public final class DefaultMapping implements Mapping{
         }
 
         private static class KeyMapperBuilder {
-            private String mappingPath;
+            private Resource mappingPath;
             private RequestMethodEnum method;
 
-            public KeyMapperBuilder path(String mappingPath) {
+            public KeyMapperBuilder path(Resource mappingPath) {
                 this.mappingPath = mappingPath;
                 return this;
             }

@@ -4,6 +4,7 @@ import cabanas.garcia.ismael.opportunity.http.Parameter;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @ToString
 @Getter
 public class DefaultRequest implements Request{
-    private String path;
+    private Resource path;
     private Optional<Session> session;
     private RequestMethodEnum method;
     private List<Parameter> parameters;
