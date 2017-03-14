@@ -2,8 +2,9 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.model.Role;
 import cabanas.garcia.ismael.opportunity.model.Roles;
-import cabanas.garcia.ismael.opportunity.permission.Permission;
-import cabanas.garcia.ismael.opportunity.permission.Permissions;
+import cabanas.garcia.ismael.opportunity.security.permission.Permission;
+import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -37,9 +38,9 @@ public class ServerConfigurationTest {
         // given
         ServerConfiguration sut = ServerConfiguration.getInstance();
 
-        Permission permission1 = Permission.builder().resource("/page1").roles(ROLES_PAGE1).build();
-        Permission permission2 = Permission.builder().resource("/page2").roles(ROLES_ADMIN_PAGE2).build();
-        Permission permission3 = Permission.builder().resource("/page3").roles(ROLES_PAGE3).build();
+        Permission permission1 = Permission.builder().resource(Resource.builder().path("/page1").build()).roles(ROLES_PAGE1).build();
+        Permission permission2 = Permission.builder().resource(Resource.builder().path("/page2").build()).roles(ROLES_ADMIN_PAGE2).build();
+        Permission permission3 = Permission.builder().resource(Resource.builder().path("/page3").build()).roles(ROLES_PAGE3).build();
         sut.getPermissions().add(permission1);
         sut.getPermissions().add(permission2);
         sut.getPermissions().add(permission3);

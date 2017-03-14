@@ -53,11 +53,11 @@ public class SunHttpAuthorizationFilter extends Filter{
             Optional<Session> session = sessionValidator.validate(request);
             if(session.isPresent()){
                 if(permissionChecker.hasPermission(session.get().getUser(), resource)){
-                    log.debug("User {} has permissions to resource {}", session.get().getUser().getUsername(), resource);
+                    log.debug("User {} has permission to resource {}", session.get().getUser().getUsername(), resource);
                     chain.doFilter(httpExchange);
                 }
                 else{
-                    log.debug("User {} hasn't permissions to resource {} and will be redirected to {}", session.get().getUser().getUsername(), resource, configuration.getRedirectForbiddenPath());
+                    log.debug("User {} hasn't permission to resource {} and will be redirected to {}", session.get().getUser().getUsername(), resource, configuration.getRedirectForbiddenPath());
                     HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectForbiddenPath());
                 }
             }

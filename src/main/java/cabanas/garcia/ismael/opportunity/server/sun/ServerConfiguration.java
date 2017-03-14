@@ -1,6 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.permission.Permissions;
+import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
 
 import java.util.HashMap;
 import java.util.Map;

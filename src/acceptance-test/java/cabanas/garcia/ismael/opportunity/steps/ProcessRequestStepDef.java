@@ -4,8 +4,8 @@ import cabanas.garcia.ismael.opportunity.http.RequestHeadersEnum;
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.permission.Permission;
-import cabanas.garcia.ismael.opportunity.permission.Permissions;
+import cabanas.garcia.ismael.opportunity.security.permission.Permission;
+import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
@@ -15,6 +15,7 @@ import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.steps.model.PermissionData;
 import cabanas.garcia.ismael.opportunity.steps.model.UserData;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.BasicAuthenticator;
 import cucumber.api.java8.En;
 import org.apache.http.Header;
@@ -57,7 +58,7 @@ public class ProcessRequestStepDef implements En {
             this.port = port;
             httpServer = new SunHttpServer(port);
 
-            // add permissions?
+            // add permission?
             addPermissionsToServer(StartServerStepDefs.permissions, httpServer.getConfiguration().getPermissions());
 
             // add users?
@@ -130,7 +131,7 @@ public class ProcessRequestStepDef implements En {
         permissionsData.forEach(permissionData -> {
             Roles roles = Roles.builder().build();
             Arrays.stream(permissionData.getRoles()).forEach(rolename -> roles.add(rolename));
-            permissions.add(Permission.builder().resource(permissionData.getResource()).roles(roles).build());
+            permissions.add(Permission.builder().resource(Resource.builder().path(permissionData.getResource()).build()).roles(roles).build());
         });
     }
 

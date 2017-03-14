@@ -10,11 +10,10 @@ import java.util.List;
 
 @Builder
 @EqualsAndHashCode
-@Getter
 @ToString
 public class Roles {
 
-    private List<Role> roleList = new ArrayList<>();
+    List<Role> roleList = new ArrayList<>();
 
     public void add(String roleName) {
         roleList.add(Role.builder().name(roleName).build());
@@ -22,6 +21,16 @@ public class Roles {
 
     public int size() {
         return roleList.size();
+    }
+
+    public boolean contains(Roles roles) {
+        for(Role role : roleList){
+            for(Role role2 : roles.roleList){
+                if(role.equals(role2))
+                    return true;
+            }
+        }
+        return false;
     }
 
     public static class RolesBuilder{

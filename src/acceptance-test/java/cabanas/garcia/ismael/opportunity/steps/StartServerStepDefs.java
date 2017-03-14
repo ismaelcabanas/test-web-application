@@ -50,7 +50,7 @@ public class StartServerStepDefs implements En {
 
             filters.add(authenticationFilter);
         });
-        Given("^the next table of permissions$", (DataTable dataTable) -> {
+        Given("^the next table of permission$", (DataTable dataTable) -> {
             this.permissions = dataTable.asList(PermissionData.class);
         });
         And("^there are the next users in the system$", (DataTable dataTable) -> {
