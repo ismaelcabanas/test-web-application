@@ -30,8 +30,8 @@ Feature: Authorization in web application
   Scenario: Admin user authenticated access to any private resources
     Given admin logs in the system
     When sends a /page2 request to web server
-    Then the web server returns Page2 resource
+    Then the web server returns PAGE2 resource
     And sends a /page3 request to web server
-    Then the web server returns Page3 resource
+    Then the web server returns PAGE3 resource
     When sends a /page1 request to web server
-    Then the web server returns Page1 resource
+    Then the web server returns PAGE1 resource
