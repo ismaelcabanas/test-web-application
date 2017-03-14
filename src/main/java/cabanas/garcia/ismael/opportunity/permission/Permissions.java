@@ -14,8 +14,8 @@ public class Permissions {
 
     public Optional<Permission> getPermissions(String resource){
         /*String[] roles =  permissions.entrySet().stream()
-                .filter(map -> resource.equals(map.getValue()))
-                .map(map -> map.getValue())
+                .filter(map -> resource.equals(map.getName()))
+                .map(map -> map.getName())
                 .collect(Collectors.joining());
 
         return Optional.of(Permission.builder()

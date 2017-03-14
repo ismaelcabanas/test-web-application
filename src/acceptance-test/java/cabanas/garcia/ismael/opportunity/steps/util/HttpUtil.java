@@ -59,7 +59,7 @@ public class HttpUtil {
                         if(locationHeader == null) {
                             throw new ProtocolException("Received redirect response " + response.getStatusLine() + " but no location header");
                         } else {
-                            String location = locationHeader.getValue();
+                            String location = locationHeader.getName();
 
                             RequestConfig config = clientContext.getRequestConfig();
                             URI uri = this.createLocationURI(location);

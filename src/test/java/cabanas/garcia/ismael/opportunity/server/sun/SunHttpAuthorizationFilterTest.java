@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.greaterThan;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SunHttpAuthenticationFilterTest {
+public class SunHttpAuthorizationFilterTest {
 
     @Mock
     private Filter.Chain chain;
@@ -41,7 +41,7 @@ public class SunHttpAuthenticationFilterTest {
     public void if_authenticated_user_request_a_private_resource_then_the_request_is_processed() throws Exception{
         // given
         HttpExchange httpExchange = new HttpExchangeAuthenticatedUserStub("/page1");
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(sessionRepository);
         sut.getConfiguration().addPrivateResource("/page1");
 
         Session nonExpiredSession = Session.builder().timeout(-1).sessionId("aSessionId").user(User.builder().username("ismael").build()).build();
@@ -58,7 +58,7 @@ public class SunHttpAuthenticationFilterTest {
     public void if_authenticated_user_request_a_non_private_resource_then_the_request_is_processed() throws Exception{
         // given
         HttpExchange httpExchange = new HttpExchangeAuthenticatedUserStub("/page2");
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter();
         sut.getConfiguration().addPrivateResource("/page1");
 
         // when
@@ -72,7 +72,7 @@ public class SunHttpAuthenticationFilterTest {
     public void if_unauthenticated_user_request_a_private_resource_then_redirect_to_login_view() throws Exception{
         // given
         HttpExchange httpExchange = new HttpExchangeUnauthenticatedUserStub("/page1");
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter();
         sut.getConfiguration().addPrivateResource("/page1");
 
         HttpExchange httpExchangeSpy = Mockito.spy(httpExchange);
@@ -89,7 +89,7 @@ public class SunHttpAuthenticationFilterTest {
     public void if_unauthenticated_user_request_a_private_resource_then_set_location_response_header_with_redirect_path_value() throws Exception{
         // given
         HttpExchange httpExchange = new HttpExchangeUnauthenticatedUserStub("/page1");
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter();
         sut.getConfiguration().redirectPath("/login");
         sut.getConfiguration().addPrivateResource("/page1");
 
@@ -106,7 +106,7 @@ public class SunHttpAuthenticationFilterTest {
     public void if_unauthenticated_user_request_a_non_private_resource_then_request_is_processed() throws Exception{
         // given
         HttpExchange httpExchange = new HttpExchangeUnauthenticatedUserStub("/publicPage");
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter();
         sut.getConfiguration().addPrivateResource("/page1");
 
         // when
@@ -122,7 +122,7 @@ public class SunHttpAuthenticationFilterTest {
         String aSessionId = "aSessionId";
         HttpExchange httpExchange = new HttpExchangeWithSessionCookieStub("/page1", aSessionId);
 
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(sessionRepository);
         sut.getConfiguration().addPrivateResource("/page1");
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
@@ -145,7 +145,7 @@ public class SunHttpAuthenticationFilterTest {
         String aSessionId = "aSessionId";
         HttpExchange httpExchange = new HttpExchangeWithSessionCookieStub("/page1", aSessionId);
 
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(sessionRepository);
         sut.getConfiguration().addPrivateResource("/page1");
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
@@ -172,7 +172,7 @@ public class SunHttpAuthenticationFilterTest {
         String aSessionId = "aSessionId";
         HttpExchange httpExchange = new HttpExchangeWithSessionCookieStub("/page1", aSessionId);
 
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter(sessionRepository);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(sessionRepository);
         sut.getConfiguration().addPrivateResource("/page1");
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
@@ -191,13 +191,13 @@ public class SunHttpAuthenticationFilterTest {
     @Test
     public void description(){
         // given
-        SunHttpAuthenticationFilter sut = new SunHttpAuthenticationFilter();
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter();
 
         // when
         String actual = sut.description();
 
         // then
-        assertThat(actual, is(equalTo(SunHttpAuthenticationFilter.AUTHENTICATION_FILTER)));
+        assertThat(actual, is(equalTo(SunHttpAuthorizationFilter.AUTHENTICATION_FILTER)));
     }
 
     private Session expiredSession() {

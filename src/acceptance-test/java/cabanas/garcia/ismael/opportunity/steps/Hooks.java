@@ -12,12 +12,8 @@ import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
-import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
-import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
-import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.Filter;
 import cucumber.api.java8.En;
 
@@ -79,7 +75,7 @@ public class Hooks implements En{
     }
 
     private static List<Filter> configureFilters() {
-        SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter();
+        SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter();
         authenticationFilter.getConfiguration().addPrivateResource("/page1");
         authenticationFilter.getConfiguration().addPrivateResource("/page2");
         authenticationFilter.getConfiguration().addPrivateResource("/page3");

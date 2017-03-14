@@ -18,7 +18,7 @@ import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import com.sun.net.httpserver.BasicAuthenticator;
@@ -82,7 +82,7 @@ public class Main {
     private static List<Filter> configureFilters() {
         log.info("Configuring filters...");
 
-        SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter(InMemorySessionRepository.getInstance());
+        SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(InMemorySessionRepository.getInstance());
         authenticationFilter.getConfiguration().addPrivateResource("/page1");
         authenticationFilter.getConfiguration().addPrivateResource("/page2");
         authenticationFilter.getConfiguration().addPrivateResource("/page3");

@@ -1,8 +1,17 @@
 package cabanas.garcia.ismael.opportunity.http;
 
-public final class RequestHeadersConstants {
+public enum RequestHeadersConstants {
 
-    public static final String COOKIE = "Cookie";
+    COOKIE("Cookie");
 
-    private RequestHeadersConstants(){}
+    private String headerName;
+
+
+    RequestHeadersConstants(String headerName) {
+        this.headerName = headerName;
+    }
+
+    public String getName() {
+        return headerName;
+    }
 }

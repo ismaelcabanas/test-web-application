@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.steps;
 
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.steps.model.PermissionData;
 import cabanas.garcia.ismael.opportunity.steps.model.UserData;
@@ -40,7 +40,7 @@ public class StartServerStepDefs implements En {
         Given("^private resources (.*)$", (String resources) -> {
             String[] resourcesSplitted = resources.split(",");
 
-            SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter(InMemorySessionRepository.getInstance());
+            SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(InMemorySessionRepository.getInstance());
 
             Arrays.stream(resourcesSplitted).forEach(resource -> authenticationFilter.getConfiguration().addPrivateResource(resource.trim()));
             authenticationFilter.getConfiguration().redirectPath("/login");

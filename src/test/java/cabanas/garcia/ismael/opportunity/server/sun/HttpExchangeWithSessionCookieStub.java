@@ -9,7 +9,7 @@ public class HttpExchangeWithSessionCookieStub extends HttpExchangeSuccessResour
     public HttpExchangeWithSessionCookieStub(String path, String aSessionId) {
         super(path);
         this.sessionId = aSessionId;
-        getRequestHeaders().add(RequestHeadersConstants.COOKIE, Cookie.builder().name("sessionToken").value(sessionId).build().toString());
+        getRequestHeaders().add(RequestHeadersConstants.COOKIE.getName(), Cookie.builder().name("sessionToken").value(sessionId).build().toString());
     }
 
 }

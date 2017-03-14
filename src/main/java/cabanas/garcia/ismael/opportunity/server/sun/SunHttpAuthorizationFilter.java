@@ -9,13 +9,12 @@ import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class SunHttpAuthenticationFilter extends Filter{
+public class SunHttpAuthorizationFilter extends Filter{
 
     public static final String AUTHENTICATION_FILTER = "Authentication filter";
 
@@ -23,11 +22,11 @@ public class SunHttpAuthenticationFilter extends Filter{
 
     private final AuthenticatorFilterConfiguration configuration;
 
-    public SunHttpAuthenticationFilter() {
+    public SunHttpAuthorizationFilter() {
         this.configuration = new AuthenticatorFilterConfiguration();
     }
 
-    public SunHttpAuthenticationFilter(SessionRepository sessionRepository) {
+    public SunHttpAuthorizationFilter(SessionRepository sessionRepository) {
         this();
         this.sessionRepository = sessionRepository;
     }

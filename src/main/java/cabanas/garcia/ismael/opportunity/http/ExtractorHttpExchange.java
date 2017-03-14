@@ -29,7 +29,7 @@ public class ExtractorHttpExchange {
         log.debug("Looking for session cookie");
         Headers headers = httpExchange.getRequestHeaders();
         if(!headers.isEmpty()) {
-            List<String> headerCookies = headers.get(RequestHeadersConstants.COOKIE);
+            List<String> headerCookies = headers.get(RequestHeadersConstants.COOKIE.getName());
             if(headerCookies != null) {
                 Cookies cookies = CookieAdapter.toCookies(headerCookies);
                 Optional<Cookie> cookie = cookies.get(Cookie.SESSION_TOKEN);
