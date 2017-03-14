@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
-import cabanas.garcia.ismael.opportunity.http.RequestHeadersConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestHeadersEnum;
 
 public class HttpExchangeWithSessionCookieStub extends HttpExchangeSuccessResourceStub {
     private final String sessionId;
@@ -9,7 +9,7 @@ public class HttpExchangeWithSessionCookieStub extends HttpExchangeSuccessResour
     public HttpExchangeWithSessionCookieStub(String path, String aSessionId) {
         super(path);
         this.sessionId = aSessionId;
-        getRequestHeaders().add(RequestHeadersConstants.COOKIE.getName(), Cookie.builder().name("sessionToken").value(sessionId).build().toString());
+        getRequestHeaders().add(RequestHeadersEnum.COOKIE.getName(), Cookie.builder().name("sessionToken").value(sessionId).build().toString());
     }
 
 }

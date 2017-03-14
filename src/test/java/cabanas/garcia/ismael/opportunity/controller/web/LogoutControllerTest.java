@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.view.View;
@@ -43,10 +43,10 @@ public class LogoutControllerTest {
         LogoutController sut = new LogoutController();
 
         // when
-        String actual = sut.getMethod();
+        RequestMethodEnum actual = sut.getMethod();
 
         // then
-        assertThat(actual, is(equalTo(RequestMethodConstants.GET)));
+        assertThat(actual, is(equalTo(RequestMethodEnum.GET)));
     }
 
     @Test

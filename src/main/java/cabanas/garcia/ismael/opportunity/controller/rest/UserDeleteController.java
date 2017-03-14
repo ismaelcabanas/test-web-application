@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller.rest;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.ResourceNotFoundView;
@@ -43,8 +43,8 @@ public class UserDeleteController extends Controller{
     }
 
     @Override
-    public String getMethod() {
-        return RequestMethodConstants.DELETE;
+    public RequestMethodEnum getMethod() {
+        return RequestMethodEnum.DELETE;
     }
 
     private String extractUsernameFromRequestPath(String path) {

@@ -2,11 +2,7 @@ package cabanas.garcia.ismael.opportunity.http.imp;
 
 import cabanas.garcia.ismael.opportunity.http.Parameter;
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNull;
-import org.junit.Assert;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -32,10 +28,10 @@ public class DefaultRequestTest {
     @Test
     public void request_with_method(){
         // when
-        Request actual = DefaultRequest.builder().method(RequestMethodConstants.POST).build();
+        Request actual = DefaultRequest.builder().method(RequestMethodEnum.POST).build();
 
         // then
-        assertThat(actual.getMethod(), is(equalTo(RequestMethodConstants.POST)));
+        assertThat(actual.getMethod(), is(equalTo(RequestMethodEnum.POST)));
     }
 
     @Test

@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller.rest;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithPathVariableStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
@@ -44,10 +44,10 @@ public class UserGetControllerTest {
         UserGetController sut = new UserGetController(userService);
 
         // when
-        String actual = sut.getMethod();
+        RequestMethodEnum actual = sut.getMethod();
 
         // then
-        assertThat(actual, is(equalTo(RequestMethodConstants.GET)));
+        assertThat(actual, is(equalTo(RequestMethodEnum.GET)));
     }
 
     @Test

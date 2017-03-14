@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import com.sun.net.httpserver.*;
 
 import java.io.*;
@@ -37,7 +38,7 @@ public class HttpExchangeStub extends HttpExchange {
 
     @Override
     public String getRequestMethod() {
-        return null;
+        return RequestMethodEnum.GET.getName();
     }
 
     @Override

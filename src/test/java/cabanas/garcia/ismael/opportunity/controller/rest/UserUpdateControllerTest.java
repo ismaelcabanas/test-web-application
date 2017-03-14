@@ -2,10 +2,9 @@ package cabanas.garcia.ismael.opportunity.controller.rest;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithDataForApiStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithPathVariableStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
@@ -17,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.net.HttpURLConnection;
@@ -54,10 +52,10 @@ public class UserUpdateControllerTest {
         UserUpdateController sut = new UserUpdateController(userService);
 
         // when
-        String actual = sut.getMethod();
+        RequestMethodEnum actual = sut.getMethod();
 
         // then
-        assertThat(actual, is(equalTo(RequestMethodConstants.PUT)));
+        assertThat(actual, is(equalTo(RequestMethodEnum.PUT)));
     }
 
     @Test

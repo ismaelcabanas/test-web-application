@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.view.View;
 
 public class Test1PostController extends Controller {
@@ -26,7 +26,7 @@ public class Test1PostController extends Controller {
     }
 
     @Override
-    public String getMethod() {
-        return RequestMethodConstants.POST;
+    public RequestMethodEnum getMethod() {
+        return RequestMethodEnum.POST;
     }
 }

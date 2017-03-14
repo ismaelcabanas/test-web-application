@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.mapper;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.util.ExpressionRegularValidator;
 
 import java.util.HashMap;
@@ -19,22 +19,22 @@ public final class DefaultMapping implements Mapping{
 
     @Override
     public Optional<Class<? extends Controller>> getController(String mappingPath) {
-        return getController(mappingPath, RequestMethodConstants.GET);
+        return getController(mappingPath, RequestMethodEnum.GET);
     }
 
     @Override
     public void addMapping(String mappingPath, Class<? extends Controller> aClass) {
-        addMapping(mappingPath, RequestMethodConstants.GET, aClass);
+        addMapping(mappingPath, RequestMethodEnum.GET, aClass);
     }
 
     @Override
-    public void addMapping(String mappingPath, String method, Class<? extends Controller> aClass) {
+    public void addMapping(String mappingPath, RequestMethodEnum method, Class<? extends Controller> aClass) {
         KeyMapper keyMapper = KeyMapper.builder().path(mappingPath).method(method).build();
         mapper.put(keyMapper, aClass);
     }
 
     @Override
-    public Optional<Class<? extends Controller>> getController(String mappingPath, String method) {
+    public Optional<Class<? extends Controller>> getController(String mappingPath, RequestMethodEnum method) {
         for (Map.Entry<KeyMapper, Class<? extends Controller>> entry : mapper.entrySet()) {
             if(entry.getKey().match(mappingPath, method))
                 return Optional.of(entry.getValue());
@@ -44,14 +44,14 @@ public final class DefaultMapping implements Mapping{
 
     private static class KeyMapper {
         private String pattern;
-        private String method;
+        private RequestMethodEnum method;
 
-        public KeyMapper(String mappingPath, String method) {
+        public KeyMapper(String mappingPath, RequestMethodEnum method) {
             this.pattern = mappingPath;
             this.method = method;
         }
 
-        public boolean match(String path, String method){
+        public boolean match(String path, RequestMethodEnum method){
             return ExpressionRegularValidator.isValidate(this.pattern, path)
                     && this.method.equals(method);
         }
@@ -80,14 +80,14 @@ public final class DefaultMapping implements Mapping{
 
         private static class KeyMapperBuilder {
             private String mappingPath;
-            private String method;
+            private RequestMethodEnum method;
 
             public KeyMapperBuilder path(String mappingPath) {
                 this.mappingPath = mappingPath;
                 return this;
             }
 
-            public KeyMapperBuilder method(String method) {
+            public KeyMapperBuilder method(RequestMethodEnum method) {
                 this.method = method;
                 return this;
             }

@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
@@ -80,7 +80,7 @@ public class LoginPostController extends Controller {
     }
 
     @Override
-    public String getMethod() {
-        return RequestMethodConstants.POST;
+    public RequestMethodEnum getMethod() {
+        return RequestMethodEnum.POST;
     }
 }

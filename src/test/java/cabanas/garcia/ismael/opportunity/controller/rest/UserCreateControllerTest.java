@@ -1,15 +1,13 @@
 package cabanas.garcia.ismael.opportunity.controller.rest;
 
-import cabanas.garcia.ismael.opportunity.controller.rest.UserCreateController;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithDataForApiStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -47,10 +45,10 @@ public class UserCreateControllerTest {
         UserCreateController sut = new UserCreateController(userService);
 
         // when
-        String actual = sut.getMethod();
+        RequestMethodEnum actual = sut.getMethod();
 
         // then
-        assertThat(actual, is(equalTo(RequestMethodConstants.POST)));
+        assertThat(actual, is(equalTo(RequestMethodEnum.POST)));
     }
 
     @Test

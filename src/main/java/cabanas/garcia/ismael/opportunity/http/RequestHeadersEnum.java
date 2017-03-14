@@ -1,13 +1,13 @@
 package cabanas.garcia.ismael.opportunity.http;
 
-public enum RequestHeadersConstants {
+public enum RequestHeadersEnum {
 
     COOKIE("Cookie");
 
     private String headerName;
 
 
-    RequestHeadersConstants(String headerName) {
+    RequestHeadersEnum(String headerName) {
         this.headerName = headerName;
     }
 

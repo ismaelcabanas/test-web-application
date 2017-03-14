@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller.rest;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.service.UserService;
@@ -58,7 +58,7 @@ public class UserCreateController extends Controller {
     }
 
     @Override
-    public String getMethod() {
-        return RequestMethodConstants.POST;
+    public RequestMethodEnum getMethod() {
+        return RequestMethodEnum.POST;
     }
 }

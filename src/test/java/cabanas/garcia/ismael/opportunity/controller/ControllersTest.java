@@ -2,7 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.controller.web.UnknownResourceController;
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultRequest;
 import cabanas.garcia.ismael.opportunity.mapper.DefaultMapping;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
@@ -47,7 +47,7 @@ public class ControllersTest {
 
         Request request = DefaultRequest.builder()
                 .path("/test1")
-                .method(RequestMethodConstants.POST)
+                .method(RequestMethodEnum.POST)
                 .build();
 
         // when
@@ -73,7 +73,7 @@ public class ControllersTest {
 
         Controllers sut = new Controllers(mapping, controllerFactory);
 
-        Request request = DefaultRequest.builder().path("/test1").method(RequestMethodConstants.GET).build();
+        Request request = DefaultRequest.builder().path("/test1").method(RequestMethodEnum.GET).build();
 
         // when
         Controller actual = sut.select(request);

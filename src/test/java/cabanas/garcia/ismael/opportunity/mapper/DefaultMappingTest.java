@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.mapper;
 
 import cabanas.garcia.ismael.opportunity.controller.*;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
@@ -43,7 +43,7 @@ public class DefaultMappingTest {
         DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
-        sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);
+        sut.addMapping("/path1", RequestMethodEnum.POST, Test1PostController.class);
 
         // when
         Optional<Class<? extends Controller>> controller = sut.getController("/path1");
@@ -59,10 +59,10 @@ public class DefaultMappingTest {
         DefaultMapping sut = new DefaultMapping();
         sut.addMapping("^/path1$", Test1Controller.class);
         sut.addMapping("^/path2$", Test2Controller.class);
-        sut.addMapping("^/path1/.*$", RequestMethodConstants.POST, Test1PostController.class);
+        sut.addMapping("^/path1/.*$", RequestMethodEnum.POST, Test1PostController.class);
 
         // when
-        Optional<Class<? extends Controller>> controller = sut.getController("/path1/test", RequestMethodConstants.POST);
+        Optional<Class<? extends Controller>> controller = sut.getController("/path1/test", RequestMethodEnum.POST);
 
         // then
         assertThat(controller.isPresent(), is(true));
@@ -75,10 +75,10 @@ public class DefaultMappingTest {
         DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
-        sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);
+        sut.addMapping("/path1", RequestMethodEnum.POST, Test1PostController.class);
 
         // when
-        Optional<Class<? extends Controller>> controller = sut.getController("/path1", RequestMethodConstants.POST);
+        Optional<Class<? extends Controller>> controller = sut.getController("/path1", RequestMethodEnum.POST);
 
         // then
         assertThat(controller.isPresent(), is(true));
@@ -91,7 +91,7 @@ public class DefaultMappingTest {
         DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
-        sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);
+        sut.addMapping("/path1", RequestMethodEnum.POST, Test1PostController.class);
 
         // when
         Optional<Class<? extends Controller>> controller = sut.getController("/path3");
@@ -106,8 +106,8 @@ public class DefaultMappingTest {
         DefaultMapping sut = new DefaultMapping();
         sut.addMapping("/path1", Test1Controller.class);
         sut.addMapping("/path2", Test2Controller.class);
-        sut.addMapping("/path1", RequestMethodConstants.POST, Test1PostController.class);
-        sut.addMapping("/path4", RequestMethodConstants.POST, Test1PostController.class);
+        sut.addMapping("/path1", RequestMethodEnum.POST, Test1PostController.class);
+        sut.addMapping("/path4", RequestMethodEnum.POST, Test1PostController.class);
 
         // when
         Optional<Class<? extends Controller>> controller = sut.getController("/path4");

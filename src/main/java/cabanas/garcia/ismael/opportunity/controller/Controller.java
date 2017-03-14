@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.controller;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.view.View;
 
 public abstract class Controller {
@@ -9,7 +9,7 @@ public abstract class Controller {
 
     public abstract String getMappingPath();
 
-    public String getMethod() {
-        return RequestMethodConstants.GET;
+    public RequestMethodEnum getMethod() {
+        return RequestMethodEnum.GET;
     }
 }

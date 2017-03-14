@@ -1,9 +1,8 @@
 package cabanas.garcia.ismael.opportunity.controller.web;
 
-import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodConstants;
+import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
@@ -12,7 +11,6 @@ import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsA
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
-import org.hamcrest.core.IsNot;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -130,10 +128,10 @@ public class LoginPostControllerTest {
         LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
 
         // when
-        String actual = sut.getMethod();
+        RequestMethodEnum actual = sut.getMethod();
 
         // then
-        assertThat(actual, is(equalTo(RequestMethodConstants.POST)));
+        assertThat(actual, is(equalTo(RequestMethodEnum.POST)));
     }
 
     @Test
