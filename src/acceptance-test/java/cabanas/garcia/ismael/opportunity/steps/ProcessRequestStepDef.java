@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.steps;
 
+import cabanas.garcia.ismael.opportunity.http.RequestHeadersConstants;
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
@@ -137,7 +138,7 @@ public class ProcessRequestStepDef implements En {
         HttpClient httpClient = HttpUtil.create();
         HttpGet httpGet = new HttpGet("http://localhost:" + port + page);
         try {
-            httpGet.addHeader(sessionTokenHeader);
+            httpGet.addHeader(RequestHeadersConstants.COOKIE, sessionTokenHeader.getValue());
             HttpResponse httpResponse = httpClient.execute(httpGet);
             statusCode = httpResponse.getStatusLine().getStatusCode();
             response = getStringFromInputStream(httpResponse.getEntity().getContent());
