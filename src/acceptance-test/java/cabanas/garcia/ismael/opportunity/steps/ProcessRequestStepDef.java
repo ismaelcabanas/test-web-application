@@ -5,10 +5,9 @@ import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenti
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
-import cabanas.garcia.ismael.opportunity.steps.model.User;
+import cabanas.garcia.ismael.opportunity.steps.model.UserData;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import com.sun.net.httpserver.BasicAuthenticator;
-import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -49,6 +48,7 @@ public class ProcessRequestStepDef implements En {
             this.port = port;
             httpServer = new SunHttpServer(port);
 
+
             httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
             SunHttpHandler webHandler = new SunHttpHandler(webControllers);
             httpServer.createContext("/", webHandler, filters);
@@ -56,6 +56,7 @@ public class ProcessRequestStepDef implements En {
             SunHttpHandler restHandler = new SunHttpHandler(restControllers);
             BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
             httpServer.createContext("/users", restHandler, basicAuthenticator);
+
             httpServer.start();
         });
 
@@ -88,12 +89,12 @@ public class ProcessRequestStepDef implements En {
             sendGetRequest("/logout");
         });
         Given("^(.*) logs in the system$", (String username) -> {
-            Optional<User> user = StartServerStepDefs.users.stream().filter(u -> u.getUsername().equals(username)).findFirst();
+            Optional<UserData> user = StartServerStepDefs.users.stream().filter(u -> u.getUsername().equals(username)).findFirst();
             if(user.isPresent()){
                 login(user.get().getUsername(), user.get().getPassword());
             }
             else{
-                throw new RuntimeException(String.format("User %s not found", username));
+                throw new RuntimeException(String.format("UserData %s not found", username));
             }
         });
         When("^sends a (.*) request to web server$", (String resource) -> {

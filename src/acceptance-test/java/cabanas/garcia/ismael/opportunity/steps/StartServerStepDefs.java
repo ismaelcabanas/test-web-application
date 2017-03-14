@@ -3,7 +3,8 @@ package cabanas.garcia.ismael.opportunity.steps;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
-import cabanas.garcia.ismael.opportunity.steps.model.User;
+import cabanas.garcia.ismael.opportunity.steps.model.PermissionData;
+import cabanas.garcia.ismael.opportunity.steps.model.UserData;
 import cucumber.api.DataTable;
 import cucumber.api.java8.En;
 import org.hamcrest.core.Is;
@@ -12,15 +13,14 @@ import org.junit.Assert;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.filters;
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.httpServer;
 
 public class StartServerStepDefs implements En {
 
-    public static List<Permission> permissions;
-    public static List<User> users;
+    public static List<PermissionData> permissions;
+    public static List<UserData> users;
 
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
@@ -48,10 +48,10 @@ public class StartServerStepDefs implements En {
             filters.add(authenticationFilter);
         });
         Given("^the next table of permissions$", (DataTable dataTable) -> {
-            this.permissions = dataTable.asList(Permission.class);
+            this.permissions = dataTable.asList(PermissionData.class);
         });
         And("^there are the next users in the system$", (DataTable dataTable) -> {
-            this.users = dataTable.asList(User.class);
+            this.users = dataTable.asList(UserData.class);
         });
     }
 }

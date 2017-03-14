@@ -1,6 +1,6 @@
 package cabanas.garcia.ismael.opportunity.steps.model;
 
-public class User {
+public class UserData {
     private String username;
     private String password;
     private String[] roles;
