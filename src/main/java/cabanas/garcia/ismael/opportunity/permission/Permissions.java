@@ -1,29 +1,15 @@
 package cabanas.garcia.ismael.opportunity.permission;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Permissions {
 
-    private static Map<String, String[]> permissions;
-    private static Permissions instance;
+    private List<Permission> permissionList;
 
-    private Permissions(){
-        permissions =  new HashMap<>();
-    }
-
-    public static Permissions getInstance(){
-        if (instance == null){
-            instance = new Permissions();
-        }
-        return instance;
-    }
-
-    public void add (String resource, String[] roles){
-        assert resource != null;
-        permissions.put(resource, roles);
-
+    public Permissions(){
+        permissionList = new ArrayList<>();
     }
 
     public Optional<Permission> getPermissions(String resource){
@@ -37,5 +23,13 @@ public class Permissions {
                 .roles(roles)
                 .build());*/
         return Optional.empty();
+    }
+
+    public void add(Permission permission) {
+        this.permissionList.add(permission);
+    }
+
+    public List<Permission> getPermissions() {
+        return this.permissionList;
     }
 }

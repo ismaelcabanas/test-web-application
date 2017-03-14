@@ -1,5 +1,6 @@
 package cabanas.garcia.ismael.opportunity.permission;
 
+import cabanas.garcia.ismael.opportunity.model.Roles;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,6 +14,6 @@ public class Permission {
 
     private String resource;
 
-    private String[] roles;
+    private Roles roles;
 
 }
