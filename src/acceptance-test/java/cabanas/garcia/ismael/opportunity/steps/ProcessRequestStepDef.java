@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenti
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
+import cabanas.garcia.ismael.opportunity.steps.model.User;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import com.sun.net.httpserver.BasicAuthenticator;
 import cucumber.api.PendingException;
@@ -24,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
 import static org.hamcrest.core.Is.is;
@@ -58,16 +60,7 @@ public class ProcessRequestStepDef implements En {
         });
 
         When("^I send a (.*) request to web server$", (String page) -> {
-            HttpClient httpClient = HttpUtil.create();
-            HttpGet httpGet = new HttpGet("http://localhost:" + port + page);
-            try {
-                httpGet.addHeader(sessionTokenHeader);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                statusCode = httpResponse.getStatusLine().getStatusCode();
-                response = getStringFromInputStream(httpResponse.getEntity().getContent());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            sendGetRequest(page);
         });
 
         Then("^the web server returns (.*) resource$", (String expected) -> {
@@ -92,18 +85,34 @@ public class ProcessRequestStepDef implements En {
             login(username, password);
         });
         When("^I logout$", () -> {
-            HttpClient httpClient = HttpUtil.create();
-            HttpGet httpGet = new HttpGet("http://localhost:" + port + "/logout");
-            try {
-                httpGet.addHeader(sessionTokenHeader);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                statusCode = httpResponse.getStatusLine().getStatusCode();
-                response = getStringFromInputStream(httpResponse.getEntity().getContent());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            sendGetRequest("/logout");
+        });
+        Given("^(.*) logs in the system$", (String username) -> {
+            Optional<User> user = StartServerStepDefs.users.stream().filter(u -> u.getUsername().equals(username)).findFirst();
+            if(user.isPresent()){
+                login(user.get().getUsername(), user.get().getPassword());
+            }
+            else{
+                throw new RuntimeException(String.format("User %s not found", username));
             }
         });
+        When("^sends a (.*) request to web server$", (String resource) -> {
+            sendGetRequest(resource);
+        });
 
+    }
+
+    private void sendGetRequest(String page) {
+        HttpClient httpClient = HttpUtil.create();
+        HttpGet httpGet = new HttpGet("http://localhost:" + port + page);
+        try {
+            httpGet.addHeader(sessionTokenHeader);
+            HttpResponse httpResponse = httpClient.execute(httpGet);
+            statusCode = httpResponse.getStatusLine().getStatusCode();
+            response = getStringFromInputStream(httpResponse.getEntity().getContent());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void login(String username, String password) {

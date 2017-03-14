@@ -1,28 +1,26 @@
 package cabanas.garcia.ismael.opportunity.steps;
 
-import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
-import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
-import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
-import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
-import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
-import cabanas.garcia.ismael.opportunity.server.StandardWebServer;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthenticationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
-import com.sun.net.httpserver.Filter;
-import cucumber.api.PendingException;
+import cabanas.garcia.ismael.opportunity.steps.model.User;
+import cucumber.api.DataTable;
 import cucumber.api.java8.En;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.filters;
+import static cabanas.garcia.ismael.opportunity.steps.Hooks.httpServer;
 
 public class StartServerStepDefs implements En {
+
+    public static List<Permission> permissions;
+    public static List<User> users;
 
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {
@@ -48,6 +46,12 @@ public class StartServerStepDefs implements En {
             authenticationFilter.getConfiguration().redirectPath("/login");
 
             filters.add(authenticationFilter);
+        });
+        Given("^the next table of permissions$", (DataTable dataTable) -> {
+            this.permissions = dataTable.asList(Permission.class);
+        });
+        And("^there are the next users in the system$", (DataTable dataTable) -> {
+            this.users = dataTable.asList(User.class);
         });
     }
 }
