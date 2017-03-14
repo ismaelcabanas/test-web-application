@@ -88,7 +88,7 @@ public class Main {
         configuration.addPrivateResource("/page3");
         configuration.redirectPath("/login");
 
-        SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(configuration, InMemorySessionRepository.getInstance());
+        SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(configuration);
 
         List<Filter> filters = new ArrayList<>();
         filters.add(authenticationFilter);

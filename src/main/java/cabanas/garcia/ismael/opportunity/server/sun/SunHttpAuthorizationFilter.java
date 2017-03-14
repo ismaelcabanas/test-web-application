@@ -1,9 +1,11 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.http.*;
-import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
-import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
-import cabanas.garcia.ismael.opportunity.support.PrivateResources;
+import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.http.RequestFactory;
+import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.session.SessionValidator;
+import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
+import cabanas.garcia.ismael.opportunity.service.PrivateResourcesService;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import com.sun.net.httpserver.Filter;
@@ -19,76 +21,54 @@ import java.util.Optional;
 public class SunHttpAuthorizationFilter extends Filter{
 
     public static final String AUTHENTICATION_FILTER = "Authentication filter";
-    private PrivateResources privateResources;
 
-    private SessionRepository sessionRepository;
-
+    private PrivateResourcesService privateResourcesService;
+    private SessionValidator sessionValidator;
+    private PermissionChecker permissionChecker;
     private AuthorizationFilterConfiguration configuration;
 
     public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration) {
+        // TODO Delete this constructor
         this.configuration = configuration;
-
-        this.privateResources = new PrivateResources();
-        this.configuration.getPrivateResources().stream().forEach(resource -> this.privateResources.add(resource));
     }
 
-    public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration, SessionRepository sessionRepository) {
+    public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration, SessionValidator sessionValidator, PermissionChecker permissionChecker, PrivateResourcesService privateResourcesService) {
         this(configuration);
-        this.sessionRepository = sessionRepository;
+        this.sessionValidator = sessionValidator;
+        this.permissionChecker = permissionChecker;
+        this.privateResourcesService = privateResourcesService;
     }
 
     @Override
     public void doFilter(HttpExchange httpExchange, Chain chain) throws IOException {
 
-        ExtractorHttpExchange extractorHttpExchange = new ExtractorHttpExchange(httpExchange);
+        Request request = RequestFactory.create(httpExchange);
 
-        Resource resource = extractorHttpExchange.extractPathFrom();
+        Resource resource = request.getResource();
 
         log.debug("Filtering resource {}", resource);
 
-        if(this.privateResources.hasResource(resource)){
-            log.debug("is a secure resource...");
-            Optional<Cookie> sessionCookie = extractorHttpExchange.extractSessionCookie();
-            if(!sessionCookie.isPresent()){
-                log.info("Not exist a valid cookie session, redirecting for authentication to {}", configuration.getRedirectPath());
-                HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
-                return;
-            }
-            Optional<Session> session = getSession(sessionCookie.get());
+        if(privateResourcesService.hasResource(resource)){
+            log.debug("{} is a secure resource...", resource.getPath());
+            Optional<Session> session = sessionValidator.validate(request);
             if(session.isPresent()){
-                Session theSession = session.get();
-                if(!theSession.hasExpired()) {
-                    log.debug("Session non expired");
-                    theSession.resetLastAccess();
-                    sessionRepository.persist(theSession);
-                    log.debug("Updated session {}", theSession);
-                    httpExchange.setAttribute("session", theSession);
+                if(permissionChecker.hasPermission(session.get().getUser(), resource)){
+                    log.debug("User {} has permissions to resource {}", session.get().getUser().getUsername(), resource);
+                    chain.doFilter(httpExchange);
                 }
                 else{
-                    log.debug("Session expired. Deleting session {}", theSession.getSessionId());
-                    sessionRepository.delete(theSession.getSessionId());
-                    log.info("Session expired, redirecting for authentication to {}", configuration.getRedirectPath());
-                    HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
-                    return;
+                    log.debug("User {} hasn't permissions to resource {} and will be redirected to {}", session.get().getUser().getUsername(), resource, configuration.getRedirectForbiddenPath());
+                    HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectForbiddenPath());
                 }
-            }else{
-                log.info("Non exist user session. Redirect to {} ", configuration.getRedirectPath());
+            }
+            else{
+                log.info("Non exist user session. Redirecting to authenticate to {} ", configuration.getRedirectPath());
                 HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
-                return;
             }
         }
-        chain.doFilter(httpExchange);
-    }
-
-    private Optional<Session> getSession(final Cookie sessionCookie) {
-        log.debug("Load session {} from repository", sessionCookie.getValue());
-        Optional<Session> sessionFromRepository = sessionRepository.read(sessionCookie.getValue());
-        if(sessionFromRepository.isPresent()){
-            Session session = sessionFromRepository.get().makeClone();
-            log.debug("Session {} loaded", session);
-            return Optional.of(session);
+        else {
+            chain.doFilter(httpExchange);
         }
-        return Optional.empty();
     }
 
     @Override
@@ -103,9 +83,13 @@ public class SunHttpAuthorizationFilter extends Filter{
     public static class AuthorizationFilterConfiguration {
         private String redirectPath;
         private List<Resource> privateResources = new ArrayList<>();
+        private String redicectForbiddenPath;
 
         public void redirectPath(String redirectPath) {
             this.redirectPath = redirectPath;
+        }
+        public void redirectForbiddenPath(String redicectForbiddenPath) {
+            this.redicectForbiddenPath = redicectForbiddenPath;
         }
 
         public void addPrivateResource(String privateResource) {
@@ -119,6 +103,10 @@ public class SunHttpAuthorizationFilter extends Filter{
 
         public List<Resource> getPrivateResources() {
             return privateResources;
+        }
+
+        public String getRedirectForbiddenPath() {
+            return redicectForbiddenPath;
         }
     }
 

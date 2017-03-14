@@ -25,7 +25,7 @@ public class RequestFactoryTest {
         Request request = RequestFactory.create(httpExchange);
 
         // then
-        assertThat(request.getPath().getPath(), is(equalTo(PATH_PAGE1)));
+        assertThat(request.getResource().getPath(), is(equalTo(PATH_PAGE1)));
     }
 
     @Test

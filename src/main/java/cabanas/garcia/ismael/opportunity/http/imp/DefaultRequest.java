@@ -18,7 +18,7 @@ import java.util.Optional;
 @ToString
 @Getter
 public class DefaultRequest implements Request{
-    private Resource path;
+    private Resource resource;
     private Optional<Session> session;
     private RequestMethodEnum method;
     private List<Parameter> parameters;

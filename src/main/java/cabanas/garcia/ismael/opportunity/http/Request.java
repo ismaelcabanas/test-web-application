@@ -5,7 +5,7 @@ import cabanas.garcia.ismael.opportunity.support.Resource;
 import java.util.Optional;
 
 public interface Request {
-    Resource getPath();
+    Resource getResource();
 
     Optional<Session> getSession();
 

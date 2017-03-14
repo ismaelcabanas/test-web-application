@@ -21,10 +21,10 @@ public class DefaultRequestTest {
     public void request_with_path(){
         // when
         Resource resourcePage1 = Resource.builder().path("/page1").build();
-        Request actual = DefaultRequest.builder().path(resourcePage1).build();
+        Request actual = DefaultRequest.builder().resource(resourcePage1).build();
 
         // then
-        assertThat(actual.getPath(), is(equalTo(resourcePage1)));
+        assertThat(actual.getResource(), is(equalTo(resourcePage1)));
     }
 
     @Test

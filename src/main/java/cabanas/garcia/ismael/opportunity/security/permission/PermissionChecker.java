@@ -1,15 +1,8 @@
-package cabanas.garcia.ismael.opportunity.permission;
+package cabanas.garcia.ismael.opportunity.security.permission;
 
-import java.util.Optional;
+import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.support.Resource;
 
-public class PermissionChecker {
-    Permissions permissions;
-
-    public PermissionChecker(Permissions permissions){
-        this.permissions = permissions;
-    }
-    public boolean check (String resource, String[] roles){
-        Optional<Permission> permission = permissions.getPermissions(resource);
-        return false; //!Collections.disjoint(permission.getRoles(), roles);
-    }
+public interface PermissionChecker {
+    boolean hasPermission(User user, Resource resource);
 }

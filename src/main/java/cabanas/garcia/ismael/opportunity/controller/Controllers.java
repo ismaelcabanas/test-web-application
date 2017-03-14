@@ -19,7 +19,7 @@ public class Controllers {
     public Controller select(Request request) {
         assert request != null;
 
-        Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getPath(), request.getMethod());
+        Optional<Class<? extends Controller>> aControllerClass = mapping.getController(request.getResource(), request.getMethod());
 
         if(aControllerClass.isPresent()){
             return controllerFactory.getInstance(aControllerClass.get());

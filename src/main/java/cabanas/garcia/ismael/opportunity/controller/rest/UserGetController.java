@@ -26,7 +26,7 @@ public class UserGetController extends Controller{
 
     @Override
     public View process(Request request) {
-        String username = extractUsernameFromRequestPath(request.getPath());
+        String username = extractUsernameFromRequestPath(request.getResource());
 
         Optional<User> existentUser = userService.findByUsername(username);
 

@@ -15,7 +15,7 @@ public class RequestFactory {
 
         return
             DefaultRequest.builder()
-                    .path(extractorHttpExchange.extractPathFrom())
+                    .resource(extractorHttpExchange.extractPathFrom())
                     .session(extractorHttpExchange.extractSession())
                     .parameters(extractorHttpExchange.getParameters())
                     .method(extractorHttpExchange.getMethod())

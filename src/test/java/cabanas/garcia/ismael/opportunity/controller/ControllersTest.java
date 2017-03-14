@@ -48,7 +48,7 @@ public class ControllersTest {
 
         Resource test1Resouce = Resource.builder().path("/test1").build();
         Request request = DefaultRequest.builder()
-                .path(test1Resouce)
+                .resource(test1Resouce)
                 .method(RequestMethodEnum.POST)
                 .build();
 
@@ -76,7 +76,7 @@ public class ControllersTest {
         Controllers sut = new Controllers(mapping, controllerFactory);
 
         Resource test1Resource = Resource.builder().path("/test1").build();
-        Request request = DefaultRequest.builder().path(test1Resource).method(RequestMethodEnum.GET).build();
+        Request request = DefaultRequest.builder().resource(test1Resource).method(RequestMethodEnum.GET).build();
 
         // when
         Controller actual = sut.select(request);
@@ -99,7 +99,7 @@ public class ControllersTest {
         Controllers sut = new Controllers(mapping, controllerFactory);
 
         Resource test3Resource = Resource.builder().path("/test3").build();
-        Request request = DefaultRequest.builder().path(test3Resource).build();
+        Request request = DefaultRequest.builder().resource(test3Resource).build();
 
         // when
         Controller actual = sut.select(request);

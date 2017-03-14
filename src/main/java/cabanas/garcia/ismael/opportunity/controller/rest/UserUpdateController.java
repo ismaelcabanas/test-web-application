@@ -27,7 +27,7 @@ public class UserUpdateController extends Controller{
 
     @Override
     public View process(Request request) {
-        String username = extractUsernameFromRequestPath(request.getPath());
+        String username = extractUsernameFromRequestPath(request.getResource());
 
         Roles roles = extractRolesFromRequest(request);
 

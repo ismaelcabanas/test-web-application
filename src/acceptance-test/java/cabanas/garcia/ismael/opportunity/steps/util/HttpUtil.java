@@ -103,7 +103,7 @@ public class HttpUtil {
                                 ex.setHost(host.toLowerCase(Locale.ROOT));
                             }
 
-                            String path = ex.getPath();
+                            String path = ex.getResource();
                             if(TextUtils.isEmpty(path)) {
                                 ex.setPath("/");
                             }

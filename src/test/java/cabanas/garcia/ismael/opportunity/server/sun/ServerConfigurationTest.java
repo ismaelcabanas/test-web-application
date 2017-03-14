@@ -5,9 +5,6 @@ import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.permission.Permission;
 import cabanas.garcia.ismael.opportunity.permission.Permissions;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
