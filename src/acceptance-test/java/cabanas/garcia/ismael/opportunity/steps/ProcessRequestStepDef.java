@@ -1,10 +1,17 @@
 package cabanas.garcia.ismael.opportunity.steps;
 
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
+import cabanas.garcia.ismael.opportunity.model.Roles;
+import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.permission.Permission;
+import cabanas.garcia.ismael.opportunity.permission.Permissions;
+import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
+import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
+import cabanas.garcia.ismael.opportunity.steps.model.PermissionData;
 import cabanas.garcia.ismael.opportunity.steps.model.UserData;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import com.sun.net.httpserver.BasicAuthenticator;
@@ -23,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +56,12 @@ public class ProcessRequestStepDef implements En {
             this.port = port;
             httpServer = new SunHttpServer(port);
 
+            // add permissions?
+            addPermissionsToServer(StartServerStepDefs.permissions, httpServer.getConfiguration().getPermissions());
 
+            // add users?
+            addUsers(StartServerStepDefs.users);
+            
             httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
             SunHttpHandler webHandler = new SunHttpHandler(webControllers);
             httpServer.createContext("/", webHandler, filters);
@@ -101,6 +114,23 @@ public class ProcessRequestStepDef implements En {
             sendGetRequest(resource);
         });
 
+    }
+
+    private void addUsers(List<UserData> users) {
+        UserRepository userRepository = InMemoryUserRepository.getInstance();
+        users.stream().forEach(userData -> {
+            Roles roles = Roles.builder().build();
+            Arrays.stream(userData.getRoles()).forEach(rolename -> roles.add(rolename));
+            userRepository.persist(User.builder().username(userData.getUsername()).roles(roles).password(userData.getPassword()).build())
+        });
+    }
+
+    private void addPermissionsToServer(final List<PermissionData> permissionsData, Permissions permissions) {
+        permissionsData.forEach(permissionData -> {
+            Roles roles = Roles.builder().build();
+            Arrays.stream(permissionData.getRoles()).forEach(rolename -> roles.add(rolename));
+            permissions.add(Permission.builder().resource(permissionData.getResource()).roles(roles).build());
+        });
     }
 
     private void sendGetRequest(String page) {
