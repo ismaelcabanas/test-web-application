@@ -42,7 +42,7 @@ public class StartServerStepDefs implements En {
 
             SunHttpAuthenticationFilter authenticationFilter = new SunHttpAuthenticationFilter(InMemorySessionRepository.getInstance());
 
-            Arrays.stream(resourcesSplitted).forEach(resource -> authenticationFilter.getConfiguration().addPrivateResource(resource));
+            Arrays.stream(resourcesSplitted).forEach(resource -> authenticationFilter.getConfiguration().addPrivateResource(resource.trim()));
             authenticationFilter.getConfiguration().redirectPath("/login");
 
             filters.add(authenticationFilter);

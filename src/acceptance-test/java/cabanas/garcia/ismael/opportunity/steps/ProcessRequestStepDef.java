@@ -121,7 +121,7 @@ public class ProcessRequestStepDef implements En {
         users.stream().forEach(userData -> {
             Roles roles = Roles.builder().build();
             Arrays.stream(userData.getRoles()).forEach(rolename -> roles.add(rolename));
-            userRepository.persist(User.builder().username(userData.getUsername()).roles(roles).password(userData.getPassword()).build())
+            userRepository.persist(User.builder().username(userData.getUsername()).roles(roles).password(userData.getPassword()).build());
         });
     }
 
