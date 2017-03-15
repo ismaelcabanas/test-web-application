@@ -11,4 +11,8 @@ import lombok.ToString;
 @Getter
 public class Resource {
     private String path;
+
+    public static Resource empty() {
+        return Resource.builder().path("").build();
+    }
 }
