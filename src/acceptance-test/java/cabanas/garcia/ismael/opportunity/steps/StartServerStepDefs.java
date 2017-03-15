@@ -11,6 +11,7 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,8 +20,8 @@ import static cabanas.garcia.ismael.opportunity.steps.Hooks.httpServer;
 
 public class StartServerStepDefs implements En {
 
-    public static List<PermissionData> permissions;
-    public static List<UserData> users;
+    public static List<PermissionData> permissions = new ArrayList<>();
+    public static List<UserData> users = new ArrayList<>();
 
     public StartServerStepDefs() {
         When("^I start the web server on (\\d+) port$", (Integer port) -> {

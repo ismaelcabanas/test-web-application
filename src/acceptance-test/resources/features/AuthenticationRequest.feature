@@ -22,8 +22,8 @@ Feature: Authentication
 
   @ignore
   Scenario: Unauthenticated users cannot access to private resources
-    Given private resource /page1
+    Given private resources /page1
     And the web server is running on port 8002
     When I send a /page1 request to web server
-    Then the web server redirects me to login page
+    Then the web server returns Login resource
 

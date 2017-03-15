@@ -5,18 +5,16 @@ Feature: Create users trhough REST API
 
   Background:
     Given there is the user admin/admin with Admin role in the system
-
+    And the web server is running on port 8082
   Scenario: Creating user with a valid account
-    Given the web server is running on port 8082
-    And I want create user with name Ismael
+    Given I want create user with name Ismael
     And with password changeIt
     And with roles Admin, Page1
     When I use API for creating users with user admin and password admin
     Then the web server returns 201 status code
 
   Scenario: Creating user with an invalid account
-    Given the web server is running on port 8082
-    And I want create user with name Ismael
+    Given I want create user with name Ismael
     And with password changeIt
     And with roles Admin, Page1
     When I use API for creating users with user admin and password wrongpassword

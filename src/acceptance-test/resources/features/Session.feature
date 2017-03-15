@@ -9,7 +9,7 @@ Feature: Session handling
   @ignore
   Scenario: Create user session when authenticate
     Given private resources /page1, /page2
-    Given the web server is running on port 8002
+    And the web server is running on port 8002
     And I log in with admin/admin credentials
     When I send a /page1 request to web server
     Then the web server returns Hello admin, you are in PAGE1 resource

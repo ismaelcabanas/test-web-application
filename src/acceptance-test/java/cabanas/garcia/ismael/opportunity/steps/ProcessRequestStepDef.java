@@ -139,7 +139,8 @@ public class ProcessRequestStepDef implements En {
         HttpClient httpClient = HttpUtil.create();
         HttpGet httpGet = new HttpGet("http://localhost:" + port + page);
         try {
-            httpGet.addHeader(RequestHeadersEnum.COOKIE.getName(), sessionTokenHeader.getValue());
+            if(sessionTokenHeader != null)
+                httpGet.addHeader(RequestHeadersEnum.COOKIE.getName(), sessionTokenHeader.getValue());
             HttpResponse httpResponse = httpClient.execute(httpGet);
             statusCode = httpResponse.getStatusLine().getStatusCode();
             response = getStringFromInputStream(httpResponse.getEntity().getContent());

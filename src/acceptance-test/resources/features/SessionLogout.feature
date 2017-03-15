@@ -5,12 +5,12 @@ Feature: Session logout
 
   Background:
     Given there is the user admin/admin with Admin role in the system
+    And private resources /page1
+    And the web server is running on port 8002
 
   @ignore
   Scenario: Logout from private resource
-    Given private resources /page1
-    Given the web server is running on port 8002
-    And I log in with admin/admin credentials
+    Given I log in with admin/admin credentials
     And I send a /page1 request to web server
     When I logout
     Then the web server redirects me to login page
