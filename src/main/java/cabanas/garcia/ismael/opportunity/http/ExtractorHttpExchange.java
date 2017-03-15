@@ -34,7 +34,10 @@ public class ExtractorHttpExchange {
             if(headerCookies != null) {
                 Cookies cookies = CookieAdapter.toCookies(headerCookies);
                 Optional<Cookie> cookie = cookies.get(Cookie.SESSION_TOKEN);
-                log.debug("Cookie founded {}", cookie.get());
+                if(cookie.isPresent())
+                    log.debug("Cookie founded {}", cookie.get());
+                else
+                    log.debug("Cookie {} not found", Cookie.SESSION_TOKEN);
                 return cookie;
             }
         }
