@@ -43,7 +43,8 @@ public class SunHttpHandler implements HttpHandler{
         httpExchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
 
         if(!response.isRedirect()) {
-            addCookieResponseHeader(httpExchange, request);
+            if(request.getSession().isPresent())
+                addCookieResponseHeader(httpExchange, request);
 
             httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
 
