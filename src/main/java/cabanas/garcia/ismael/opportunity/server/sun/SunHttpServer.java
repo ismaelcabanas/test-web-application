@@ -42,11 +42,13 @@ public class SunHttpServer {
 
     public void start() {
 
+        log.info("Starting server...");
+
         this.httpServer.start();
 
         updateStatus(State.RUNNING);
 
-        log.info("Server started");
+        log.info("Server started on port {}", port);
     }
 
     public boolean isRunning() {
