@@ -2,14 +2,20 @@ package cabanas.garcia.ismael.opportunity.steps;
 
 import cabanas.garcia.ismael.opportunity.http.RequestHeadersEnum;
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
+import cabanas.garcia.ismael.opportunity.http.session.DefaultSessionManager;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
+import cabanas.garcia.ismael.opportunity.security.permission.DefaultPermissionChecker;
 import cabanas.garcia.ismael.opportunity.security.permission.Permission;
+import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
 import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.steps.model.PermissionData;
@@ -58,12 +64,21 @@ public class ProcessRequestStepDef implements En {
             this.port = port;
             httpServer = new SunHttpServer(port);
 
-            // add permission?
-            addPermissionsToServer(StartServerStepDefs.permissions, httpServer.getConfiguration().getPermissions());
-
             // add users?
             addUsers(StartServerStepDefs.users);
-            
+
+            // set authorization filter
+            SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
+                    new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
+            configuration.redirectPath("/login");
+            SessionManager sessionManager = new DefaultSessionManager(InMemorySessionRepository.getInstance());
+            PermissionChecker permissionChecker = new DefaultPermissionChecker(StartServerStepDefs.permissions);
+            SunHttpAuthorizationFilter authenticationFilter =
+                    new SunHttpAuthorizationFilter(configuration, sessionManager,
+                            permissionChecker,
+                            StartServerStepDefs.privateResourceService);
+            filters.add(authenticationFilter);
+
             httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
             SunHttpHandler webHandler = new SunHttpHandler(webControllers);
             httpServer.createContext("/", webHandler, filters);
@@ -82,9 +97,11 @@ public class ProcessRequestStepDef implements En {
         Then("^the web server returns (.*) resource$", (String expected) -> {
             assertThat(this.response, containsString(expected));
         });
+
         And("^(\\d+) status code$", (Integer statusCode) -> {
             assertThat(this.statusCode, is(equalTo(statusCode)));
         });
+
         Then("^the web server redirects me to login page$", () -> {
             assertThat(this.statusCode, is(equalTo(200)));
             assertThat(this.response, containsString("Login"));
@@ -94,15 +111,19 @@ public class ProcessRequestStepDef implements En {
             this.username = user;
             this.password = password;
         });
+
         When("^I send try to login to web server$", () -> {
             login(username, password);
         });
+
         And("^I log in with (.*)/(.*) credentials$", (String username, String password) -> {
             login(username, password);
         });
+
         When("^I logout$", () -> {
             sendGetRequest("/logout");
         });
+
         Given("^(.*) logs in the system$", (String username) -> {
             Optional<UserData> user = StartServerStepDefs.users.stream().filter(u -> u.getUsername().equals(username)).findFirst();
             if(user.isPresent()){
@@ -124,14 +145,6 @@ public class ProcessRequestStepDef implements En {
             Roles roles = Roles.builder().build();
             Arrays.stream(userData.getRoles()).forEach(rolename -> roles.add(rolename));
             userRepository.persist(User.builder().username(userData.getUsername()).roles(roles).password(userData.getPassword()).build());
-        });
-    }
-
-    private void addPermissionsToServer(final List<PermissionData> permissionsData, Permissions permissions) {
-        permissionsData.forEach(permissionData -> {
-            Roles roles = Roles.builder().build();
-            Arrays.stream(permissionData.getRoles()).forEach(rolename -> roles.add(rolename));
-            permissions.add(Permission.builder().resource(Resource.builder().path(permissionData.getResource()).build()).roles(roles).build());
         });
     }
 

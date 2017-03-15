@@ -27,13 +27,9 @@ public class SunHttpAuthorizationFilter extends Filter{
     private PermissionChecker permissionChecker;
     private AuthorizationFilterConfiguration configuration;
 
-    public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration) {
-        // TODO Delete this constructor
-        this.configuration = configuration;
-    }
 
     public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration, SessionManager sessionManager, PermissionChecker permissionChecker, PrivateResourcesService privateResourcesService) {
-        this(configuration);
+        this.configuration = configuration;
         this.sessionManager = sessionManager;
         this.permissionChecker = permissionChecker;
         this.privateResourcesService = privateResourcesService;

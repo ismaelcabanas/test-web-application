@@ -4,10 +4,13 @@ package cabanas.garcia.ismael.opportunity.steps;
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
 import cabanas.garcia.ismael.opportunity.controller.DIControllerFactory;
+import cabanas.garcia.ismael.opportunity.http.session.DefaultSessionManager;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.ConstructorInstantiator;
 import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
+import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
@@ -74,19 +77,6 @@ public class Hooks implements En{
         return new Controllers(controllerMapping, new DIControllerFactory(new ConstructorInstantiator()));
     }
 
-    private static List<Filter> configureFilters() {
-        SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration = new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
-        configuration.addPrivateResource("/page1");
-        configuration.addPrivateResource("/page2");
-        configuration.addPrivateResource("/page3");
-        configuration.redirectPath("/login");
-        SunHttpAuthorizationFilter authenticationFilter = new SunHttpAuthorizationFilter(configuration);
-
-        List<Filter> filters = new ArrayList<>();
-        filters.add(authenticationFilter);
-
-        return filters;
-    }
 
     private static void loadDefaultUsers() {
         UserRepository userRepository = InMemoryUserRepository.getInstance();
