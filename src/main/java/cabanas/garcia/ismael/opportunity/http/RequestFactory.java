@@ -19,6 +19,7 @@ public class RequestFactory {
                     .session(extractorHttpExchange.extractSession())
                     .parameters(extractorHttpExchange.getParameters())
                     .method(extractorHttpExchange.getMethod())
+                    .sessionCookie(extractorHttpExchange.extractSessionCookie())
                     .build();
     }
 

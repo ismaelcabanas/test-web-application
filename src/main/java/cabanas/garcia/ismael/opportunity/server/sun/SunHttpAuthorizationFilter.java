@@ -3,7 +3,7 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.Session;
-import cabanas.garcia.ismael.opportunity.http.session.SessionValidator;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
 import cabanas.garcia.ismael.opportunity.service.PrivateResourcesService;
 import cabanas.garcia.ismael.opportunity.support.Resource;
@@ -23,7 +23,7 @@ public class SunHttpAuthorizationFilter extends Filter{
     public static final String AUTHENTICATION_FILTER = "Authentication filter";
 
     private PrivateResourcesService privateResourcesService;
-    private SessionValidator sessionValidator;
+    private SessionManager sessionManager;
     private PermissionChecker permissionChecker;
     private AuthorizationFilterConfiguration configuration;
 
@@ -32,9 +32,9 @@ public class SunHttpAuthorizationFilter extends Filter{
         this.configuration = configuration;
     }
 
-    public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration, SessionValidator sessionValidator, PermissionChecker permissionChecker, PrivateResourcesService privateResourcesService) {
+    public SunHttpAuthorizationFilter(AuthorizationFilterConfiguration configuration, SessionManager sessionManager, PermissionChecker permissionChecker, PrivateResourcesService privateResourcesService) {
         this(configuration);
-        this.sessionValidator = sessionValidator;
+        this.sessionManager = sessionManager;
         this.permissionChecker = permissionChecker;
         this.privateResourcesService = privateResourcesService;
     }
@@ -50,7 +50,7 @@ public class SunHttpAuthorizationFilter extends Filter{
 
         if(privateResourcesService.hasResource(resource)){
             log.debug("{} is a secure resource...", resource.getPath());
-            Optional<Session> session = sessionValidator.validate(request);
+            Optional<Session> session = sessionManager.validate(request);
             if(session.isPresent()){
                 if(permissionChecker.hasPermission(session.get().getUser(), resource)){
                     log.debug("User {} has permission to resource {}", session.get().getUser().getUsername(), resource);

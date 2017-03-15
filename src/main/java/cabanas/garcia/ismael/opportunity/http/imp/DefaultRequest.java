@@ -4,6 +4,7 @@ import cabanas.garcia.ismael.opportunity.http.Parameter;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,7 @@ public class DefaultRequest implements Request{
     private Optional<Session> session;
     private RequestMethodEnum method;
     private List<Parameter> parameters;
+    private Optional<Cookie> sessionCookie;
 
     @Override
     public String getParameter(String paramName) {
@@ -40,4 +42,5 @@ public class DefaultRequest implements Request{
     public boolean hasRedirectParameter() {
         return getParameter("redirect") != null;
     }
+
 }

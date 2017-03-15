@@ -5,6 +5,6 @@ import cabanas.garcia.ismael.opportunity.http.Session;
 
 import java.util.Optional;
 
-public interface SessionValidator {
+public interface SessionManager {
     Optional<Session> validate(Request request);
 }

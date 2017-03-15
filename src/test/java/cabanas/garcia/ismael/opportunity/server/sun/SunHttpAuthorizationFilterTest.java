@@ -4,7 +4,7 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
 import cabanas.garcia.ismael.opportunity.http.Session;
-import cabanas.garcia.ismael.opportunity.http.session.SessionValidator;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Role;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
@@ -14,16 +14,11 @@ import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNull;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.net.HttpURLConnection;
@@ -54,7 +49,7 @@ public class SunHttpAuthorizationFilterTest {
     private Filter.Chain chain;
 
     @Mock
-    private SessionValidator sessionValidator;
+    private SessionManager sessionManager;
 
     @Mock
     private PermissionChecker permissionChecker;
@@ -77,7 +72,7 @@ public class SunHttpAuthorizationFilterTest {
         configuration.addPrivateResource(PATH_PAGE_1);
 
         SunHttpAuthorizationFilter sut =
-                new SunHttpAuthorizationFilter(configuration, sessionValidator, permissionChecker, privateResourcesService);
+                new SunHttpAuthorizationFilter(configuration, sessionManager, permissionChecker, privateResourcesService);
 
         when(privateResourcesService.hasResource(any())).thenReturn(false);
 
@@ -87,7 +82,7 @@ public class SunHttpAuthorizationFilterTest {
         // then
         verify(chain).doFilter(httpExchange);
         verify(privateResourcesService).hasResource(PUBLIC_RESOURCE);
-        verifyZeroInteractions(sessionValidator, permissionChecker);
+        verifyZeroInteractions(sessionManager, permissionChecker);
     }
 
     @Test
@@ -102,10 +97,10 @@ public class SunHttpAuthorizationFilterTest {
         configuration.addPrivateResource(PRIVATE_RESOURCE_PAGE_1.getPath());
 
         SunHttpAuthorizationFilter sut =
-                new SunHttpAuthorizationFilter(configuration, sessionValidator, permissionChecker, privateResourcesService);
+                new SunHttpAuthorizationFilter(configuration, sessionManager, permissionChecker, privateResourcesService);
 
         when(privateResourcesService.hasResource(any())).thenReturn(true);
-        when(sessionValidator.validate(request)).thenReturn(VALID_SESSION);
+        when(sessionManager.validate(request)).thenReturn(VALID_SESSION);
         when(permissionChecker.hasPermission(AUTHENTICATED_USER, PRIVATE_RESOURCE_PAGE_1)).thenReturn(true);
 
         // when
@@ -114,7 +109,7 @@ public class SunHttpAuthorizationFilterTest {
         // then
         verify(privateResourcesService).hasResource(PRIVATE_RESOURCE_PAGE_1);
         verify(chain).doFilter(httpExchange);
-        verify(sessionValidator).validate(any());
+        verify(sessionManager).validate(any());
         verify(permissionChecker).hasPermission(any(), any());
     }
 
@@ -132,10 +127,10 @@ public class SunHttpAuthorizationFilterTest {
 
 
         SunHttpAuthorizationFilter sut =
-                new SunHttpAuthorizationFilter(configuration, sessionValidator, permissionChecker, privateResourcesService);
+                new SunHttpAuthorizationFilter(configuration, sessionManager, permissionChecker, privateResourcesService);
 
         when(privateResourcesService.hasResource(any())).thenReturn(true);
-        when(sessionValidator.validate(request)).thenReturn(INVALID_SESSION);
+        when(sessionManager.validate(request)).thenReturn(INVALID_SESSION);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
@@ -144,15 +139,11 @@ public class SunHttpAuthorizationFilterTest {
 
         // then
         verify(privateResourcesService).hasResource(PRIVATE_RESOURCE_PAGE_1);
-        verify(sessionValidator).validate(any());
+        verify(sessionManager).validate(any());
         verifyZeroInteractions(chain, permissionChecker);
         verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
 
-        Headers responseHeaders = httpExchange.getResponseHeaders();
-        List<String> headersList = responseHeaders.get(ResponseHeaderConstants.LOCATION);
-        assertThat(headersList, is(notNullValue()));
-        assertThat(headersList.isEmpty(), is(equalTo(false)));
-        assertThat(headersList.get(0), is(equalTo(PATH_LOGIN)));
+        assertThatRequestHaveLocationHeaderWithValue(httpExchange, PATH_LOGIN);
     }
 
     @Test
@@ -169,10 +160,10 @@ public class SunHttpAuthorizationFilterTest {
         configuration.redirectForbiddenPath(PATH_FORBIDDEN);
 
         SunHttpAuthorizationFilter sut =
-                new SunHttpAuthorizationFilter(configuration, sessionValidator, permissionChecker, privateResourcesService);
+                new SunHttpAuthorizationFilter(configuration, sessionManager, permissionChecker, privateResourcesService);
 
         when(privateResourcesService.hasResource(any())).thenReturn(true);
-        when(sessionValidator.validate(request)).thenReturn(VALID_SESSION);
+        when(sessionManager.validate(request)).thenReturn(VALID_SESSION);
         when(permissionChecker.hasPermission(AUTHENTICATED_USER, PRIVATE_RESOURCE_PAGE_1)).thenReturn(false);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
@@ -182,15 +173,19 @@ public class SunHttpAuthorizationFilterTest {
 
         // then
         verify(privateResourcesService).hasResource(PRIVATE_RESOURCE_PAGE_1);
-        verify(sessionValidator).validate(any());
+        verify(sessionManager).validate(any());
         verifyZeroInteractions(chain);
         verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
 
+        assertThatRequestHaveLocationHeaderWithValue(httpExchange, PATH_FORBIDDEN);
+    }
+
+    private void assertThatRequestHaveLocationHeaderWithValue(final HttpExchange httpExchange, final String locationPath) {
         Headers responseHeaders = httpExchange.getResponseHeaders();
         List<String> headersList = responseHeaders.get(ResponseHeaderConstants.LOCATION);
         assertThat(headersList, is(notNullValue()));
         assertThat(headersList.isEmpty(), is(equalTo(false)));
-        assertThat(headersList.get(0), is(equalTo(PATH_FORBIDDEN)));
+        assertThat(headersList.get(0), is(equalTo(locationPath)));
     }
 
 /*    @Test
@@ -199,11 +194,11 @@ public class SunHttpAuthorizationFilterTest {
         HttpExchange httpExchange = new HttpExchangeAuthenticatedUserStub("/page1");
         SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
                 new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
-        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionValidator);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionManager);
         sut.getConfiguration().addPrivateResource("/page1");
 
         Session nonExpiredSession = Session.builder().timeout(-1).sessionId("aSessionId").user(User.builder().username("ismael").build()).build();
-        when(sessionValidator.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
+        when(sessionManager.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
 
         // when
         sut.doFilter(httpExchange, chain);
@@ -296,19 +291,19 @@ public class SunHttpAuthorizationFilterTest {
                 new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
         configuration.addPrivateResource("/page1");
 
-        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionValidator);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionManager);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
         Session nonExpiredSession = Session.builder().timeout(-1).sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
 
-        when(sessionValidator.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
+        when(sessionManager.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
 
         // when
         sut.doFilter(httpExchangeSpy, chain);
 
         // then
-        verify(sessionValidator).read(nonExpiredSession.getSessionId());
+        verify(sessionManager).read(nonExpiredSession.getSessionId());
         verify(httpExchangeSpy).setAttribute("session", nonExpiredSession);
     }
 
@@ -321,20 +316,20 @@ public class SunHttpAuthorizationFilterTest {
         SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
                 new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
         configuration.addPrivateResource("/page1");
-        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionValidator);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionManager);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
         Session nonExpiredSession = Session.builder().timeout(-1).sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
 
-        when(sessionValidator.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
+        when(sessionManager.read(anyString())).thenReturn(Optional.of(nonExpiredSession));
 
         // when
         sut.doFilter(httpExchangeSpy, chain);
 
         // then
-        verify(sessionValidator).read(nonExpiredSession.getSessionId());
-        verify(sessionValidator).persist(any());
+        verify(sessionManager).read(nonExpiredSession.getSessionId());
+        verify(sessionManager).persist(any());
         verify(httpExchangeSpy).setAttribute(Mockito.anyString(), sessionCaptor.capture());
 
         Session sessionUpdated = sessionCaptor.getValue();
@@ -350,19 +345,19 @@ public class SunHttpAuthorizationFilterTest {
         SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
                 new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
         configuration.addPrivateResource("/page1");
-        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionValidator);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionManager);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
         Session session = Session.builder().timeout(1).sessionId(aSessionId).user(User.builder().username("ismael").build()).build();
 
-        when(sessionValidator.read(anyString())).thenReturn(Optional.of(session));
+        when(sessionManager.read(anyString())).thenReturn(Optional.of(session));
 
         // when
         sut.doFilter(httpExchangeSpy, chain);
 
         // then
-        verify(sessionValidator).delete(session.getSessionId());
+        verify(sessionManager).delete(session.getSessionId());
     }
 
     @Test
@@ -370,7 +365,7 @@ public class SunHttpAuthorizationFilterTest {
         // given
         SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
                 new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
-        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionValidator);
+        SunHttpAuthorizationFilter sut = new SunHttpAuthorizationFilter(configuration, sessionManager);
 
         // when
         String actual = sut.description();
