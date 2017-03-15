@@ -14,6 +14,6 @@ public class UnknownResourceController extends Controller {
 
     @Override
     public Resource getMappingPath() {
-        return null;
+        return Resource.empty();
     }
 }
