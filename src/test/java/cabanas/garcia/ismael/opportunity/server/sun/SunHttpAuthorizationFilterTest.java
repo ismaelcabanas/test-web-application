@@ -110,6 +110,7 @@ public class SunHttpAuthorizationFilterTest {
         verify(privateResourcesService).hasResource(PRIVATE_RESOURCE_PAGE_1);
         verify(chain).doFilter(httpExchange);
         verify(sessionManager).validate(any());
+        verify(sessionManager).update(any());
         verify(permissionChecker).hasPermission(any(), any());
     }
 

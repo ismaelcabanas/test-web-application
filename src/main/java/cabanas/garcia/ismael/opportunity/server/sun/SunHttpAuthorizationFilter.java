@@ -54,6 +54,7 @@ public class SunHttpAuthorizationFilter extends Filter{
             if(session.isPresent()){
                 if(permissionChecker.hasPermission(session.get().getUser(), resource)){
                     log.debug("User {} has permission to resource {}", session.get().getUser().getUsername(), resource);
+                    sessionManager.update(session.get());
                     chain.doFilter(httpExchange);
                 }
                 else{

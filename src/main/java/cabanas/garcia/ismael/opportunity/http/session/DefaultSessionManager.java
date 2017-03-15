@@ -42,4 +42,9 @@ public class DefaultSessionManager implements SessionManager {
         log.info("Not exist a valid cookie session");
         return Optional.empty();
     }
+
+    @Override
+    public Session update(Session session) {
+        return null;
+    }
 }
