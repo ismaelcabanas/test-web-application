@@ -6,8 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.net.HttpURLConnection;
-
 @Builder
 @EqualsAndHashCode
 @ToString
@@ -25,7 +23,7 @@ public class DefaultResponse implements Response{
 
     @Override
     public boolean isRedirect() {
-        return statusCode == HttpURLConnection.HTTP_MOVED_TEMP;
+        return statusCode >= 300 && statusCode <= 305 && statusCode != 304;
     }
 
 }
