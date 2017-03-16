@@ -20,7 +20,6 @@ import java.util.*;
 @Slf4j
 public class ExchangeRequest implements Request {
 
-    private static final String REDIRECCT_PARAM = "redirecct";
     private final Resource resource;
 
     private HttpExchange httpExchange;
