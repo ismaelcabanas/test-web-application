@@ -22,6 +22,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.net.HttpURLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -144,7 +146,8 @@ public class SunHttpAuthorizationFilterTest {
         verifyZeroInteractions(chain, permissionChecker);
         verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
 
-        assertThatRequestHaveLocationHeaderWithValue(httpExchange, PATH_LOGIN);
+        String expectedLocation = configuration.getRedirectPath() + "?" + Request.REDIRECCT_PARAM + "=" + URLEncoder.encode(request.getResource().getPath(), "UTF-8");
+        assertThatRequestHaveLocationHeaderWithValue(httpExchange, expectedLocation);
     }
 
     @Test

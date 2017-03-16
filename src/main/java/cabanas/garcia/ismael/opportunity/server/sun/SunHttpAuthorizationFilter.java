@@ -13,6 +13,7 @@ import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +60,7 @@ public class SunHttpAuthorizationFilter extends Filter{
             }
             else{
                 log.info("Non exist user session. Redirecting to authenticate to {} ", configuration.getRedirectPath());
-                HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath());
+                HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath() + "?" + Request.REDIRECCT_PARAM + "=" + URLEncoder.encode(resource.getPath(), "UTF-8"));
             }
         }
         else {
