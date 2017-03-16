@@ -6,6 +6,7 @@ import com.sun.net.httpserver.*;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public class HttpExchangeStub extends HttpExchange {
 
     private Headers requestHeaders;
     private Headers responseHeaders;
+    private Map<String, Object> attributes = new HashMap<>();
 
     public HttpExchangeStub() {
         baos = new ByteArrayOutputStream();
@@ -129,12 +131,12 @@ public class HttpExchangeStub extends HttpExchange {
 
     @Override
     public Object getAttribute(String s) {
-        return null;
+        return attributes.get(s);
     }
 
     @Override
     public void setAttribute(String s, Object o) {
-
+        attributes.put(s, o);
     }
 
     @Override

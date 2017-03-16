@@ -1,5 +1,7 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
+import cabanas.garcia.ismael.opportunity.http.Request;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -18,7 +20,7 @@ public class HttpExchangeWithCredentialsAndRedirectParam extends HttpExchangeWit
     @Override
     public InputStream getRequestBody() {
         String payload = "username=" + username + "&" +
-                "password=" + password + "&redirect=" + redirectPath;
+                "password=" + password + "&" + Request.REDIRECCT_PARAM + "=" + redirectPath;
         InputStream is = new ByteArrayInputStream(payload.getBytes());
         return is;
     }
