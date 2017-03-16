@@ -14,7 +14,9 @@ public class LoginController extends Controller {
     @Override
     public View process(Request request) {
         String redirectPath = request.getQueryParameter(Request.REDIRECCT_PARAM);
-        return new LoginRawView(redirectPath);
+        if(redirectPath != null)
+            return new LoginRawView(redirectPath);
+        return new LoginRawView();
     }
 
     @Override

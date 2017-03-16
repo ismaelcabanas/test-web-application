@@ -4,14 +4,17 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.imp.HttpExchangeWithQueryStringParam;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.LoginRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
+import org.hamcrest.core.IsNull;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class LoginControllerTest {
@@ -53,5 +56,21 @@ public class LoginControllerTest {
 
         // then
         assertThat(actual.getRedirectPath(), is(equalTo("/page1")));
+    }
+
+    @Test
+    public void should_return_login_view_without_redirect_paramete(){
+        // given
+        LoginController sut = new LoginController();
+
+        HttpExchange httpExchange = new HttpExchangeSuccessResourceStub("/page1");
+
+        Request request = RequestFactory.create(httpExchange);
+
+        // when
+        LoginRawView actual = (LoginRawView) sut.process(request);
+
+        // then
+        assertThat(actual.getRedirectPath(), is(nullValue()));
     }
 }
