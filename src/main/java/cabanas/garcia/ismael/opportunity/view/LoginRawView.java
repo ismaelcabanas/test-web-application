@@ -20,11 +20,25 @@ public class LoginRawView implements View{
             "\t</form>\n" +
             "\t</body>\n" +
             "</html>";
+
+    private String redirectPath;
+
+    public LoginRawView() {
+    }
+
+    public LoginRawView(String redirectPath) {
+        this.redirectPath = redirectPath;
+    }
+
     @Override
     public Response render() {
         return DefaultResponse.builder()
                 .statusCode(HttpURLConnection.HTTP_OK)
                 .content(raw.getBytes())
                 .build();
+    }
+
+    public String getRedirectPath() {
+        return this.redirectPath;
     }
 }

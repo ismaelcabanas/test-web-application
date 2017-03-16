@@ -7,13 +7,18 @@ import cabanas.garcia.ismael.opportunity.view.LoginRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 
 public class LoginController extends Controller {
+    static final String PATH = "/login";
+
+
+
     @Override
     public View process(Request request) {
-        return new LoginRawView();
+        String redirectPath = request.getQueryParameter(Request.REDIRECCT_PARAM);
+        return new LoginRawView(redirectPath);
     }
 
     @Override
     public Resource getMappingPath() {
-        return Resource.builder().path("/login").build();
+        return Resource.builder().path(PATH).build();
     }
 }
