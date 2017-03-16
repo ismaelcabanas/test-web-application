@@ -46,6 +46,15 @@ public class Main {
     private static PermissionChecker permissionChecker;
     private static PrivateResourcesService privateResourcesService;
 
+    private static Role rolePage1 = Role.builder().name("Page1").build();
+    private static Role rolePage2 = Role.builder().name("Page2").build();
+    private static Role rolePage3 = Role.builder().name("Page3").build();
+    private static Role roleAdmin = Role.builder().name("Admin").build();
+
+    private static Roles rolesResourcePage1 = Roles.builder().roleList(Arrays.asList(rolePage1)).build();
+    private static Roles rolesResourcePage2 = Roles.builder().roleList(Arrays.asList(rolePage2)).build();
+    private static Roles rolesResourcePage3 = Roles.builder().roleList(Arrays.asList(rolePage3)).build();
+
     private Main(){}
 
     public static void main(String... args) throws Exception{
@@ -84,8 +93,6 @@ public class Main {
     }
 
     private static Controllers webControllers() {
-        log.info("Scanning web controllers...");
-
         ControllerScanner controllerScanner = new DefaultControllerScanner("cabanas.garcia.ismael.opportunity.controller.web");
         List<Class<? extends Controller>> controllersScanned = controllerScanner.scanner();
         ControllerMapper controllerMapper = new DefaultControllerMapper(new ConstructorInstantiator());
@@ -98,6 +105,7 @@ public class Main {
 
         SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration = new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
         configuration.redirectPath("/login");
+        configuration.redirectForbiddenPath("/forbidden");
 
         SessionManager sessionManager = new DefaultSessionManager(InMemorySessionRepository.getInstance());
 
@@ -117,14 +125,18 @@ public class Main {
         UserRepository userRepository = InMemoryUserRepository.getInstance();
 
         User adminUser = getAdminUser();
-
         userRepository.persist(adminUser);
-        log.info("User {} persited", adminUser);
+
+        User user1 = User.builder().username("user1").password("changeit").roles(rolesResourcePage1).build();
+        userRepository.persist(user1);
+        User user2 = User.builder().username("user2").password("changeit").roles(rolesResourcePage2).build();
+        userRepository.persist(user2);
+        User user3 = User.builder().username("user3").password("changeit").roles(rolesResourcePage3).build();
+        userRepository.persist(user3);
     }
 
     private static User getAdminUser() {
-        Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
-        roles.add(RoleEnum.ADMIN.getRoleName());
+        Roles roles = Roles.builder().roleList(Arrays.asList(roleAdmin)).build();
 
         return User.builder().username("admin").password("admin").roles(roles).build();
     }
@@ -134,20 +146,12 @@ public class Main {
         Resource resourcePage2 = Resource.builder().path("/page2").build();
         Resource resourcePage3 = Resource.builder().path("/page3").build();
 
-        Role rolePage1 = Role.builder().name("Page1").build();
-        Role rolePage2 = Role.builder().name("Page2").build();
-        Role rolePage3 = Role.builder().name("Page3").build();
-        Role roleAdmin = Role.builder().name("Admin").build();
-
-        Roles rolesResourcePage1 = Roles.builder().roleList(Arrays.asList(rolePage1)).build();
-        Roles rolesResourcePage2 = Roles.builder().roleList(Arrays.asList(rolePage2)).build();
-        Roles rolesResourcePage3 = Roles.builder().roleList(Arrays.asList(rolePage3)).build();
-
         Permissions permissions = new Permissions();
         permissions.add(Permission.builder().resource(resourcePage1).roles(rolesResourcePage1).build());
         permissions.add(Permission.builder().resource(resourcePage2).roles(rolesResourcePage2).build());
         permissions.add(Permission.builder().resource(resourcePage3).roles(rolesResourcePage3).build());
 
+        log.info("Application permissions set: " + permissions);
         permissionChecker = new DefaultPermissionChecker(permissions);
 
         PrivateResources privateResources = new PrivateResources();
@@ -155,9 +159,8 @@ public class Main {
         privateResources.add(resourcePage2);
         privateResources.add(resourcePage3);
 
+        log.info("Resources securized: " + privateResources);
         privateResourcesService = new DefaultPrivateResourceService(privateResources);
-
-        log.info("Security configured");
     }
 
 }
