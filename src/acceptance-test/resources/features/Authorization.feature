@@ -17,17 +17,20 @@ Feature: Authorization in web application
     And private resources /page1, /page2, /page3
     And the web server is running on port 8002
 
-  Scenario: User authenticated access to private resources without required permissions
+    @ignore
+  Scenario: User authenticated accesses to private resources without required permissions
     Given user1 logs in the system
     When sends a /page2 request to web server
-    Then the web server returns Unauthorized resource
+    Then the web server returns Forbidden resource
 
-  Scenario: User authenticated access to private with required permissions
+  @ignore
+  Scenario: User authenticated accesses to private with required permissions
     Given user1 logs in the system
     When sends a /page1 request to web server
     Then the web server returns Page1 resource
 
-  Scenario: Admin user authenticated access to any private resources
+  @ignore
+  Scenario: Admin user authenticated accesses to any private resources
     Given admin logs in the system
     When sends a /page2 request to web server
     Then the web server returns PAGE2 resource
