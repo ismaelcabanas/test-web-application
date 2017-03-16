@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity.security.permission;
 
 import cabanas.garcia.ismael.opportunity.model.Role;
+import cabanas.garcia.ismael.opportunity.model.RoleEnum;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.support.Resource;
@@ -18,7 +19,7 @@ public class DefaultPermissionCheckerTest {
     private static final Roles ROLES_PAGE1_PAGE2 = Roles.builder().roleList(Arrays.asList(Role.builder().name("Page2").build(), Role.builder().name("Page1").build())).build();
     private static final Roles ROLES_PAGE1 = Roles.builder().roleList(Arrays.asList(Role.builder().name("Page1").build())).build();
     private static final Roles ROLES_PAGE3 = Roles.builder().roleList(Arrays.asList(Role.builder().name("Page3").build())).build();
-    private static final Roles ROLES_ADMIN = Roles.builder().roleList(Arrays.asList(Role.builder().name("Admin").build())).build();
+    private static final Roles ROLES_ADMIN = Roles.builder().roleList(Arrays.asList(Role.builder().name(RoleEnum.ADMIN.getRoleName()).build())).build();
 
     private Permissions permissions;
 
@@ -64,7 +65,6 @@ public class DefaultPermissionCheckerTest {
     @Test
     public void not_has_permission(){
         // given
-
         User user = User.builder().username("user1").roles(ROLES_PAGE3).build();
 
         PermissionChecker sut = new DefaultPermissionChecker(permissions);
@@ -74,5 +74,19 @@ public class DefaultPermissionCheckerTest {
 
         // then
         assertThat(actual, is(equalTo(false)));
+    }
+
+    @Test
+    public void has_permission_if_user_is_admin(){
+        // given
+        User adminUser = User.builder().username("user1").roles(ROLES_ADMIN).build();
+
+        PermissionChecker sut = new DefaultPermissionChecker(permissions);
+
+        // when
+        boolean actual = sut.hasPermission(adminUser, RESOURCE_PAGE_1);
+
+        // then
+        assertThat(actual, is(equalTo(true)));
     }
 }

@@ -13,6 +13,6 @@ public class DefaultPermissionChecker implements PermissionChecker {
 
     @Override
     public boolean hasPermission(final User user, final Resource resource) {
-        return permissions.check(user.getRoles(), resource);
+        return user.isAdmin() || permissions.check(user.getRoles(), resource);
     }
 }
