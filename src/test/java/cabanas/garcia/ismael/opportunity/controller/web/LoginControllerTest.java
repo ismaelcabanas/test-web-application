@@ -3,13 +3,11 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
-import cabanas.garcia.ismael.opportunity.http.imp.HttpExchangeWithQueryStringParam;
+import cabanas.garcia.ismael.opportunity.http.imp.HttpExchangeWithQueryStringParamStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.LoginRawView;
-import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
-import org.hamcrest.core.IsNull;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -47,7 +45,7 @@ public class LoginControllerTest {
         // given
         LoginController sut = new LoginController();
 
-        HttpExchange httpExchange = new HttpExchangeWithQueryStringParam("/login","redirect","/page1");
+        HttpExchange httpExchange = new HttpExchangeWithQueryStringParamStub("/login","redirect","/page1");
 
         Request request = RequestFactory.create(httpExchange);
 
