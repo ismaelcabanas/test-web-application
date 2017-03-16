@@ -20,6 +20,7 @@ import org.apache.http.util.Args;
 import org.apache.http.util.Asserts;
 import org.apache.http.util.TextUtils;
 
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
@@ -28,13 +29,14 @@ public class HttpUtil {
 
     public static HttpClient create(){
         return HttpClientBuilder.create()
-                .setRedirectStrategy(new LaxRedirectStrategy())
+                //.setRedirectStrategy(new LaxRedirectStrategy())
+                .disableRedirectHandling()
                 .build();
-/*
-                .setRedirectStrategy(new RedirectStrategy() {
+
+/*                .setRedirectStrategy(new RedirectStrategy() {
                     @Override
                     public boolean isRedirected(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws ProtocolException {
-                        return true;
+                        return httpResponse.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_MOVED_TEMP;
                     }
 
                     @Override
@@ -50,6 +52,7 @@ public class HttpUtil {
                             return (HttpUriRequest)(status == 307? RequestBuilder.copy(httpRequest).setUri(uri).build():new HttpGet(uri));
                         }
                     }
+
                     public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
                         Args.notNull(request, "HTTP request");
                         Args.notNull(response, "HTTP response");
@@ -59,7 +62,7 @@ public class HttpUtil {
                         if(locationHeader == null) {
                             throw new ProtocolException("Received redirect response " + response.getStatusLine() + " but no location header");
                         } else {
-                            String location = locationHeader.getName();
+                            String location = locationHeader.getValue();
 
                             RequestConfig config = clientContext.getRequestConfig();
                             URI uri = this.createLocationURI(location);
@@ -103,7 +106,7 @@ public class HttpUtil {
                                 ex.setHost(host.toLowerCase(Locale.ROOT));
                             }
 
-                            String path = ex.getResource();
+                            String path = ex.getPath();
                             if(TextUtils.isEmpty(path)) {
                                 ex.setPath("/");
                             }
@@ -113,8 +116,8 @@ public class HttpUtil {
                             throw new ProtocolException("Invalid redirect URI: " + location, var5);
                         }
                     }
-                }).build();
-*/
+                }).build();*/
+
     }
 
 
