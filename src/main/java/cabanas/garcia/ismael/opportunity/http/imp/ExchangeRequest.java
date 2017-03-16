@@ -9,6 +9,7 @@ import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
@@ -84,7 +85,7 @@ public class ExchangeRequest implements Request {
 
     @Override
     public boolean hasRedirectParameter() {
-        return getParameter(REDIRECCT_PARAM) != null;
+        return StringUtils.isNoneEmpty(getParameter(REDIRECCT_PARAM));
     }
 
     @Override

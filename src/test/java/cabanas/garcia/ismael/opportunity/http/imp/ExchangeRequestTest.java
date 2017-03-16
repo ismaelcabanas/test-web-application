@@ -1,18 +1,16 @@
 package cabanas.garcia.ismael.opportunity.http.imp;
 
 
-import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParam;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParamStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.HttpExchange;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNull;
-import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -54,7 +52,7 @@ public class ExchangeRequestTest {
     @Test
     public void should_return_parameter_when_exist_parameter(){
         // given
-        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParam("ismael", "", "");
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParamStub("ismael", "", "");
         ExchangeRequest sut = new ExchangeRequest(httpExchange);
 
         // when
@@ -67,7 +65,7 @@ public class ExchangeRequestTest {
     @Test
     public void should_return_null_when_parameter_not_exist(){
         // given
-        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParam("ismael", "", "");
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParamStub("ismael", "", "");
         ExchangeRequest sut = new ExchangeRequest(httpExchange);
 
         // when
@@ -80,7 +78,7 @@ public class ExchangeRequestTest {
     @Test
     public void should_return_parameter_from_query_string_when_exist_parameter(){
         // given
-        HttpExchange httpExchange = new HttpExchangeWithQueryStringParam(PAGE1_PATH, "redirect", "/page2");
+        HttpExchange httpExchange = new HttpExchangeWithQueryStringParamStub(PAGE1_PATH, "redirect", "/page2");
         ExchangeRequest sut = new ExchangeRequest(httpExchange);
 
         // when
@@ -93,7 +91,7 @@ public class ExchangeRequestTest {
     @Test
     public void should_return_parameter_from_query_string_when_not_exists_parameter(){
         // given
-        HttpExchange httpExchange = new HttpExchangeWithQueryStringParam(PAGE1_PATH, "redirect", "/page2");
+        HttpExchange httpExchange = new HttpExchangeWithQueryStringParamStub(PAGE1_PATH, "redirect", "/page2");
         ExchangeRequest sut = new ExchangeRequest(httpExchange);
 
         // when
@@ -114,5 +112,46 @@ public class ExchangeRequestTest {
 
         // then
         assertThat(actual, is(nullValue()));
+    }
+
+    @Test
+    public void hasRedirect_should_true_when_redirect_parameter_has_value() throws UnsupportedEncodingException {
+        // given
+        String redirectParam = URLEncoder.encode("/page1", "UTF-8");
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParamStub("ismael", "", redirectParam);
+        ExchangeRequest sut = new ExchangeRequest(httpExchange);
+
+        // when
+        boolean actual = sut.hasRedirectParameter();
+
+        // then
+        assertThat(actual, is(equalTo(true)));
+    }
+
+    @Test
+    public void hasRedirect_should_true_when_redirect_parameter_has_empty_value() throws UnsupportedEncodingException {
+        // given
+        String redirectParam = URLEncoder.encode("", "UTF-8");
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParamStub("ismael", "", redirectParam);
+        ExchangeRequest sut = new ExchangeRequest(httpExchange);
+
+        // when
+        boolean actual = sut.hasRedirectParameter();
+
+        // then
+        assertThat(actual, is(equalTo(false)));
+    }
+
+    @Test
+    public void hasRedirect_should_true_when_redirect_parameter_has_null_value() throws UnsupportedEncodingException {
+        // given
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsStub();
+        ExchangeRequest sut = new ExchangeRequest(httpExchange);
+
+        // when
+        boolean actual = sut.hasRedirectParameter();
+
+        // then
+        assertThat(actual, is(equalTo(false)));
     }
 }
