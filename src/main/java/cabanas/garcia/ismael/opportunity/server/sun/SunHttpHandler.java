@@ -42,10 +42,10 @@ public class SunHttpHandler implements HttpHandler{
     private void process(HttpExchange httpExchange, final Request request, final Response response) throws IOException {
         httpExchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
 
-        if(!response.isRedirect()) {
-            if(request.getSession().isPresent())
-                addCookieResponseHeader(httpExchange, request);
+        if(request.getSession().isPresent())
+            addCookieResponseHeader(httpExchange, request);
 
+        if(!response.isRedirect()) {
             httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
 
             writeResponse(httpExchange, response.getContent());
@@ -68,8 +68,9 @@ public class SunHttpHandler implements HttpHandler{
     }
 
     private void writeResponse(HttpExchange httpExchange, byte[] response) throws IOException {
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response);
-        os.close();
+        OutputStream responseBody = httpExchange.getResponseBody();
+        responseBody.write(response);
+        responseBody.flush();
+        responseBody.close();
     }
 }
