@@ -108,4 +108,22 @@ public class ExchangeRequest implements Request {
                 ", method=" + method +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ExchangeRequest that = (ExchangeRequest) o;
+
+        if (!resource.equals(that.resource)) return false;
+        return method == that.method;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = resource.hashCode();
+        result = 31 * result + method.hashCode();
+        return result;
+    }
 }
