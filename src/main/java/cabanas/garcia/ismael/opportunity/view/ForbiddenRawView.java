@@ -6,11 +6,20 @@ import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
 import java.net.HttpURLConnection;
 
 public class ForbiddenRawView implements WebView {
+
+    String RAW_CONTENT = "<html>\n" +
+            "\t<body>\n" +
+            "\t<h1>Forbidden Access!!!</h1>\n" +
+            "\t<a href=\"/login\">Login\n" +
+            "\t</a>\n" +
+            "\t</body>\n" +
+            "</html>";
+
     @Override
     public Response render() {
         return DefaultResponse.builder()
                 .statusCode(HttpURLConnection.HTTP_FORBIDDEN)
-                .content("Forbidden Access!!!".getBytes())
+                .content(RAW_CONTENT.getBytes())
                 .build();
     }
 
