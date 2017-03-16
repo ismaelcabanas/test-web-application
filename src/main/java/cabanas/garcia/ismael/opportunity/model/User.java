@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Optional;
+
 @Builder
 @EqualsAndHashCode
 @ToString
@@ -14,4 +16,8 @@ public class User implements Cloneable{
     private String password;
     private Roles roles;
 
+    public boolean isAdmin() {
+        Optional<Role> roleAdmin = roles.roleList.stream().filter(role -> role.equals(Role.ADMIN)).findFirst();
+        return roleAdmin.isPresent();
+    }
 }

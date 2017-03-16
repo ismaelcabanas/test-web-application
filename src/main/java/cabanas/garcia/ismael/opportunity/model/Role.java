@@ -10,5 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Role {
+    public static Role ADMIN = Role.builder().name(RoleEnum.ADMIN.getRoleName()).build();
+
     private String name;
 }
