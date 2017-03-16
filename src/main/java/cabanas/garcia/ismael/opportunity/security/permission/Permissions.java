@@ -35,4 +35,11 @@ public class Permissions {
     private Optional<Permission> getPermission(Resource resource){
         return this.permissionList.stream().filter(permission -> permission.getResource().equals(resource)).findFirst();
     }
+
+    @Override
+    public String toString() {
+        return "Permissions{" +
+                "permissionList=" + permissionList +
+                '}';
+    }
 }

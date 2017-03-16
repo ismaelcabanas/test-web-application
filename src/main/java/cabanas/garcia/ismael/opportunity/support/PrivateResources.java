@@ -20,4 +20,11 @@ public class PrivateResources {
         Optional<Resource> result = privateResourcesList.stream().filter(resource1 -> resource1.equals(resource)).findFirst();
         return result.isPresent();
     }
+
+    @Override
+    public String toString() {
+        return "PrivateResources{" +
+                "privateResourcesList=" + privateResourcesList +
+                '}';
+    }
 }

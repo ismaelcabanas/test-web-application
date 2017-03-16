@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity.http;
 
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultRequest;
+import cabanas.garcia.ismael.opportunity.http.imp.ExchangeRequest;
 import com.sun.net.httpserver.HttpExchange;
 
 public class RequestFactory {
@@ -11,6 +12,7 @@ public class RequestFactory {
     public static Request create(HttpExchange httpExchange) {
         assert httpExchange != null;
 
+        /*
         ExtractorHttpExchange extractorHttpExchange = new ExtractorHttpExchange(httpExchange);
 
         return
@@ -20,7 +22,8 @@ public class RequestFactory {
                     .parameters(extractorHttpExchange.getParameters())
                     .method(extractorHttpExchange.getMethod())
                     .sessionCookie(extractorHttpExchange.extractSessionCookie())
-                    .build();
+                    .build();*/
+        return new ExchangeRequest(httpExchange);
     }
 
 

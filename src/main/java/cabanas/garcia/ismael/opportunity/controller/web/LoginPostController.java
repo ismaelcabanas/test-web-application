@@ -60,7 +60,7 @@ public class LoginPostController extends Controller {
             return new HomeRawView();
         }
         else{
-            log.debug("Authentication failed, redirecting to unauthorized page");
+            log.debug("Authentication failed, wrong credentials. Redirecting to unauthorized page");
             return new UnAuthorizedRawView();
         }
     }

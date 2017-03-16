@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.Page1RawView;
 import cabanas.garcia.ismael.opportunity.view.View;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 

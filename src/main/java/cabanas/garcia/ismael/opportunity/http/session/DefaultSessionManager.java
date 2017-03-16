@@ -30,21 +30,22 @@ public class DefaultSessionManager implements SessionManager {
                     return session;
                 }
                 else{
-                    log.debug("Session expired. Deleting session {}", sessionId);
+                    log.debug("Session with sessionId {} expired", sessionId);
                     sessionRepository.delete(sessionId);
                 }
             }
             else{
-                log.info("Session with sessionId {} not founded.", sessionId);
+                log.debug("Session with sessionId {} not founded.", sessionId);
             }
         }
 
-        log.info("Not exist a valid cookie session");
+        log.debug("Not exist a valid cookie session");
         return Optional.empty();
     }
 
     @Override
     public Session update(Session session) {
-        return null;
+        session.resetLastAccess();
+        return sessionRepository.persist(session);
     }
 }

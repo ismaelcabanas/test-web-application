@@ -27,7 +27,7 @@ public class SunHttpHandler implements HttpHandler{
 
         Request request = RequestFactory.create(httpExchange);
 
-        log.info("Handle request {}", request);
+        log.debug("Handle request {}", request);
 
         Controller controller = controllers.select(request);
 
