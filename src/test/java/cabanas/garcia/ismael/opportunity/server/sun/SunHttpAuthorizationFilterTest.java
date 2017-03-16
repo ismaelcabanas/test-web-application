@@ -1,9 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
-import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Role;
 import cabanas.garcia.ismael.opportunity.model.Roles;
@@ -23,7 +20,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -146,7 +142,7 @@ public class SunHttpAuthorizationFilterTest {
         verifyZeroInteractions(chain, permissionChecker);
         verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
 
-        String expectedLocation = configuration.getRedirectPath() + "?" + Request.REDIRECCT_PARAM + "=" + URLEncoder.encode(request.getResource().getPath(), "UTF-8");
+        String expectedLocation = configuration.getRedirectPath() + "?" + RequestConstants.REDIRECCT_PARAM + "=" + URLEncoder.encode(request.getResource().getPath(), "UTF-8");
         assertThatRequestHaveLocationHeaderWithValue(httpExchange, expectedLocation);
     }
 

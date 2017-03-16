@@ -2,7 +2,6 @@ package cabanas.garcia.ismael.opportunity.model;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
 import java.util.ArrayList;

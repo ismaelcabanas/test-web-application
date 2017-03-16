@@ -25,14 +25,13 @@ public class ExchangeRequest implements Request {
     private final Resource resource;
 
     private HttpExchange httpExchange;
-    private Map<String, String> parameters;
-    private Session session;
+    private Map<String, String> requestBodyParameters;
     private final RequestMethodEnum method;
     private Map<String, String> queryParameters;
 
     public ExchangeRequest(HttpExchange httpExchange) {
         this.httpExchange = httpExchange;
-        this.parameters = new HashMap<>();
+        this.requestBodyParameters = new HashMap<>();
         this.resource = Resource.builder().path(httpExchange.getRequestURI().getPath()).build();
         this.method = RequestMethodEnum.valueOf(httpExchange.getRequestMethod());
         this.queryParameters = HttpExchangeUtil.parseQueryParameters(httpExchange);
@@ -51,7 +50,7 @@ public class ExchangeRequest implements Request {
         } catch (IOException e) {
             throw new RuntimeException("Error dealing with request body", e);
         }
-        this.parameters = Collections.unmodifiableMap(parameters);
+        this.requestBodyParameters = Collections.unmodifiableMap(parameters);
     }
 
     @Override
@@ -71,21 +70,20 @@ public class ExchangeRequest implements Request {
 
     @Override
     public String getParameter(String paramName) {
-        if(parameters.isEmpty()){
+        if(requestBodyParameters.isEmpty()){
             readParametersRequest();
         }
-        return parameters.get(paramName);
+        return requestBodyParameters.get(paramName);
     }
 
     @Override
     public void setSession(Session session) {
-        this.session = session;
         httpExchange.setAttribute("session", session);
     }
 
     @Override
     public boolean hasRedirectParameter() {
-        return StringUtils.isNoneEmpty(getParameter(REDIRECCT_PARAM));
+        return StringUtils.isNoneEmpty(getParameter(RequestConstants.REDIRECCT_PARAM));
     }
 
     @Override

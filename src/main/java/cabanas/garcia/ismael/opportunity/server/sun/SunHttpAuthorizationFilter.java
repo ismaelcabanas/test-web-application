@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.http.RequestConstants;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
@@ -60,7 +61,7 @@ public class SunHttpAuthorizationFilter extends Filter{
             }
             else{
                 log.info("Non exist user session. Redirecting to authenticate to {} ", configuration.getRedirectPath());
-                HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath() + "?" + Request.REDIRECCT_PARAM + "=" + URLEncoder.encode(resource.getPath(), "UTF-8"));
+                HttpExchangeUtil.redirect(httpExchange, configuration.getRedirectPath() + "?" + RequestConstants.REDIRECCT_PARAM + "=" + URLEncoder.encode(resource.getPath(), "UTF-8"));
             }
         }
         else {

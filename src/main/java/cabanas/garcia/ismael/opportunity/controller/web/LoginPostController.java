@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 
 import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.http.RequestConstants;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
@@ -57,7 +58,7 @@ public class LoginPostController extends Controller {
             if(request.hasRedirectParameter()){
                 log.debug("The request had redirect parameter, then redirect it");
                 try {
-                    return new RedirectView(URLDecoder.decode(request.getParameter(Request.REDIRECCT_PARAM), "UTF-8"));
+                    return new RedirectView(URLDecoder.decode(request.getParameter(RequestConstants.REDIRECCT_PARAM), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     throw new AssertionError(e);
                 }

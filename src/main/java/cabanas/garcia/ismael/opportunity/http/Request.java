@@ -6,7 +6,6 @@ import cabanas.garcia.ismael.opportunity.support.Resource;
 import java.util.Optional;
 
 public interface Request {
-    String REDIRECCT_PARAM = "redirect";
 
     Resource getResource();
 

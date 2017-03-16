@@ -11,7 +11,6 @@ import cabanas.garcia.ismael.opportunity.mapper.ControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.DefaultControllerMapper;
 import cabanas.garcia.ismael.opportunity.mapper.Mapping;
 import cabanas.garcia.ismael.opportunity.model.Role;
-import cabanas.garcia.ismael.opportunity.model.RoleEnum;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
@@ -43,6 +42,7 @@ import java.util.List;
 @Slf4j
 public class Main {
 
+    public static final String CHANGEIT = "changeit";
     private static PermissionChecker permissionChecker;
     private static PrivateResourcesService privateResourcesService;
 
@@ -127,11 +127,11 @@ public class Main {
         User adminUser = getAdminUser();
         userRepository.persist(adminUser);
 
-        User user1 = User.builder().username("user1").password("changeit").roles(rolesResourcePage1).build();
+        User user1 = User.builder().username("user1").password(CHANGEIT).roles(rolesResourcePage1).build();
         userRepository.persist(user1);
-        User user2 = User.builder().username("user2").password("changeit").roles(rolesResourcePage2).build();
+        User user2 = User.builder().username("user2").password(CHANGEIT).roles(rolesResourcePage2).build();
         userRepository.persist(user2);
-        User user3 = User.builder().username("user3").password("changeit").roles(rolesResourcePage3).build();
+        User user3 = User.builder().username("user3").password(CHANGEIT).roles(rolesResourcePage3).build();
         userRepository.persist(user3);
     }
 

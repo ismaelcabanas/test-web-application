@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 
 public class ForbiddenRawView implements WebView {
 
-    String RAW_CONTENT = "<html>\n" +
+    private static final String RAW_CONTENT = "<html>\n" +
             "\t<body>\n" +
             "\t<h1>Forbidden Access!!!</h1>\n" +
             "\t<a href=\"/login\">Login\n" +

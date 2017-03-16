@@ -1,6 +1,6 @@
 package cabanas.garcia.ismael.opportunity.server.sun;
 
-import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.http.RequestConstants;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +26,7 @@ public class HttpExchangeWithCredentialsAndRedirectParamStub extends HttpExchang
         String payload = "";
         try {
             payload = "username=" + username + "&" +
-                    "password=" + password + "&" + Request.REDIRECCT_PARAM + "=" + URLEncoder.encode(redirectPath, "UTF-8");
+                    "password=" + password + "&" + RequestConstants.REDIRECCT_PARAM + "=" + URLEncoder.encode(redirectPath, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             log.error("Error encoding", e);
         }

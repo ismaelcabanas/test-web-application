@@ -1,9 +1,6 @@
 package cabanas.garcia.ismael.opportunity.controller.web;
 
-import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestFactory;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
-import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
@@ -110,7 +107,7 @@ public class LoginPostControllerTest {
         // then
         assertThat(actual, is(not(nullValue())));
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_MOVED_TEMP)));
-        assertThat(actual.getRedirectPath(), is(equalTo(requestWithSuccessCredentialsAndRedirectParameter.getParameter(Request.REDIRECCT_PARAM))));
+        assertThat(actual.getRedirectPath(), is(equalTo(requestWithSuccessCredentialsAndRedirectParameter.getParameter(RequestConstants.REDIRECCT_PARAM))));
     }
 
     @Test

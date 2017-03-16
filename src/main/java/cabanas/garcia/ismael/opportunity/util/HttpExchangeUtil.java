@@ -10,7 +10,6 @@ import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SplittableRandom;
 
 @Slf4j
 public final class HttpExchangeUtil {
@@ -43,13 +42,13 @@ public final class HttpExchangeUtil {
     }
 
     public static Map<String, String> parseQueryParameters(final HttpExchange httpExchange) {
-        Map<String, String> queryParameters = new HashMap<String, String>();
+        Map<String, String> queryParameters = new HashMap<>();
 
         String query = httpExchange.getRequestURI().getQuery();
 
         if(query != null) {
             for (String param : query.split("&")) {
-                String pair[] = param.split("=");
+                String[] pair = param.split("=");
                 if (pair.length > 1) {
                     queryParameters.put(pair[0], pair[1]);
                 } else {
