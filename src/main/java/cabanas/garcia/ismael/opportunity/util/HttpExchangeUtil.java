@@ -20,7 +20,7 @@ public final class HttpExchangeUtil {
     public static void redirect(HttpExchange httpExchange, String redirectPath) throws IOException {
         log.debug("Redirecting to {}", redirectPath);
         httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, redirectPath);
-        httpExchange.getResponseHeaders().remove(ResponseHeaderConstants.SET_COOKIE);
+        //httpExchange.getResponseHeaders().remove(ResponseHeaderConstants.SET_COOKIE);
         httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
     }
 
