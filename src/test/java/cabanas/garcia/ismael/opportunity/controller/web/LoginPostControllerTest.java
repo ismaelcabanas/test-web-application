@@ -10,7 +10,9 @@ import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsS
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParam;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.support.Resource;
+import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.View;
+import cabanas.garcia.ismael.opportunity.view.WebView;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
 import org.junit.Test;
@@ -104,11 +106,12 @@ public class LoginPostControllerTest {
         Request requestWithSuccessCredentialsAndRedirectParameter = createRequestWithCredentialsAndRedirectParameter();
 
         // when
-        View actual = sut.process(requestWithSuccessCredentialsAndRedirectParameter);
+        RedirectView actual = (RedirectView) sut.process(requestWithSuccessCredentialsAndRedirectParameter);
 
         // then
         assertThat(actual, is(not(nullValue())));
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_MOVED_TEMP)));
+        assertThat(actual.getRedirectPath(), is(equalTo(requestWithSuccessCredentialsAndRedirectParameter.getParameter(Request.REDIRECCT_PARAM))));
     }
 
     @Test
