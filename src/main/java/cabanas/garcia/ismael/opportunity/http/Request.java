@@ -21,4 +21,6 @@ public interface Request {
     boolean hasRedirectParameter();
 
     Optional<Cookie> getSessionCookie();
+
+    String getQueryParameter(String paramName);
 }

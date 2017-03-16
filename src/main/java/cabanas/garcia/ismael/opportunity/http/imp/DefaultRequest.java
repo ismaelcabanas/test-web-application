@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Builder
@@ -24,6 +25,7 @@ public class DefaultRequest implements Request{
     private RequestMethodEnum method;
     private List<Parameter> parameters;
     private Optional<Cookie> sessionCookie;
+    private Map<String, String> queryParameters;
 
     @Override
     public String getParameter(String paramName) {
@@ -43,4 +45,8 @@ public class DefaultRequest implements Request{
         return getParameter("redirect") != null;
     }
 
+    @Override
+    public String getQueryParameter(String paramName) {
+        return null;
+    }
 }

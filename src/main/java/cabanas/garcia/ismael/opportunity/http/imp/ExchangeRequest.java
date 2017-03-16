@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.http.cookies.CookieAdapter;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookies;
 import cabanas.garcia.ismael.opportunity.support.Resource;
+import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +27,18 @@ public class ExchangeRequest implements Request {
     private Map<String, String> parameters;
     private Session session;
     private final RequestMethodEnum method;
+    private Map<String, String> queryParameters;
 
     public ExchangeRequest(HttpExchange httpExchange) {
         this.httpExchange = httpExchange;
         this.parameters = new HashMap<>();
         this.resource = Resource.builder().path(httpExchange.getRequestURI().getPath()).build();
         this.method = RequestMethodEnum.valueOf(httpExchange.getRequestMethod());
+        this.queryParameters = HttpExchangeUtil.parseQueryParameters(httpExchange);
     }
 
     private void readParametersRequest() {
+        Map<String, String> parameters = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(httpExchange.getRequestBody()))) {
             String urlencoded = reader.readLine();
             if (urlencoded != null && urlencoded.trim().length() > 0) {
@@ -46,6 +50,7 @@ public class ExchangeRequest implements Request {
         } catch (IOException e) {
             throw new RuntimeException("Error dealing with request body", e);
         }
+        this.parameters = Collections.unmodifiableMap(parameters);
     }
 
     @Override
@@ -99,6 +104,11 @@ public class ExchangeRequest implements Request {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public String getQueryParameter(String paramName) {
+        return queryParameters.get(paramName);
     }
 
     @Override
