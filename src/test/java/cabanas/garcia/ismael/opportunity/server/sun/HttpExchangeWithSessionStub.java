@@ -9,14 +9,11 @@ public class HttpExchangeWithSessionStub extends HttpExchangeSuccessResourceStub
     public HttpExchangeWithSessionStub(String path, String aSessionId) {
         super(path);
         this.session = Session.builder().sessionId(aSessionId).build();
+        setAttribute("session", session);
     }
 
     public HttpExchangeWithSessionStub(String path) {
         super(path);
     }
-
-    @Override
-    public Object getAttribute(String name) {
-        return session;
-    }
+    
 }
