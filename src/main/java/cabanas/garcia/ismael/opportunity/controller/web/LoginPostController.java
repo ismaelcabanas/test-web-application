@@ -14,6 +14,8 @@ import cabanas.garcia.ismael.opportunity.view.UnAuthorizedRawView;
 import cabanas.garcia.ismael.opportunity.view.View;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Optional;
 
 @Slf4j
@@ -54,7 +56,11 @@ public class LoginPostController extends Controller {
             createSession(user.get(), request);
             if(request.hasRedirectParameter()){
                 log.debug("The request had redirect parameter, then redirect it");
-                return new RedirectView("/login");
+                try {
+                    return new RedirectView(URLDecoder.decode(request.getParameter(Request.REDIRECCT_PARAM), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    throw new AssertionError(e);
+                }
             }
             log.debug("Going to home view");
             return new HomeRawView();

@@ -7,12 +7,11 @@ import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParam;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParamStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.RedirectView;
 import cabanas.garcia.ismael.opportunity.view.View;
-import cabanas.garcia.ismael.opportunity.view.WebView;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
 import org.junit.Test;
@@ -173,7 +172,7 @@ public class LoginPostControllerTest {
     }
 
     private Request createRequestWithCredentialsAndRedirectParameter() {
-        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParam(USERNAME_ISMAEL, "changeIt", "/page1");
+        HttpExchange httpExchange = new HttpExchangeWithCredentialsAndRedirectParamStub(USERNAME_ISMAEL, "changeIt", "/page1");
         return RequestFactory.create(httpExchange);
     }
 
