@@ -71,8 +71,12 @@ public class ProcessRequestStepDef implements En {
             SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
                     new SunHttpAuthorizationFilter.AuthorizationFilterConfiguration();
             configuration.redirectPath("/login");
+            configuration.redirectForbiddenPath("/forbidden");
+
             SessionManager sessionManager = new DefaultSessionManager(InMemorySessionRepository.getInstance());
+
             PermissionChecker permissionChecker = new DefaultPermissionChecker(StartServerStepDefs.permissions);
+
             SunHttpAuthorizationFilter authenticationFilter =
                     new SunHttpAuthorizationFilter(configuration, sessionManager,
                             permissionChecker,
@@ -156,10 +160,20 @@ public class ProcessRequestStepDef implements En {
                 httpGet.addHeader(RequestHeadersEnum.COOKIE.getName(), sessionTokenHeader.getValue());
             HttpResponse httpResponse = httpClient.execute(httpGet);
             statusCode = httpResponse.getStatusLine().getStatusCode();
-            response = getStringFromInputStream(httpResponse.getEntity().getContent());
+            if(isRedirect(statusCode)){
+                sendGetRequest("/forbidden");
+            }
+            else{
+                response = getStringFromInputStream(httpResponse.getEntity().getContent());
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isRedirect(int statusCode){
+        return statusCode >= 300 && statusCode <= 305 && statusCode != 304;
     }
 
     private void login(String username, String password) {
