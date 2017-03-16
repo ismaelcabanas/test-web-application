@@ -19,4 +19,8 @@ public class RedirectView implements View {
                 .redirectPath(redirectPath)
                 .build();
     }
+
+    public String getRedirectPath() {
+        return redirectPath;
+    }
 }
