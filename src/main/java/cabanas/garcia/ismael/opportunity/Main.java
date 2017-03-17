@@ -64,7 +64,7 @@ public class Main {
         loadDefaultUsers();
 
         SunHttpServer httpServer = new SunHttpServer(8080);
-        httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
+        httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60);
         httpServer.getConfiguration().add(ServerConfiguration.REDIRECT_LOGOUT, "/login");
 
         Controllers webControllers = webControllers();
