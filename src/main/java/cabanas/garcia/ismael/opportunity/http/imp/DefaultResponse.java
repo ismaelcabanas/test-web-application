@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 @Builder
 @EqualsAndHashCode
@@ -17,8 +18,7 @@ public class DefaultResponse implements Response{
     private String redirectPath;
 
     public static class DefaultResponseBuilder{
-        private static final String EMPTY_CONTENT = "";
-        private byte[] content = EMPTY_CONTENT.getBytes();
+        private byte[] content = StringUtils.EMPTY.getBytes();
     }
 
     @Override
