@@ -25,9 +25,9 @@ import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpHandler;
 import cucumber.api.java8.En;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -155,6 +155,13 @@ public class ProcessRequestStepDef implements En {
     }
 
     private void sendGetRequest(String page) {
+        /*Response responseAssured = RestAssured
+                .given()
+                    .cookie(RequestHeadersEnum.COOKIE.getName(), sessionTokenHeader.getValue())
+                .when()
+                    .get("http://localhost:" + port + page);
+        statusCode = responseAssured.getStatusCode();
+        response = responseAssured.getBody().print();*/
         HttpClient httpClient = HttpUtil.create();
         HttpGet httpGet = new HttpGet("http://localhost:" + port + page);
         try {
@@ -179,6 +186,33 @@ public class ProcessRequestStepDef implements En {
     }
 
     private void login(String username, String password) {
+        /*Response responseAssured = RestAssured
+                .given()
+                .formParam("username", username)
+                .formParam("password", password)
+                .when()
+                .post("http://localhost:" + port + "/login");
+
+        statusCode = responseAssured.getStatusCode();
+        sessionTokenHeader = new Header() {
+            @Override
+            public String getName() {
+                return ResponseHeaderConstants.SET_COOKIE;
+            }
+
+            @Override
+            public String getValue() {
+                return responseAssured.getCookie(ResponseHeaderConstants.SET_COOKIE);
+            }
+
+            @Override
+            public HeaderElement[] getElements() throws ParseException {
+                return new HeaderElement[0];
+            }
+        };
+        response = responseAssured.getBody().print();*/
+
+
         HttpClient httpClient = HttpUtil.create();
         HttpPost httpPost = new HttpPost("http://localhost:" + port + "/login");
         List<NameValuePair> urlParameters = new ArrayList<>();

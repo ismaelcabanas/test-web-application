@@ -71,7 +71,7 @@ public class StartServerStepDefs implements En {
             permissions = new Permissions();
             permissionsData.forEach(permissionData -> {
                 Roles roles = Roles.builder().build();
-                Arrays.stream(permissionData.getRoles()).forEach(rolename -> roles.add(rolename));
+                Arrays.stream(permissionData.getRoles()).forEach(rolename -> roles.add(rolename.trim()));
                 permissions.add(Permission.builder().resource(Resource.builder().path(permissionData.getResource()).build()).roles(roles).build());
             });
         });
