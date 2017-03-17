@@ -2,16 +2,17 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
+import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
 import com.sun.corba.se.spi.activation.Server;
-import com.sun.net.httpserver.BasicAuthenticator;
-import com.sun.net.httpserver.Filter;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class SunHttpServer {
@@ -72,16 +73,19 @@ public class SunHttpServer {
         this.state = newState;
     }
 
-    public void createContext(String contextPath, SunHttpHandler handler, List<Filter> filters) {
-        HttpContext context = this.httpServer.createContext(contextPath, handler);
-        filters.forEach(filter -> context.getFilters().add(filter));
+    public void createContext(String contextPath, HttpHandler handler, List<Filter> filters) {
+        createContext(contextPath, handler, filters, Optional.empty());
     }
-    public void createContext(String contextPath, SunHttpHandler handler, BasicAuthenticator authenticator) {
+
+    public void createContext(String contextPath, HttpHandler handler, List<Filter> filters, Optional<Authenticator> authenticator) {
         HttpContext context = this.httpServer.createContext(contextPath, handler);
-        context.setAuthenticator(authenticator);
+        if(authenticator.isPresent())
+            context.setAuthenticator(authenticator.get());
+        filters.forEach(filter -> context.getFilters().add(filter));
     }
 
     public ServerConfiguration getConfiguration() {
         return this.configuration;
     }
+
 }

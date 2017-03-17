@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 @Slf4j
-public class SunHttpHandler implements HttpHandler{
+public class SunHttpHandler extends AbstractHttpHandler{
     private final Controllers controllers;
 
     public SunHttpHandler(Controllers controllers) {
@@ -46,9 +46,7 @@ public class SunHttpHandler implements HttpHandler{
             addCookieResponseHeader(httpExchange, request);
 
         if(!response.isRedirect()) {
-            httpExchange.sendResponseHeaders(response.getStatusCode(), response.getContent().length);
-
-            writeResponse(httpExchange, response.getContent());
+            HttpExchangeUtil.write(httpExchange, response.getStatusCode(), "text/html", response.getContent());
         }
         else
             HttpExchangeUtil.redirect(httpExchange, response.getRedirectPath());
