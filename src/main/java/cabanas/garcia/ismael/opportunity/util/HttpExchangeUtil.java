@@ -20,6 +20,7 @@ public final class HttpExchangeUtil {
         log.debug("Redirecting to {}", redirectPath);
         httpExchange.getResponseHeaders().add(ResponseHeaderConstants.LOCATION, redirectPath);
         httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_MOVED_TEMP, 0);
+        httpExchange.close();
     }
 
     public static void write(HttpExchange httpExchange, int statusCode, String contentType, byte[] content) throws IOException {
