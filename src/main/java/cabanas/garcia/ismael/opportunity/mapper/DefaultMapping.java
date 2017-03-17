@@ -52,8 +52,9 @@ public final class DefaultMapping implements Mapping{
     @Override
     public Optional<Class<? extends Controller>> getController(Resource mappingPath, RequestMethodEnum method) {
         for (Map.Entry<KeyMapper, Class<? extends Controller>> entry : mapper.entrySet()) {
-            if(entry.getKey().match(mappingPath, method))
+            if(entry.getKey().match(mappingPath, method)) {
                 return Optional.of(entry.getValue());
+            }
         }
         return Optional.empty();
     }
@@ -83,12 +84,18 @@ public final class DefaultMapping implements Mapping{
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()){
+                return false;
+            }
 
             KeyMapper keyMapper = (KeyMapper) o;
 
-            if (pattern != null ? !pattern.equals(keyMapper.pattern) : keyMapper.pattern != null) return false;
+            if (pattern != null ? !pattern.equals(keyMapper.pattern) : keyMapper.pattern != null){
+                return false;
+            }
             return method != null ? method.equals(keyMapper.method) : keyMapper.method == null;
         }
 

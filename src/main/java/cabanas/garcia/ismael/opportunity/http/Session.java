@@ -34,7 +34,7 @@ public class Session implements Cloneable{
     }
 
     public boolean hasExpired() {
-        return (timeout != -1 && !(DateUtil.now() < lastAccess + timeout));
+        return timeout != -1 && (DateUtil.now() >= lastAccess + timeout);
     }
 
     public void resetLastAccess() {

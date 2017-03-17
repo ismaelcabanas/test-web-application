@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 public class ExpressionRegularValidator {
 
+    private ExpressionRegularValidator(){}
+
     public static boolean isValidate(String pattern, String pathToCheck){
 
         if(pattern == null || pathToCheck == null)

@@ -20,7 +20,10 @@ import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
 import cabanas.garcia.ismael.opportunity.security.permission.*;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
-import cabanas.garcia.ismael.opportunity.server.sun.*;
+import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
+import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
 import cabanas.garcia.ismael.opportunity.service.DefaultPrivateResourceService;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
@@ -58,8 +61,6 @@ public class Main {
 
         List<Filter> filters = configureFilters();
 
-        List<Filter> restFilters = configureRestFilters();
-
         loadDefaultUsers();
 
         SunHttpServer httpServer = new SunHttpServer(8080);
@@ -79,16 +80,6 @@ public class Main {
         httpServer.createContext("/users", restHandler, Collections.emptyList(), Optional.of(basicAuthenticator));
 
         httpServer.start();
-    }
-
-    private static List<Filter> configureRestFilters() {
-        UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
-        PermissionChecker permissionChecker = new DefaultRestPermissionChecker();
-        RestAuthorizationFilter authorizationFilter = new RestAuthorizationFilter(userService, permissionChecker);
-        List<Filter> filters = new ArrayList<>();
-        filters.add(authorizationFilter);
-
-        return filters;
     }
 
     private static Controllers restControllers() {

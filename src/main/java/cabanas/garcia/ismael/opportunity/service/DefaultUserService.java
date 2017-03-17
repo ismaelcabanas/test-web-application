@@ -34,7 +34,10 @@ public class DefaultUserService implements UserService{
     public Optional<User> findByUsername(String username) {
         Optional<User> userPersisted = userRepository.read(username);
 
-        return userPersisted.isPresent() ? Optional.of(newUserWithoutPassword(userPersisted.get())) : Optional.empty();
+        User user = null;
+        if(userPersisted.isPresent())
+            user = newUserWithoutPassword(userPersisted.get());
+        return Optional.ofNullable(user);
     }
 
     private User newUserWithoutPassword(User user) {

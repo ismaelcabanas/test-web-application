@@ -44,9 +44,7 @@ public class ExchangeRequest implements Request {
             String urlencoded = reader.readLine();
             if (urlencoded != null && urlencoded.trim().length() > 0) {
                 List<NameValuePair> list = URLEncodedUtils.parse(urlencoded, Charset.defaultCharset());
-                list.forEach(pair -> {
-                    parameters.put(pair.getName(), pair.getValue());
-                });
+                list.forEach(pair -> parameters.put(pair.getName(), pair.getValue()));
             }
         } catch (IOException e) {
             throw new RuntimeException("Error dealing with request body", e);
@@ -130,12 +128,18 @@ public class ExchangeRequest implements Request {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
 
         ExchangeRequest that = (ExchangeRequest) o;
 
-        if (!resource.equals(that.resource)) return false;
+        if (!resource.equals(that.resource)){
+            return false;
+        }
         return method == that.method;
     }
 

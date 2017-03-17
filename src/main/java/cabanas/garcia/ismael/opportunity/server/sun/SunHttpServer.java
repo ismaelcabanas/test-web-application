@@ -2,15 +2,11 @@ package cabanas.garcia.ismael.opportunity.server.sun;
 
 import cabanas.garcia.ismael.opportunity.server.State;
 import cabanas.garcia.ismael.opportunity.server.UnavailableServerException;
-import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
-import com.sun.corba.se.spi.activation.Server;
 import com.sun.net.httpserver.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

@@ -8,11 +8,9 @@ import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 @Slf4j
 public class SunHttpHandler extends AbstractHttpHandler{
@@ -65,10 +63,4 @@ public class SunHttpHandler extends AbstractHttpHandler{
             log.debug("No session cookie set, not exist session");
     }
 
-    private void writeResponse(HttpExchange httpExchange, byte[] response) throws IOException {
-        OutputStream responseBody = httpExchange.getResponseBody();
-        responseBody.write(response);
-        responseBody.flush();
-        responseBody.close();
-    }
 }

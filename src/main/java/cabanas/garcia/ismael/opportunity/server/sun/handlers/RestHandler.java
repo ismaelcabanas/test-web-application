@@ -51,7 +51,7 @@ public class RestHandler extends AbstractHttpHandler{
 
                     Response response = view.render();
 
-                    process(httpExchange, request, response);
+                    process(httpExchange, response);
                 }
                 else{
                     HttpExchangeUtil.forbidden(httpExchange);
@@ -69,7 +69,7 @@ public class RestHandler extends AbstractHttpHandler{
     }
 
 
-    private void process(HttpExchange httpExchange, Request request, Response response) throws IOException {
+    private void process(HttpExchange httpExchange, Response response) throws IOException {
         HttpExchangeUtil.write(httpExchange, response.getStatusCode(), "text/html", response.getContent());
     }
 }

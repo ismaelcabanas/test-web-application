@@ -20,7 +20,7 @@ public class Page1RawView implements WebView {
 
     @Override
     public Response render() {
-        String content = String.format(RAW_CONTENT, model.getUsername(), getName());
+        String content = String.format(ViewConstants.RAW_CONTENT, model.getUsername(), getName());
         return DefaultResponse.builder()
                 .statusCode(HttpURLConnection.HTTP_OK)
                 .content(content.getBytes())
