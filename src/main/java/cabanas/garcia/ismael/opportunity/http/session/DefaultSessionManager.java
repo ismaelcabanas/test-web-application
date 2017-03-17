@@ -3,7 +3,10 @@ package cabanas.garcia.ismael.opportunity.http.session;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
+import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
+import cabanas.garcia.ismael.opportunity.util.UUIDProvider;
+import cabanas.garcia.ismael.opportunity.util.UUIDRandomProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -11,9 +14,15 @@ import java.util.Optional;
 @Slf4j
 public class DefaultSessionManager implements SessionManager {
     private final SessionRepository sessionRepository;
+    private final UUIDProvider uuidProvider;
 
     public DefaultSessionManager(SessionRepository sessionRepository) {
+        this(sessionRepository, new UUIDRandomProvider());
+    }
+
+    public DefaultSessionManager(SessionRepository sessionRepository, UUIDProvider uuidProvider) {
         this.sessionRepository = sessionRepository;
+        this.uuidProvider = uuidProvider;
     }
 
     @Override
@@ -53,5 +62,16 @@ public class DefaultSessionManager implements SessionManager {
     public void invalidate(Session session) {
         sessionRepository.delete(session.getSessionId());
         session.invalidate();
+    }
+
+    @Override
+    public Session create(User user, int sessionTimeout) {
+        Session session = Session.create(user, sessionTimeout, uuidProvider);
+
+        sessionRepository.persist(session);
+
+        log.debug("Session created {}", session);
+
+        return session;
     }
 }

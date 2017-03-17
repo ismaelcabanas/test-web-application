@@ -5,6 +5,7 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestConstants;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.service.UserService;
@@ -26,7 +27,7 @@ public class LoginPostController extends Controller {
 
     private int sessionTimeout;
 
-    private SessionRepository sessionRepository;
+    private SessionManager sessionManager;
 
     private UserService userService;
 
@@ -34,13 +35,13 @@ public class LoginPostController extends Controller {
         // Necessary for instantiations by reflection
     }
 
-    public LoginPostController(UserService userService, SessionRepository sessionRepository) {
-        this(userService, sessionRepository, -1);
+    public LoginPostController(UserService userService, SessionManager sessionManager) {
+        this(userService, sessionManager, -1);
     }
 
-    public LoginPostController(UserService userService, SessionRepository sessionRepository, Integer sessionTimeout) {
+    public LoginPostController(UserService userService, SessionManager sessionManager, Integer sessionTimeout) {
         this.userService = userService;
-        this.sessionRepository = sessionRepository;
+        this.sessionManager = sessionManager;
         this.sessionTimeout = sessionTimeout;
     }
 
@@ -54,7 +55,13 @@ public class LoginPostController extends Controller {
 
         if(user.isPresent()){
             log.debug("Login successfully");
-            createSession(user.get(), request);
+
+            Session session = sessionManager.create(user.get(), sessionTimeout);
+
+            log.debug("Session created {}", session);
+
+            request.setSession(session);
+
             if(request.hasRedirectParameter()){
                 log.debug("The request had redirect parameter, then redirect it");
                 try {
@@ -70,16 +77,6 @@ public class LoginPostController extends Controller {
             log.debug("Authentication failed, wrong credentials. Redirecting to unauthorized page");
             return new UnAuthorizedRawView();
         }
-    }
-
-    private void createSession(final User user, Request request) {
-        Session session = Session.create(user, sessionTimeout);
-
-        log.debug("Session created {}", session);
-
-        request.setSession(session);
-
-        sessionRepository.persist(session);
     }
 
     @Override

@@ -1,10 +1,11 @@
 package cabanas.garcia.ismael.opportunity.controller.web;
 
 import cabanas.garcia.ismael.opportunity.http.*;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParamStub;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.RedirectView;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.jws.soap.SOAPBinding;
 import java.net.HttpURLConnection;
 import java.util.Optional;
 
@@ -43,7 +45,7 @@ public class LoginPostControllerTest {
     private UserService userServiceLoginFailed;
 
     @Mock
-    private SessionRepository sessionRepository;
+    private SessionManager sessionManager;
 
     @Before
     public void setUp(){
@@ -56,7 +58,7 @@ public class LoginPostControllerTest {
     @Test
     public void when_login_then_call_to_login_service(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginFailed, sessionRepository);
+        LoginPostController sut = new LoginPostController(userServiceLoginFailed, sessionManager);
         Request requestWithFailedCredentials = createRequestWithCredentials();
 
         // when
@@ -69,7 +71,7 @@ public class LoginPostControllerTest {
     @Test
     public void when_login_with_failed_credentials_then_return_unauthorized_view(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginFailed, sessionRepository);
+        LoginPostController sut = new LoginPostController(userServiceLoginFailed, sessionManager);
         Request requestWithFailedCredentials = createRequestWithCredentials();
 
         // when
@@ -83,7 +85,7 @@ public class LoginPostControllerTest {
     @Test
     public void when_login_with_succes_credentials_then_return_home_view(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionManager);
         Request requestWithSuccessCredentials = createRequestWithCredentials();
 
         // when
@@ -98,7 +100,7 @@ public class LoginPostControllerTest {
     @Test
     public void when_login_with_succes_credentials_after_request_resource_then_return_redirect_view(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionManager);
         Request requestWithSuccessCredentialsAndRedirectParameter = createRequestWithCredentialsAndRedirectParameter();
 
         // when
@@ -113,7 +115,7 @@ public class LoginPostControllerTest {
     @Test
     public void mapping_path(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionManager);
 
         // when
         Resource actual = sut.getMappingPath();
@@ -125,7 +127,7 @@ public class LoginPostControllerTest {
     @Test
     public void method_path(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionManager);
 
         // when
         RequestMethodEnum actual = sut.getMethod();
@@ -138,34 +140,35 @@ public class LoginPostControllerTest {
     public void should_create_a_user_session_when_login_successfully(){
         // given
         int sessionTimeout = 3600;
-        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository, sessionTimeout);
-        Request request = createRequestWithCredentialsAndRedirectParameter();
+        String aSessionId = "aSessionId";
+        Request request = createRequestWithValidSession(aSessionId);
+
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionManager, sessionTimeout);
+
+        User user = User.builder().username(USERNAME_ISMAEL).build();
+        Session aSession = Session.builder().sessionId(aSessionId).timeout(sessionTimeout).user(user).build();
+        when(sessionManager.create(Mockito.any(), Mockito.anyInt())).thenReturn(aSession);
+
+        Request requestSpy = Mockito.spy(request);
 
         // when
-        View actual = sut.process(request);
+        View actual = sut.process(requestSpy);
 
         // then
-        Optional<Session> session = request.getSession();
-
-        assertThat(session.isPresent(), is(equalTo(true)));
-        assertThat(session.get().getSessionId(), is(notNullValue()));
-        assertThat(session.get().getUser(), is(notNullValue()));
-        assertThat(session.get().getUser().getUsername(), is(equalTo(USERNAME_ISMAEL)));
-        assertThat(session.get().getTimeout(), is(equalTo(sessionTimeout)));
-        assertTrue(session.get().getLastAccess() > 0);
+        verify(requestSpy).setSession(aSession);
     }
 
     @Test
     public void should_persist_a_user_session_when_login_successfully(){
         // given
-        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionRepository);
+        LoginPostController sut = new LoginPostController(userServiceLoginSuccess, sessionManager);
         Request request = createRequestWithCredentialsAndRedirectParameter();
 
         // when
         View actual = sut.process(request);
 
         // then
-        verify(sessionRepository).persist(request.getSession().get());
+        verify(sessionManager).create(Mockito.any(), Mockito.anyInt());
     }
 
     private Request createRequestWithCredentialsAndRedirectParameter() {
@@ -175,6 +178,11 @@ public class LoginPostControllerTest {
 
     private Request createRequestWithCredentials() {
         HttpExchange httpExchange = new HttpExchangeWithCredentialsStub();
+        return RequestFactory.create(httpExchange);
+    }
+
+    private Request createRequestWithValidSession(String aSessionId) {
+        HttpExchange httpExchange = new HttpExchangeWithSessionStub("/logout", aSessionId);
         return RequestFactory.create(httpExchange);
     }
 }

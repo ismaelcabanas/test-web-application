@@ -3,12 +3,15 @@ package cabanas.garcia.ismael.opportunity.http.session;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionCookieStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.util.DateUtil;
+import cabanas.garcia.ismael.opportunity.util.UUIDProvider;
 import com.sun.net.httpserver.HttpExchange;
+import org.hamcrest.core.IsNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -19,6 +22,7 @@ import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -27,6 +31,9 @@ public class DefaultSessionManagerTest {
 
     @Mock
     private SessionRepository sessionRepository;
+
+    @Mock
+    private UUIDProvider uuidProvider;
 
     @Test
     public void should_return_empty_session_when_not_exist_session_cookie(){
@@ -107,9 +114,9 @@ public class DefaultSessionManagerTest {
         SessionManager sut = new DefaultSessionManager(sessionRepository);
 
         String aSessionId = "aSessionId";
-        Request requestWithSessionCookie = createRequestWithSession(aSessionId);
+        Session session = Session.builder().sessionId(aSessionId).build();
 
-        Session sessionSpy = Mockito.spy(requestWithSessionCookie.getSession().get());
+        Session sessionSpy = Mockito.spy(session);
 
         // when
         sut.invalidate(sessionSpy);
@@ -117,6 +124,29 @@ public class DefaultSessionManagerTest {
         // then
         verify(sessionRepository).delete(aSessionId);
         verify(sessionSpy).invalidate();
+    }
+
+    @Test
+    public void should_create_session(){
+        // given
+        SessionManager sut = new DefaultSessionManager(sessionRepository, uuidProvider);
+
+        String aSessionId = "aSessionId";
+        int sessionTimeout = 100;
+        User user = User.builder().username("user1").build();
+
+        when(uuidProvider.generateUUID()).thenReturn(aSessionId);
+
+        // when
+        Session actual = sut.create(user, sessionTimeout);
+
+        // then
+        verify(sessionRepository).persist(any());
+        verify(uuidProvider).generateUUID();
+
+        assertThat(actual, is(notNullValue()));
+        assertThat(actual.getSessionId(), is(equalTo(aSessionId)));
+        assertThat(actual.getUser(), is(equalTo(user)));
     }
 
     private Request createRequestWithSession(String aSessionId) {
