@@ -3,13 +3,17 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
+import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
+import org.hamcrest.core.IsNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -18,6 +22,7 @@ import java.net.HttpURLConnection;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,10 +31,13 @@ public class LogoutControllerTest {
     @Mock
     private SessionRepository sessionRepository;
 
+    @Mock
+    private SessionManager sessionManager;
+
     @Test
     public void mapping_path(){
         // given
-        LogoutController sut = new LogoutController();
+        LogoutController sut = new LogoutController(sessionManager, "");
 
         // when
         Resource actual = sut.getMappingPath();
@@ -41,7 +49,7 @@ public class LogoutControllerTest {
     @Test
     public void method_path(){
         // given
-        LogoutController sut = new LogoutController();
+        LogoutController sut = new LogoutController(sessionManager, "");
 
         // when
         RequestMethodEnum actual = sut.getMethod();
@@ -54,7 +62,7 @@ public class LogoutControllerTest {
     public void process_request_should_invalidate_session(){
         // given
         String aSessionId = "aSessionId";
-        LogoutController sut = new LogoutController(sessionRepository);
+        LogoutController sut = new LogoutController(sessionManager);
         Request request = createRequestWithValidSession(aSessionId);
 
         // when
@@ -69,14 +77,19 @@ public class LogoutControllerTest {
     public void process_request_should_delete_session(){
         // given
         String aSessionId = "aSessionId";
-        LogoutController sut = new LogoutController(sessionRepository);
+        LogoutController sut = new LogoutController(sessionManager);
         Request request = createRequestWithValidSession(aSessionId);
 
         // when
         sut.process(request);
 
         // then
-        Mockito.verify(sessionRepository).delete(aSessionId);
+        ArgumentCaptor<Session> sessionArgumentCaptor = ArgumentCaptor.forClass(Session.class);
+        Mockito.verify(sessionManager).invalidate(sessionArgumentCaptor.capture());
+
+        Session session = sessionArgumentCaptor.getValue();
+        assertThat(session, is(notNullValue()));
+        assertThat(session.getSessionId(), is(equalTo(aSessionId)));
     }
 
     @Test
@@ -84,7 +97,7 @@ public class LogoutControllerTest {
         // given
         String redirectPath = "/login";
         String aSessionId = "aSessionId";
-        LogoutController sut = new LogoutController(sessionRepository, redirectPath);
+        LogoutController sut = new LogoutController(sessionManager, redirectPath);
         Request request = createRequestWithValidSession(aSessionId);
 
         // when

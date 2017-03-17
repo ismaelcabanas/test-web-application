@@ -48,4 +48,10 @@ public class DefaultSessionManager implements SessionManager {
         session.resetLastAccess();
         return sessionRepository.persist(session);
     }
+
+    @Override
+    public void invalidate(Session session) {
+        sessionRepository.delete(session.getSessionId());
+        session.invalidate();
+    }
 }

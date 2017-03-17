@@ -6,7 +6,9 @@ import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionCookieStub;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.util.DateUtil;
+import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,12 +20,10 @@ import java.util.Optional;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SessionManagerTest {
+public class DefaultSessionManagerTest {
 
     @Mock
     private SessionRepository sessionRepository;
@@ -101,15 +101,40 @@ public class SessionManagerTest {
         assertThat(actual.isPresent(), is(equalTo(true)));
     }
 
+    @Test
+    public void should_invalidate_session(){
+        // given
+        SessionManager sut = new DefaultSessionManager(sessionRepository);
+
+        String aSessionId = "aSessionId";
+        Request requestWithSessionCookie = createRequestWithSession(aSessionId);
+
+        Session sessionSpy = Mockito.spy(requestWithSessionCookie.getSession().get());
+
+        // when
+        sut.invalidate(sessionSpy);
+
+        // then
+        verify(sessionRepository).delete(aSessionId);
+        verify(sessionSpy).invalidate();
+    }
+
+    private Request createRequestWithSession(String aSessionId) {
+        HttpExchange httpExchange =
+                 new HttpExchangeWithSessionStub("/page1", aSessionId);
+
+        return RequestFactory.create(httpExchange);
+    }
+
     private Request createRequestWithSessionCookie(String aSessionId) {
-        HttpExchangeWithSessionCookieStub httpExchange =
+        HttpExchange httpExchange =
                 new HttpExchangeWithSessionCookieStub("/page1", aSessionId);
 
         return RequestFactory.create(httpExchange);
     }
 
     private Request createRequestWithoutSessionCookie() {
-        HttpExchangeSuccessResourceStub httpExchange = new HttpExchangeSuccessResourceStub("/page1");
+        HttpExchange httpExchange = new HttpExchangeSuccessResourceStub("/page1");
 
         return RequestFactory.create(httpExchange);
     }

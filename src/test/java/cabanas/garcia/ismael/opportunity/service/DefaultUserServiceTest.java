@@ -109,7 +109,7 @@ public class DefaultUserServiceTest {
 
         assertThat(user.isPresent(), is(true));
         assertThat(user.get().getUsername(), is(equalTo(USERNAME)));
-        assertThat(user.get().getPassword(),is(nullValue()));
+        assertThat(user.get().getPassword(),is(equalTo(DefaultUserService.PASSWORD_MASK)));
         assertThat(user.get().getRoles(),is(equalTo(ROLES)));
     }
 
@@ -147,7 +147,7 @@ public class DefaultUserServiceTest {
         verify(userRepository).update(updateUser);
 
         assertThat(actual.getUsername(), is(equalTo(USERNAME)));
-        assertThat(actual.getPassword(),is(nullValue()));
+        assertThat(actual.getPassword(),is(equalTo(DefaultUserService.PASSWORD_MASK)));
         assertThat(actual.getRoles(),is(equalTo(newRoles)));
     }
 

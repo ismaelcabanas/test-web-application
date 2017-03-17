@@ -9,4 +9,6 @@ public interface SessionManager {
     Optional<Session> validate(Request request);
 
     Session update(Session session);
+
+    void invalidate(Session session);
 }
