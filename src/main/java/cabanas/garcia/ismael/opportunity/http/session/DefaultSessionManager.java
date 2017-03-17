@@ -5,6 +5,8 @@ import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
+import cabanas.garcia.ismael.opportunity.util.DefaultTimeProvider;
+import cabanas.garcia.ismael.opportunity.util.TimeProvider;
 import cabanas.garcia.ismael.opportunity.util.UUIDProvider;
 import cabanas.garcia.ismael.opportunity.util.UUIDRandomProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +17,20 @@ import java.util.Optional;
 public class DefaultSessionManager implements SessionManager {
     private final SessionRepository sessionRepository;
     private final UUIDProvider uuidProvider;
+    private final TimeProvider timeProvider;
 
     public DefaultSessionManager(SessionRepository sessionRepository) {
-        this(sessionRepository, new UUIDRandomProvider());
+        this(sessionRepository, new UUIDRandomProvider(), new DefaultTimeProvider());
     }
 
     public DefaultSessionManager(SessionRepository sessionRepository, UUIDProvider uuidProvider) {
+        this(sessionRepository, uuidProvider, new DefaultTimeProvider());
+    }
+
+    public DefaultSessionManager(SessionRepository sessionRepository, UUIDProvider uuidProvider, TimeProvider timeProvider) {
         this.sessionRepository = sessionRepository;
         this.uuidProvider = uuidProvider;
+        this.timeProvider = timeProvider;
     }
 
     @Override
@@ -66,7 +74,7 @@ public class DefaultSessionManager implements SessionManager {
 
     @Override
     public Session create(User user, int sessionTimeout) {
-        Session session = Session.create(user, sessionTimeout, uuidProvider);
+        Session session = new Session(user, sessionTimeout, uuidProvider, timeProvider);
 
         sessionRepository.persist(session);
 

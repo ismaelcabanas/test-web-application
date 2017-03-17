@@ -108,7 +108,7 @@ public class SunHttpHandlerTest {
         HttpExchange httpExchange = new HttpExchangeSuccessResourceStub("/page1");
         Request request = RequestFactory.create(httpExchange);
 
-        Session session = Session.create(User.builder().username("ismael").build());
+        Session session = Session.builder().user((User.builder().username("ismael").build())).build();
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 

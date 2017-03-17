@@ -11,7 +11,7 @@ import java.util.Optional;
 @EqualsAndHashCode
 @ToString
 @Getter
-public class User implements Cloneable{
+public class User{
     private String username;
     private String password;
     private Roles roles;

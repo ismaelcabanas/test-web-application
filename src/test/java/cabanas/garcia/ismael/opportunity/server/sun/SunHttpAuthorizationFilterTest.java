@@ -39,7 +39,7 @@ public class SunHttpAuthorizationFilterTest {
     private static final Resource PUBLIC_RESOURCE = Resource.builder().path(PATH_LOGIN).build();
     private static final Roles ROLES_ADMIN_PAGE2 = Roles.builder().roleList(Arrays.asList(Role.builder().name("Page2").build(), Role.builder().name("Admin").build())).build();
     private static final User AUTHENTICATED_USER = User.builder().username("Admin").password("Admin").roles(ROLES_ADMIN_PAGE2).build();
-    private static final Optional<Session> VALID_SESSION = Optional.of(Session.create(AUTHENTICATED_USER));
+    private static final Optional<Session> VALID_SESSION = Optional.of(Session.builder().user(AUTHENTICATED_USER).build());
     private static final Optional<Session> INVALID_SESSION = Optional.empty();
     private static final String PATH_FORBIDDEN = "/forbidden";
 

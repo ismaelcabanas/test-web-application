@@ -9,7 +9,9 @@ import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceS
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionCookieStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.util.DateUtil;
+import cabanas.garcia.ismael.opportunity.util.DefaultTimeProvider;
 import cabanas.garcia.ismael.opportunity.util.UUIDProvider;
+import cabanas.garcia.ismael.opportunity.util.UUIDRandomProvider;
 import com.sun.net.httpserver.HttpExchange;
 import org.hamcrest.core.IsNull;
 import org.junit.Test;
@@ -98,13 +100,18 @@ public class DefaultSessionManagerTest {
         String aSessionId = "aSessionId";
         Request requetWithSessionCookie = createRequestWithSessionCookie(aSessionId);
 
-        Session sessionValid = Session.builder().sessionId(aSessionId).timeout(3000*1000).lastAccess(DateUtil.now()).build();
+        User anUser = User.builder().username("user1").build();
+        Session sessionValid = new Session(anUser, 60, new UUIDRandomProvider(), new DefaultTimeProvider());
         when(sessionRepository.read(aSessionId)).thenReturn(Optional.of(sessionValid));
 
+        Request requestSpy = Mockito.spy(requetWithSessionCookie);
+
         // when
-        Optional<Session> actual = sut.validate(requetWithSessionCookie);
+        Optional<Session> actual = sut.validate(requestSpy);
 
         // then
+        verify(requestSpy).getSessionCookie();
+
         assertThat(actual.isPresent(), is(equalTo(true)));
     }
 
