@@ -81,7 +81,8 @@ public class ProcessRequestStepDef implements En {
                             StartServerStepDefs.privateResourceService);
             filters.add(authenticationFilter);
 
-            httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
+            httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60);
+            httpServer.getConfiguration().add(ServerConfiguration.REDIRECT_LOGOUT, "/login");
             HttpHandler webHandler = new SunHttpHandler(webControllers);
             httpServer.createContext("/", webHandler, filters);
 

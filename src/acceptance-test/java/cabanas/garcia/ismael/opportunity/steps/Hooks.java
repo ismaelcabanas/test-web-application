@@ -41,24 +41,6 @@ public class Hooks implements En{
 
         Before(() -> {
             filters = new ArrayList<>();
-            /*configurePermissions();
-
-            List<Filter> filters = configureFilters();
-
-            loadDefaultUsers();
-
-            httpServer = new SunHttpServer(8082);
-
-            Controllers webControllers = webControllers();
-            SunHttpHandler webHandler = new SunHttpHandler(webControllers);
-            httpServer.createContext("/", webHandler, filters);
-
-            Controllers restControllers = restControllers();
-            SunHttpHandler restHandler = new SunHttpHandler(restControllers);
-            BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
-            httpServer.createContext("/users", restHandler, basicAuthenticator);
-
-            httpServer.start();*/
         });
     }
     private static Controllers restControllers() {
@@ -82,7 +64,4 @@ public class Hooks implements En{
         UserRepository userRepository = InMemoryUserRepository.getInstance();
     }
 
-    private static void configurePermissions() {
-
-    }
 }

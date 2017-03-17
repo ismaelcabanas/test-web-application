@@ -73,9 +73,7 @@ public class ApiUsersStepDefs implements En {
                 throw new RuntimeException(e);
             }
         });
-        Then("^the web server returns (\\d+) status code$", (Integer statusCodeExpected) -> {
-            assertThat(statusCode, is(equalTo(statusCodeExpected)));
-        });
+
         And("^there is the user (.*)/(.*) with (.*) role in the system$", (String username, String password, String rolename) -> {
             UserRepository userRepository = InMemoryUserRepository.getInstance();
             Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
@@ -149,6 +147,10 @@ public class ApiUsersStepDefs implements En {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+
+        Then("^the web server returns (\\d+) status code$", (Integer statusCodeExpected) -> {
+            assertThat(statusCode, is(equalTo(statusCodeExpected)));
         });
 
     }
