@@ -39,6 +39,7 @@ public final class HttpExchangeUtil {
         responseBody.write(content);
         responseBody.flush();
         responseBody.close();
+        httpExchange.close();
     }
 
     public static Map<String, String> parseQueryParameters(final HttpExchange httpExchange) {
@@ -58,5 +59,17 @@ public final class HttpExchangeUtil {
         }
 
         return Collections.unmodifiableMap(queryParameters);
+    }
+
+    public static void unauthorized(HttpExchange httpExchange) throws IOException {
+        log.debug("Unauthorized request");
+        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
+        httpExchange.close();
+    }
+
+    public static void forbidden(HttpExchange httpExchange) throws IOException {
+        log.debug("Forbidden request");
+        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
+        httpExchange.close();
     }
 }
