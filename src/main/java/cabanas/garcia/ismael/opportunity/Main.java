@@ -18,26 +18,21 @@ import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.scanner.ControllerScanner;
 import cabanas.garcia.ismael.opportunity.scanner.DefaultControllerScanner;
-import cabanas.garcia.ismael.opportunity.security.permission.DefaultPermissionChecker;
-import cabanas.garcia.ismael.opportunity.security.permission.Permission;
-import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
-import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
+import cabanas.garcia.ismael.opportunity.security.permission.*;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
-import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
+import cabanas.garcia.ismael.opportunity.server.sun.*;
+import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
 import cabanas.garcia.ismael.opportunity.service.DefaultPrivateResourceService;
+import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.PrivateResourcesService;
+import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.support.PrivateResources;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.Filter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class Main {
@@ -63,6 +58,8 @@ public class Main {
 
         List<Filter> filters = configureFilters();
 
+        List<Filter> restFilters = configureRestFilters();
+
         loadDefaultUsers();
 
         SunHttpServer httpServer = new SunHttpServer(8080);
@@ -75,11 +72,23 @@ public class Main {
 
 
         Controllers restControllers = restControllers();
-        SunHttpHandler restHandler = new SunHttpHandler(restControllers);
+        UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
+        PermissionChecker permissionChecker = new DefaultRestPermissionChecker();
+        RestHandler restHandler = new RestHandler(restControllers, userService, permissionChecker);
         BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
-        httpServer.createContext("/users", restHandler, basicAuthenticator);
+        httpServer.createContext("/users", restHandler, Collections.emptyList(), Optional.of(basicAuthenticator));
 
         httpServer.start();
+    }
+
+    private static List<Filter> configureRestFilters() {
+        UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
+        PermissionChecker permissionChecker = new DefaultRestPermissionChecker();
+        RestAuthorizationFilter authorizationFilter = new RestAuthorizationFilter(userService, permissionChecker);
+        List<Filter> filters = new ArrayList<>();
+        filters.add(authorizationFilter);
+
+        return filters;
     }
 
     private static Controllers restControllers() {
