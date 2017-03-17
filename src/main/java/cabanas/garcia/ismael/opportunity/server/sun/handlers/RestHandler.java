@@ -10,7 +10,6 @@ import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
 import cabanas.garcia.ismael.opportunity.server.sun.AbstractHttpHandler;
 import cabanas.garcia.ismael.opportunity.service.UserService;
-import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import cabanas.garcia.ismael.opportunity.view.View;
 import com.sun.net.httpserver.HttpExchange;
@@ -39,49 +38,36 @@ public class RestHandler extends AbstractHttpHandler{
         log.debug("Handle request {}", request);
 
         Principal principal = request.getPrincipal();
+        
+        if(principal != null){
+            log.debug("User {} authenticated", principal.getName());
 
-        if(!authenticated(request)){
-            log.debug("There is principal but no user found, then unauthorizated user");
+            Optional<User> user = userService.findByUsername(principal.getName());
+            if(user.isPresent()){
+                if(permissionChecker.hasPermission(user.get(), request.getResource())){
+                    Controller controller = controllers.select(request);
+
+                    View view = controller.process(request);
+
+                    Response response = view.render();
+
+                    process(httpExchange, request, response);
+                }
+                else{
+                    HttpExchangeUtil.forbidden(httpExchange);
+                }
+            }
+            else{
+                log.debug("There is principal but no user found, then unauthorizated user");
+                HttpExchangeUtil.unauthorized(httpExchange);
+            }
+        }
+        else{
+            log.debug("No user authenticated");
             HttpExchangeUtil.unauthorized(httpExchange);
-            return;
         }
-
-        Optional<User> user = userService.findByUsername(principal.getName());
-
-        if(!authorized(user, request.getResource())){
-            log.debug("User {} not authorized", request.getPrincipal().getName());
-            HttpExchangeUtil.forbidden(httpExchange);
-            return;
-        }
-
-        Controller controller = controllers.select(request);
-
-        View view = controller.process(request);
-
-        Response response = view.render();
-
-        process(httpExchange, request, response);
     }
 
-    private boolean authenticated(final Request request) {
-        return existPrincipal(request) && existUser(request);
-    }
-
-    private boolean authorized(final Optional<User> user, final Resource resource) {
-        return user.isPresent() && hasPermissions(user.get(), resource);
-    }
-
-    private boolean hasPermissions(final User user, final Resource resource) {
-        return permissionChecker.hasPermission(user, resource);
-    }
-
-    private boolean existUser(final Request request) {
-        return userService.findByUsername(request.getPrincipal().getName()).isPresent();
-    }
-
-    private boolean existPrincipal(final Request request) {
-        return request.getPrincipal() != null;
-    }
 
     private void process(HttpExchange httpExchange, Request request, Response response) throws IOException {
         HttpExchangeUtil.write(httpExchange, response.getStatusCode(), "text/html", response.getContent());
