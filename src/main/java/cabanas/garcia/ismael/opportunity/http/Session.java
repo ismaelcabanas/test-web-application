@@ -2,6 +2,9 @@ package cabanas.garcia.ismael.opportunity.http;
 
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.util.DateUtil;
+import cabanas.garcia.ismael.opportunity.util.TimeProvider;
+import cabanas.garcia.ismael.opportunity.util.UUIDProvider;
+import cabanas.garcia.ismael.opportunity.util.UUIDRandomProvider;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,17 +23,14 @@ public class Session implements Cloneable{
     // expire session in milliseconds
     private int timeout;
 
+    private TimeProvider timeProvider;
+
     public static Session create(final User user) {
         return create(user, -1);
     }
 
     public static Session create(User user, int timeoutInMilliseconds) {
-        return Session.builder()
-                .sessionId(UUID.randomUUID().toString())
-                .user(user)
-                .lastAccess(DateUtil.now())
-                .timeout(timeoutInMilliseconds) // session don't expire
-                .build();
+        return create(user, timeoutInMilliseconds, new UUIDRandomProvider());
     }
 
     public boolean hasExpired() {
@@ -53,5 +53,14 @@ public class Session implements Cloneable{
         this.sessionId = null;
         this.lastAccess = 0;
         this.user = null;
+    }
+
+    public static Session create(User user, int sessionTimeout, UUIDProvider uuidProvider) {
+        return Session.builder()
+                .sessionId(uuidProvider.generateUUID())
+                .user(user)
+                .lastAccess(DateUtil.now())
+                .timeout(sessionTimeout) // session don't expire
+                .build();
     }
 }
