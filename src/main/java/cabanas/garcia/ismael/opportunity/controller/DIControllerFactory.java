@@ -6,6 +6,8 @@ import cabanas.garcia.ismael.opportunity.controller.rest.UserGetController;
 import cabanas.garcia.ismael.opportunity.controller.rest.UserUpdateController;
 import cabanas.garcia.ismael.opportunity.controller.web.LoginPostController;
 import cabanas.garcia.ismael.opportunity.controller.web.LogoutController;
+import cabanas.garcia.ismael.opportunity.http.session.DefaultSessionManager;
+import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.InstantiationException;
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
@@ -14,6 +16,7 @@ import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.util.UUIDRandomProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,10 +43,10 @@ public class DIControllerFactory {
         }
         else if(clazz.getName().equals(LoginPostController.class.getName())){
             try {
-                return clazz.getConstructor(UserService.class, SessionRepository.class, Integer.class)
+                return clazz.getConstructor(UserService.class, SessionManager.class, Integer.class)
                         .newInstance(
                                 new DefaultUserService(InMemoryUserRepository.getInstance())
-                                , InMemorySessionRepository.getInstance()
+                                , new DefaultSessionManager(InMemorySessionRepository.getInstance(), new UUIDRandomProvider())
                                 , (Integer) ServerConfiguration.getInstance().get(ServerConfiguration.SESSION_TIMEOUT)
                         );
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -52,9 +55,9 @@ public class DIControllerFactory {
         }
         else if(clazz.getName().equals(LogoutController.class.getName())){
             try {
-                return clazz.getConstructor(SessionRepository.class, String.class)
+                return clazz.getConstructor(SessionManager.class, String.class)
                         .newInstance(
-                                InMemorySessionRepository.getInstance()
+                                new DefaultSessionManager(InMemorySessionRepository.getInstance())
                                 , (String) ServerConfiguration.getInstance().get(ServerConfiguration.REDIRECT_LOGOUT)
                         );
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
