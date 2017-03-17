@@ -8,6 +8,7 @@ import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.util.HttpExchangeUtil;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
@@ -32,8 +33,8 @@ public class ExchangeRequest implements Request {
     public ExchangeRequest(HttpExchange httpExchange) {
         this.httpExchange = httpExchange;
         this.requestBodyParameters = new HashMap<>();
-        this.resource = Resource.builder().path(httpExchange.getRequestURI().getPath()).build();
         this.method = RequestMethodEnum.valueOf(httpExchange.getRequestMethod());
+        this.resource = Resource.builder().path(httpExchange.getRequestURI().getPath()).method(this.method).build();
         this.queryParameters = HttpExchangeUtil.parseQueryParameters(httpExchange);
     }
 
@@ -108,6 +109,15 @@ public class ExchangeRequest implements Request {
     @Override
     public String getQueryParameter(String paramName) {
         return queryParameters.get(paramName);
+    }
+
+    @Override
+    public Principal getPrincipal() {
+        HttpPrincipal httpPrincipal = httpExchange.getPrincipal();
+        if(httpPrincipal != null) {
+            return DefaultPrincipal.builder().name(httpPrincipal.getName()).build();
+        }
+        return null;
     }
 
     @Override

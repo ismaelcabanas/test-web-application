@@ -1,9 +1,6 @@
 package cabanas.garcia.ismael.opportunity.http.imp;
 
-import cabanas.garcia.ismael.opportunity.http.Parameter;
-import cabanas.garcia.ismael.opportunity.http.Request;
-import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
-import cabanas.garcia.ismael.opportunity.http.Session;
+import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import lombok.Builder;
@@ -45,6 +42,11 @@ public class DefaultRequest implements Request{
 
     @Override
     public String getQueryParameter(String paramName) {
+        return null;
+    }
+
+    @Override
+    public Principal getPrincipal() {
         return null;
     }
 }

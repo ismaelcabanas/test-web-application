@@ -22,4 +22,6 @@ public interface Request {
     Optional<Cookie> getSessionCookie();
 
     String getQueryParameter(String paramName);
+
+    Principal getPrincipal();
 }
