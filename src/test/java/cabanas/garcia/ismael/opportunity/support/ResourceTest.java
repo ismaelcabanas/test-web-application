@@ -10,7 +10,7 @@ public class ResourceTest {
     @Test
     public void new_resource(){
         // given
-        Resource sut = new Resource("/page1");
+        Resource sut = Resource.builder().path("/page1").build();
 
         // when
         String actual = sut.getPath();
