@@ -26,8 +26,8 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class RestAuthorizationFilterTest {
 
-    public static final String USER_1 = "user1";
-    public static final String USERS_PATH = "/users";
+    private static final String USER_1 = "user1";
+    private static final String USERS_PATH = "/users";
     private static final Roles ROLES_ADMIN = Roles.builder().roleList(Arrays.asList(Role.ADMIN)).build();
     private static final Roles ROLES_PAGE1 = Roles.builder().roleList(Arrays.asList(Role.builder().name("Page1").build())).build();
     private static final Optional<User> ADMIN_USER = Optional.of(User.builder().username(USER_1).password("****").roles(ROLES_ADMIN).build());

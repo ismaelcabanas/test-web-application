@@ -88,7 +88,9 @@ public class ProcessRequestStepDef implements En {
             UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
             PermissionChecker permissionCheckerForRestContext = new DefaultRestPermissionChecker();
             HttpHandler restHandler = new RestHandler(restControllers, userService, permissionCheckerForRestContext);
-            BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
+
+            UserService userServiceForAuthenticator = new DefaultUserService(InMemoryUserRepository.getInstance());
+            BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application", userServiceForAuthenticator);
             httpServer.createContext("/users", restHandler, Collections.EMPTY_LIST, Optional.of(basicAuthenticator));
 
             httpServer.start();

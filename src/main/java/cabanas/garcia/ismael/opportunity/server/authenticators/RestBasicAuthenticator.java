@@ -1,18 +1,18 @@
 package cabanas.garcia.ismael.opportunity.server.authenticators;
 
-import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
-import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import com.sun.net.httpserver.BasicAuthenticator;
 
 public class RestBasicAuthenticator extends BasicAuthenticator {
-    public RestBasicAuthenticator(String realm) {
+    private final UserService userService;
+
+    public RestBasicAuthenticator(String realm, UserService userService) {
         super(realm);
+        this.userService = userService;
     }
 
     @Override
     public boolean checkCredentials (String username, String password) {
-        UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
         return userService.login(username, password).isPresent();
     }
 }

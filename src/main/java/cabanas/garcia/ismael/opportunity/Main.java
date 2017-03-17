@@ -76,7 +76,9 @@ public class Main {
         UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
         PermissionChecker permissionChecker = new DefaultRestPermissionChecker();
         RestHandler restHandler = new RestHandler(restControllers, userService, permissionChecker);
-        BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
+
+        UserService userServiceForAuthenticator = new DefaultUserService(InMemoryUserRepository.getInstance());
+        BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application", userServiceForAuthenticator);
         httpServer.createContext("/users", restHandler, Collections.emptyList(), Optional.of(basicAuthenticator));
 
         httpServer.start();
