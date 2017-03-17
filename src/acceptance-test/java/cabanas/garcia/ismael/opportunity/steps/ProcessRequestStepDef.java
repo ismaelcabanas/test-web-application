@@ -7,10 +7,7 @@ import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
-import cabanas.garcia.ismael.opportunity.security.permission.DefaultPermissionChecker;
-import cabanas.garcia.ismael.opportunity.security.permission.Permission;
-import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
-import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
+import cabanas.garcia.ismael.opportunity.security.permission.*;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
@@ -18,11 +15,15 @@ import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
+import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
+import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
+import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.steps.model.PermissionData;
 import cabanas.garcia.ismael.opportunity.steps.model.UserData;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.BasicAuthenticator;
+import com.sun.net.httpserver.HttpHandler;
 import cucumber.api.java8.En;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -37,10 +38,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
 import static org.hamcrest.core.Is.is;
@@ -65,7 +63,7 @@ public class ProcessRequestStepDef implements En {
             httpServer = new SunHttpServer(port);
 
             // add users?
-            addUsers(StartServerStepDefs.users);
+            //addUsers(StartServerStepDefs.users);
 
             // set authorization filter
             SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
@@ -84,12 +82,14 @@ public class ProcessRequestStepDef implements En {
             filters.add(authenticationFilter);
 
             httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60000);
-            SunHttpHandler webHandler = new SunHttpHandler(webControllers);
+            HttpHandler webHandler = new SunHttpHandler(webControllers);
             httpServer.createContext("/", webHandler, filters);
 
-            SunHttpHandler restHandler = new SunHttpHandler(restControllers);
+            UserService userService = new DefaultUserService(InMemoryUserRepository.getInstance());
+            PermissionChecker permissionCheckerForRestContext = new DefaultRestPermissionChecker();
+            HttpHandler restHandler = new RestHandler(restControllers, userService, permissionCheckerForRestContext);
             BasicAuthenticator basicAuthenticator = new RestBasicAuthenticator("test_web_application");
-            httpServer.createContext("/users", restHandler, basicAuthenticator);
+            httpServer.createContext("/users", restHandler, Collections.EMPTY_LIST, Optional.of(basicAuthenticator));
 
             httpServer.start();
         });
@@ -129,7 +129,7 @@ public class ProcessRequestStepDef implements En {
         });
 
         Given("^(.*) logs in the system$", (String username) -> {
-            Optional<UserData> user = StartServerStepDefs.users.stream().filter(u -> u.getUsername().equals(username)).findFirst();
+            Optional<User> user = InMemoryUserRepository.getInstance().read(username);
             if(user.isPresent()){
                 login(user.get().getUsername(), user.get().getPassword());
             }

@@ -3,7 +3,10 @@ package cabanas.garcia.ismael.opportunity.steps;
 import cabanas.garcia.ismael.opportunity.http.session.DefaultSessionManager;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Roles;
+import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
+import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
+import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.security.permission.Permission;
 import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
@@ -30,7 +33,6 @@ import static cabanas.garcia.ismael.opportunity.steps.Hooks.httpServer;
 public class StartServerStepDefs implements En {
 
     public static Permissions permissions = new Permissions();
-    public static List<UserData> users = new ArrayList<>();
     public static PrivateResourcesService privateResourceService = new DefaultPrivateResourceService(new PrivateResources());
 
     public StartServerStepDefs() {
@@ -62,7 +64,7 @@ public class StartServerStepDefs implements En {
         });
 
         And("^there are the next users in the system$", (DataTable dataTable) -> {
-            this.users = dataTable.asList(UserData.class);
+            addUsers(dataTable.asList(UserData.class));
         });
         Given("^the next table of permissions$", (DataTable dataTable) -> {
             List<PermissionData> permissionsData = dataTable.asList(PermissionData.class);
@@ -72,6 +74,15 @@ public class StartServerStepDefs implements En {
                 Arrays.stream(permissionData.getRoles()).forEach(rolename -> roles.add(rolename));
                 permissions.add(Permission.builder().resource(Resource.builder().path(permissionData.getResource()).build()).roles(roles).build());
             });
+        });
+    }
+
+    private void addUsers(List<UserData> users) {
+        UserRepository userRepository = InMemoryUserRepository.getInstance();
+        users.stream().forEach(userData -> {
+            Roles roles = Roles.builder().build();
+            Arrays.stream(userData.getRoles()).forEach(rolename -> roles.add(rolename.trim()));
+            userRepository.persist(User.builder().username(userData.getUsername()).roles(roles).password(userData.getPassword()).build());
         });
     }
 }

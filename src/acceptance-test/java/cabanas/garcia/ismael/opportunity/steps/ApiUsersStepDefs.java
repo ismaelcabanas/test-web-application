@@ -91,7 +91,7 @@ public class ApiUsersStepDefs implements En {
             User user = User.builder().username(username).password(DEFAULT_PASSWORD).roles(roles).build();
             userRepository.persist(user);
         });
-        And("^And I want to update roles to (.*) for user (.*)", (String newRoles, String username) -> {
+        Given("^I want to update roles to (.*) for user (.*)", (String newRoles, String username) -> {
             this.newRoles = newRoles;
             this.usernameToUpdate = username;
         });
@@ -115,7 +115,7 @@ public class ApiUsersStepDefs implements En {
             }
         });
 
-        And("^And I want to delete user (.*)$", (String username) -> {
+        Given("^I want to delete user (.*)$", (String username) -> {
             this.usernameToDelete = username;
         });
         When("^I use API for deleting users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
@@ -132,7 +132,7 @@ public class ApiUsersStepDefs implements En {
                 throw new RuntimeException(e);
             }
         });
-        And("^And I want to get data for user (.*)", (String username) -> {
+        Given("^I want to get data for user (.*)", (String username) -> {
             this.usernameToFind = username;
         });
         When("^I use API for getting users with user (.*) and password (.*)$", (String authUser, String authPassword) -> {
