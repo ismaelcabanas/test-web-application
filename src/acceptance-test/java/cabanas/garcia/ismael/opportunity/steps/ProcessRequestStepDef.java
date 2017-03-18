@@ -7,9 +7,11 @@ import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
-import cabanas.garcia.ismael.opportunity.security.permission.*;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
+import cabanas.garcia.ismael.opportunity.security.permission.DefaultPermissionChecker;
+import cabanas.garcia.ismael.opportunity.security.permission.DefaultRestPermissionChecker;
+import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
@@ -18,16 +20,14 @@ import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.UserService;
-import cabanas.garcia.ismael.opportunity.steps.model.PermissionData;
 import cabanas.garcia.ismael.opportunity.steps.model.UserData;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
-import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpHandler;
 import cucumber.api.java8.En;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.apache.http.*;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -38,6 +38,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.util.*;
 
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.*;
@@ -61,9 +62,6 @@ public class ProcessRequestStepDef implements En {
         Given("^the web server is running on port (\\d+)$", (Integer port) -> {
             this.port = port;
             httpServer = new SunHttpServer(port);
-
-            // add users?
-            //addUsers(StartServerStepDefs.users);
 
             // set authorization filter
             SunHttpAuthorizationFilter.AuthorizationFilterConfiguration configuration =
@@ -110,7 +108,7 @@ public class ProcessRequestStepDef implements En {
         });
 
         Then("^the web server redirects me to login page$", () -> {
-            assertThat(this.statusCode, is(equalTo(200)));
+            assertThat(this.statusCode, is(equalTo(HttpURLConnection.HTTP_OK)));
             assertThat(this.response, containsString("Login"));
         });
 
@@ -146,14 +144,6 @@ public class ProcessRequestStepDef implements En {
 
     }
 
-    private void addUsers(List<UserData> users) {
-        UserRepository userRepository = InMemoryUserRepository.getInstance();
-        users.stream().forEach(userData -> {
-            Roles roles = Roles.builder().build();
-            Arrays.stream(userData.getRoles()).forEach(rolename -> roles.add(rolename));
-            userRepository.persist(User.builder().username(userData.getUsername()).roles(roles).password(userData.getPassword()).build());
-        });
-    }
 
     private void sendGetRequest(String page) {
         /*Response responseAssured = RestAssured
