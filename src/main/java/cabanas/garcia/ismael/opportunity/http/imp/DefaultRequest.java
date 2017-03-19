@@ -2,6 +2,7 @@ package cabanas.garcia.ismael.opportunity.http.imp;
 
 import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
+import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

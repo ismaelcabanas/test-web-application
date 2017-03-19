@@ -1,6 +1,7 @@
 package cabanas.garcia.ismael.opportunity.controller.web;
 
 import cabanas.garcia.ismael.opportunity.http.*;
+import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeWithCredentialsStub;

@@ -1,11 +1,8 @@
 package cabanas.garcia.ismael.opportunity.repository;
 
 import cabanas.garcia.ismael.opportunity.http.Session;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

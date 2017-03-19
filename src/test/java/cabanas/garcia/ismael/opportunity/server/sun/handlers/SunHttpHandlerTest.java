@@ -6,8 +6,8 @@ import cabanas.garcia.ismael.opportunity.controller.web.UnknownResourceControlle
 import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.cookies.Cookie;
 import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
+import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.server.sun.handlers.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeNotFoundResourceStub;
 import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;

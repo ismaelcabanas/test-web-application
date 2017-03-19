@@ -1,12 +1,12 @@
 package cabanas.garcia.ismael.opportunity.server.sun.filter;
 
 import cabanas.garcia.ismael.opportunity.http.*;
+import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Role;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
-import cabanas.garcia.ismael.opportunity.server.sun.filter.SunHttpAuthorizationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.service.PrivateResourcesService;
 import cabanas.garcia.ismael.opportunity.support.Resource;
