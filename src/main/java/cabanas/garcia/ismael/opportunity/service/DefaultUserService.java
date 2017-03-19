@@ -6,7 +6,7 @@ import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import java.util.Optional;
 
 public class DefaultUserService implements UserService{
-    protected static final String PASSWORD_MASK = "********";
+    protected static final String MASK = "********";
     private final UserRepository userRepository;
 
     public DefaultUserService(UserRepository userRepository) {
@@ -42,7 +42,7 @@ public class DefaultUserService implements UserService{
     }
 
     private User newUserWithoutPassword(User user) {
-        return User.builder().username(user.getUsername()).password(PASSWORD_MASK).roles(user.getRoles()).build();
+        return User.builder().username(user.getUsername()).password(MASK).roles(user.getRoles()).build();
     }
 
     @Override
