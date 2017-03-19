@@ -4,11 +4,9 @@ import cabanas.garcia.ismael.opportunity.http.RequestHeadersEnum;
 import cabanas.garcia.ismael.opportunity.http.ResponseHeaderConstants;
 import cabanas.garcia.ismael.opportunity.http.session.DefaultSessionManager;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
-import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
-import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.security.permission.DefaultPermissionChecker;
 import cabanas.garcia.ismael.opportunity.security.permission.DefaultRestPermissionChecker;
 import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
@@ -20,7 +18,7 @@ import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.UserService;
-import cabanas.garcia.ismael.opportunity.steps.model.UserData;
+import cabanas.garcia.ismael.opportunity.steps.model.Response;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpHandler;
@@ -30,7 +28,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -56,6 +53,7 @@ public class ProcessRequestStepDef implements En {
     private String username;
     private String password;
     private Header sessionTokenHeader;
+    Response httpResponse;
 
     public ProcessRequestStepDef() {
 
@@ -100,11 +98,11 @@ public class ProcessRequestStepDef implements En {
         });
 
         Then("^the web server returns (.*) resource$", (String expected) -> {
-            assertThat(this.response, containsString(expected));
+            assertThat(httpResponse.getContent(), containsString(expected));
         });
 
         And("^(\\d+) status code$", (Integer statusCode) -> {
-            assertThat(this.statusCode, is(equalTo(statusCode)));
+            assertThat(httpResponse.getStatusCode(), is(equalTo(statusCode)));
         });
 
         Then("^the web server redirects me to login page$", () -> {
@@ -146,30 +144,19 @@ public class ProcessRequestStepDef implements En {
 
 
     private void sendGetRequest(String page) {
-        /*Response responseAssured = RestAssured
-                .given()
-                    .cookie(RequestHeadersEnum.COOKIE.getName(), sessionTokenHeader.getValue())
-                .when()
-                    .get("http://localhost:" + port + page);
-        statusCode = responseAssured.getStatusCode();
-        response = responseAssured.getBody().print();*/
-        HttpClient httpClient = HttpUtil.create();
-        HttpGet httpGet = new HttpGet("http://localhost:" + port + page);
-        try {
-            if(sessionTokenHeader != null)
-                httpGet.addHeader(RequestHeadersEnum.COOKIE.getName(), sessionTokenHeader.getValue());
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            statusCode = httpResponse.getStatusLine().getStatusCode();
-            if(isRedirect(statusCode)){
-                sendGetRequest("/forbidden");
-            }
-            else{
-                response = getStringFromInputStream(httpResponse.getEntity().getContent());
-            }
+        String getUri = "http://localhost:" + port + "/" + page;
+        HttpUtil httpClientUtil = new HttpUtil(getUri);
 
-        } catch (IOException e) {
+        if(sessionTokenHeader != null){
+            httpClientUtil.addHeader(RequestHeadersEnum.COOKIE.getName(), sessionTokenHeader.getValue());
+        }
+
+        try {
+            httpResponse = httpClientUtil.sendGet();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 
     private boolean isRedirect(int statusCode){
@@ -177,76 +164,17 @@ public class ProcessRequestStepDef implements En {
     }
 
     private void login(String username, String password) {
-        /*Response responseAssured = RestAssured
-                .given()
-                .formParam("username", username)
-                .formParam("password", password)
-                .when()
-                .post("http://localhost:" + port + "/login");
+        HttpUtil httpClientUtil = new HttpUtil("http://localhost:" + port + "/login");
 
-        statusCode = responseAssured.getStatusCode();
-        sessionTokenHeader = new Header() {
-            @Override
-            public String getName() {
-                return ResponseHeaderConstants.SET_COOKIE;
-            }
+        httpClientUtil.addFormParameter("username", username);
+        httpClientUtil.addFormParameter("password", password);
 
-            @Override
-            public String getValue() {
-                return responseAssured.getCookie(ResponseHeaderConstants.SET_COOKIE);
-            }
-
-            @Override
-            public HeaderElement[] getElements() throws ParseException {
-                return new HeaderElement[0];
-            }
-        };
-        response = responseAssured.getBody().print();*/
-
-
-        HttpClient httpClient = HttpUtil.create();
-        HttpPost httpPost = new HttpPost("http://localhost:" + port + "/login");
-        List<NameValuePair> urlParameters = new ArrayList<>();
-        urlParameters.add(new BasicNameValuePair("username", username));
-        urlParameters.add(new BasicNameValuePair("password", password));
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            statusCode = httpResponse.getStatusLine().getStatusCode();
-            response = getStringFromInputStream(httpResponse.getEntity().getContent());
-            sessionTokenHeader = httpResponse.getFirstHeader(ResponseHeaderConstants.SET_COOKIE);
-        } catch (IOException e) {
+            httpResponse = httpClientUtil.sendPost();
+            sessionTokenHeader = httpResponse.getHeader(ResponseHeaderConstants.SET_COOKIE);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-
     }
 
 }
