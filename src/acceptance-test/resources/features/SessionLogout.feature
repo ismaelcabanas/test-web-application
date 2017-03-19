@@ -4,7 +4,7 @@ Feature: Session logout
   In order to logout the web application and can to log in with other user
 
   Background:
-    Given there is the user admin/admin with Admin role in the system
+    Given there is the user admin/admin with ADMIN role in the system
     And private resources /page1
     And the web server is running on port 8002
 

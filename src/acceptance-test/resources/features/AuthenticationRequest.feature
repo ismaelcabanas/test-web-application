@@ -4,7 +4,7 @@ Feature: Authentication
   In order to only authenticated users can access to private resources
 
   Background:
-    Given there is the user admin/admin with Admin role in the system
+    Given there is the user admin/admin with ADMIN role in the system
 
   Scenario: Authentication failed
     Given credentials ismael/wrongpassword

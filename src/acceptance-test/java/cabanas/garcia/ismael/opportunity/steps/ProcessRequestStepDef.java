@@ -22,6 +22,7 @@ import cabanas.garcia.ismael.opportunity.steps.model.Response;
 import cabanas.garcia.ismael.opportunity.steps.util.HttpUtil;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpHandler;
+import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.apache.http.Header;
 
@@ -37,9 +38,9 @@ import static org.junit.Assert.assertThat;
 
 public class ProcessRequestStepDef implements En {
 
-    static int statusCode;
-    static String response;
+    public static final int DEFAULT_SESSION_TIMEOUT = 60;
     static int port;
+    private Integer sessionTimeout;
 
     private String username;
     private String password;
@@ -68,7 +69,7 @@ public class ProcessRequestStepDef implements En {
                             StartServerStepDefs.privateResourceService);
             filters.add(authenticationFilter);
 
-            httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60);
+            httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, (this.sessionTimeout != null ? this.sessionTimeout : DEFAULT_SESSION_TIMEOUT));
             httpServer.getConfiguration().add(ServerConfiguration.REDIRECT_LOGOUT, "/login");
             HttpHandler webHandler = new SunHttpHandler(webControllers);
             httpServer.createContext("/", webHandler, filters);
@@ -97,8 +98,8 @@ public class ProcessRequestStepDef implements En {
         });
 
         Then("^the web server redirects me to login page$", () -> {
-            assertThat(this.statusCode, is(equalTo(HttpURLConnection.HTTP_OK)));
-            assertThat(this.response, containsString("Login"));
+            assertThat(this.httpResponse.getStatusCode(), is(equalTo(HttpURLConnection.HTTP_OK)));
+            assertThat(this.httpResponse.getContent(), containsString("Login"));
         });
 
         Given("^credentials (.*)/(.*)", (String user, String password) -> {
@@ -128,6 +129,18 @@ public class ProcessRequestStepDef implements En {
             }
         });
         When("^sends a (.*) request to web server$", (String resource) -> {
+            sendGetRequest(resource);
+        });
+        And("^session timeout is configured to (\\d+) seconds$", (Integer sessionTimeout) -> {
+            this.sessionTimeout = sessionTimeout;
+        });
+        When("^after (\\d+) seconds I send a (.*) request to web server$", (Integer elapsedTime, String resource) -> {
+            int delay = (elapsedTime+1) * 1000;
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             sendGetRequest(resource);
         });
 

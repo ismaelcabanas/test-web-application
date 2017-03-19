@@ -4,7 +4,7 @@ Feature: Session handling
   In order to navigate for the site avoiding log in each request
 
   Background:
-    Given there is the user admin/admin with Admin role in the system
+    Given there is the user admin/admin with ADMIN role in the system
 
   Scenario: Create user session when authenticate
     Given private resources /page1, /page2

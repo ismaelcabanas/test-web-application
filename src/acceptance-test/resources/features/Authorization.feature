@@ -6,14 +6,14 @@ Feature: Authorization in web application
   Background:
     Given the next table of permissions
       | resource | roles        |
-      | /page1   | Admin, Page1 |
+      | /page1   | ADMIN, Page1 |
       | /page2   | Page2        |
       | /page3   | Page3        |
     And there are the next users in the system
       | username | password | roles        |
       | user1    | changeIt | Page1        |
       | user2    | changeIt | Page1, Page2 |
-      | admin    | admin    | Admin        |
+      | admin    | admin    | ADMIN        |
     And private resources /page1, /page2, /page3
     And the web server is running on port 8002
 

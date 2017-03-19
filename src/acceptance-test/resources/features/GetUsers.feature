@@ -8,7 +8,7 @@ Feature: Get users through REST API
       | username | password | roles        |
       | user1    | changeIt | Page1        |
       | user2    | changeIt | Page1, Page2 |
-      | admin    | admin    | Admin        |
+      | admin    | admin    | ADMIN        |
     And the web server is running on port 8082
 
   Scenario: Get user date with an admin user
