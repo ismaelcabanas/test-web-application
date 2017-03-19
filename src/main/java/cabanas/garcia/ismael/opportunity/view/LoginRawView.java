@@ -40,7 +40,7 @@ public class LoginRawView implements View{
         try {
             rawContent = String.format(raw, URLEncoder.encode(redirectPath, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            log.error("Error encoding {}", redirectPath);
+            log.error("Error encoding {}: {}", redirectPath, e.getMessage());
             rawContent = String.format(raw, "");
         }
     }

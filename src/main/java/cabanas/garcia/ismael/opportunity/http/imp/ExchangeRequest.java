@@ -47,7 +47,7 @@ public class ExchangeRequest implements Request {
                 list.forEach(pair -> parameters.put(pair.getName(), pair.getValue()));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Error dealing with request body", e);
+            log.error("Error dealing with request body", e);
         }
         this.requestBodyParameters = Collections.unmodifiableMap(parameters);
     }
