@@ -40,14 +40,14 @@ import java.util.*;
 @Slf4j
 public class Main {
 
-    public static final String CHANGEIT = "changeit";
+    private static final String CHANGEIT = "changeit";
     private static PermissionChecker permissionChecker;
     private static PrivateResourcesService privateResourcesService;
 
-    private static Role rolePage1 = Role.builder().name("Page1").build();
-    private static Role rolePage2 = Role.builder().name("Page2").build();
-    private static Role rolePage3 = Role.builder().name("Page3").build();
-    private static Role roleAdmin = Role.builder().name("Admin").build();
+    private static Role rolePage1 = Role.builder().name("PAGE_1").build();
+    private static Role rolePage2 = Role.builder().name("PAGE_2").build();
+    private static Role rolePage3 = Role.builder().name("PAGE_3").build();
+    private static Role roleAdmin = Role.builder().name("ADMIN").build();
 
     private static Roles rolesResourcePage1 = Roles.builder().roleList(Arrays.asList(rolePage1)).build();
     private static Roles rolesResourcePage2 = Roles.builder().roleList(Arrays.asList(rolePage2)).build();
@@ -64,7 +64,7 @@ public class Main {
         loadDefaultUsers();
 
         SunHttpServer httpServer = new SunHttpServer(8080);
-        httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 60);
+        httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 3600);
         httpServer.getConfiguration().add(ServerConfiguration.REDIRECT_LOGOUT, "/login");
 
         Controllers webControllers = webControllers();
