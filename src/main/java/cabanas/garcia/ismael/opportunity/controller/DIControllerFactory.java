@@ -37,7 +37,7 @@ public class DIControllerFactory {
             try {
                 return clazz.getConstructor(UserService.class).newInstance(new DefaultUserService(InMemoryUserRepository.getInstance()));
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
+                throwExcpetion(clazz.getSimpleName(), e);
             }
         }
         else if(clazz.getName().equals(LoginPostController.class.getName())){
@@ -49,7 +49,7 @@ public class DIControllerFactory {
                                 , (Integer) ServerConfiguration.getInstance().get(ServerConfiguration.SESSION_TIMEOUT)
                         );
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
+                throwExcpetion(clazz.getSimpleName(), e);
             }
         }
         else if(clazz.getName().equals(LogoutController.class.getName())){
@@ -60,11 +60,15 @@ public class DIControllerFactory {
                                 , (String) ServerConfiguration.getInstance().get(ServerConfiguration.REDIRECT_LOGOUT)
                         );
             } catch (java.lang.InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new InstantiationException("Unable to create instance of \'" + clazz.getSimpleName() + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
+                throwExcpetion(clazz.getSimpleName(), e);
             }
         }
 
 
         return instantiator.newInstance(clazz);
+    }
+
+    private void throwExcpetion(final String className, final Exception e) {
+        throw new InstantiationException("Unable to create instance of \'" + className + "\'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", e);
     }
 }

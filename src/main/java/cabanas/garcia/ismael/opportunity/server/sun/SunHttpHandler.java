@@ -11,6 +11,7 @@ import com.sun.net.httpserver.HttpExchange;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 public class SunHttpHandler extends AbstractHttpHandler{
@@ -52,9 +53,10 @@ public class SunHttpHandler extends AbstractHttpHandler{
 
     private void addCookieResponseHeader(HttpExchange httpExchange, final Request request) {
         log.debug("Adding cookie response header...");
-        if(request.getSession().isPresent()){
-            Session session = request.getSession().get();
-            String cookieValue = String.format("%s=%s", Cookie.SESSION_TOKEN, session.getSessionId());
+        Optional<Session> session = request.getSession();
+        if(session.isPresent()){
+            Session theSession = session.get();
+            String cookieValue = String.format("%s=%s", Cookie.SESSION_TOKEN, theSession.getSessionId());
             log.debug("Setting {} header with value {}", ResponseHeaderConstants.SET_COOKIE, cookieValue);
             httpExchange.getResponseHeaders()
                     .add(ResponseHeaderConstants.SET_COOKIE, cookieValue);
