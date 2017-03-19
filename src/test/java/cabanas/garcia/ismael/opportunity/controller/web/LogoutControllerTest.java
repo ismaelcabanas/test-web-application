@@ -6,6 +6,7 @@ import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.Session;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.View;
@@ -24,6 +25,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LogoutControllerTest {
@@ -106,6 +108,26 @@ public class LogoutControllerTest {
         // then
         assertThat(actual.render().getStatusCode(), is(equalTo(HttpURLConnection.HTTP_MOVED_TEMP)));
         assertThat(actual.render().getRedirectPath(), is(equalTo(redirectPath)));
+    }
+
+    @Test
+    public void process_request_not_should_invalidate_session_when_not_exist_session(){
+        // given
+        String redirectPath = "/login";
+        String aSessionId = "aSessionId";
+        LogoutController sut = new LogoutController(sessionManager, redirectPath);
+        Request request = createRequestWithoutSession();
+
+        // when
+        View actual = sut.process(request);
+
+        // then
+        verifyZeroInteractions(sessionManager);
+    }
+
+    private Request createRequestWithoutSession() {
+        HttpExchange httpExchange = new HttpExchangeSuccessResourceStub("/logout");
+        return RequestFactory.create(httpExchange);
     }
 
     private Request createRequestWithValidSession(String aSessionId) {

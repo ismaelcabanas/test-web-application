@@ -69,6 +69,26 @@ public class InMemoryUserRepositoryTest {
     }
 
     @Test
+    public void update_not_found_user(){
+        // given
+        Roles roles = Roles.builder().roleList(new ArrayList<>()).build();
+        roles.add("Admin");
+        User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").roles(roles).build();
+        sut.persist(newUser);
+
+        Roles newRoles = Roles.builder().roleList(new ArrayList<>()).build();
+        newRoles.add("Page2");
+        newRoles.add("Page3");
+        User userNotExist = User.builder().username("user_not_exist").roles(newRoles).build();
+
+        // when
+        User updatedUser = sut.update(userNotExist);
+
+        // then
+        assertThat(updatedUser, is(nullValue()));
+    }
+
+    @Test
     public void in_memory_persitent_storage(){
         // given
         User newUser = User.builder().username(USER_NAME_ISMAEL).password("changeIt").build();

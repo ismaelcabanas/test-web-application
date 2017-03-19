@@ -66,7 +66,7 @@ public class LoginPostController extends Controller {
                 try {
                     return new RedirectView(URLDecoder.decode(request.getParameter(RequestConstants.REDIRECCT_PARAM), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
-                    throw new AssertionError(e);
+                    log.error("Error to decode parameter", e);
                 }
             }
             log.debug("Going to home view");
