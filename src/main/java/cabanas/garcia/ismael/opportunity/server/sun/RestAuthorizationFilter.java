@@ -61,7 +61,6 @@ public class RestAuthorizationFilter extends Filter{
         else{
             log.debug("No user authenticated");
             HttpExchangeUtil.unauthorized(httpExchange);
-            httpExchange.close();
         }
     }
 
