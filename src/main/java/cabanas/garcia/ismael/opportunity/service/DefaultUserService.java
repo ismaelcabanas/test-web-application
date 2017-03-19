@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Optional;
 
 public class DefaultUserService implements UserService{
-    public static final String PASSWORD_MASK = "********";
+    private static final String PASSWORD_MASK = "********";
     private final UserRepository userRepository;
 
     public DefaultUserService(UserRepository userRepository) {
