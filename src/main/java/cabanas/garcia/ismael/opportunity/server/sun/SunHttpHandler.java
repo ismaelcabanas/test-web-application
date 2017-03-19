@@ -41,8 +41,11 @@ public class SunHttpHandler extends AbstractHttpHandler{
     private void process(HttpExchange httpExchange, final Request request, final Response response) throws IOException {
         httpExchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
 
-        if(request.getSession().isPresent())
-            addCookieResponseHeader(httpExchange, request);
+        Optional<Session> session = request.getSession();
+        if(session.isPresent()) {
+            log.debug("No session cookie set, not exist session");
+            addCookieResponseHeader(httpExchange, session.get());
+        }
 
         if(!response.isRedirect()) {
             HttpExchangeUtil.write(httpExchange, response.getStatusCode(), "text/html", response.getContent());
@@ -51,18 +54,12 @@ public class SunHttpHandler extends AbstractHttpHandler{
             HttpExchangeUtil.redirect(httpExchange, response.getRedirectPath());
     }
 
-    private void addCookieResponseHeader(HttpExchange httpExchange, final Request request) {
+    private void addCookieResponseHeader(HttpExchange httpExchange, final Session session) {
         log.debug("Adding cookie response header...");
-        Optional<Session> session = request.getSession();
-        if(session.isPresent()){
-            Session theSession = session.get();
-            String cookieValue = String.format("%s=%s", Cookie.SESSION_TOKEN, theSession.getSessionId());
-            log.debug("Setting {} header with value {}", ResponseHeaderConstants.SET_COOKIE, cookieValue);
-            httpExchange.getResponseHeaders()
-                    .add(ResponseHeaderConstants.SET_COOKIE, cookieValue);
-        }
-        else
-            log.debug("No session cookie set, not exist session");
+
+        String cookieValue = String.format("%s=%s", Cookie.SESSION_TOKEN, session.getSessionId());
+        log.debug("Setting {} header with value {}", ResponseHeaderConstants.SET_COOKIE, cookieValue);
+        httpExchange.getResponseHeaders().add(ResponseHeaderConstants.SET_COOKIE, cookieValue);
     }
 
 }
