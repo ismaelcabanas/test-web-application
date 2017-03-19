@@ -2,9 +2,9 @@ package cabanas.garcia.ismael.opportunity.http.imp;
 
 
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParamStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeSuccessResourceStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeWithCredentialsAndRedirectParamStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeWithCredentialsStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;

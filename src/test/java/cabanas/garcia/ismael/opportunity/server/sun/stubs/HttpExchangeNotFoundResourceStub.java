@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity.server.sun;
+package cabanas.garcia.ismael.opportunity.server.sun.stubs;
 
 import java.net.HttpURLConnection;
 

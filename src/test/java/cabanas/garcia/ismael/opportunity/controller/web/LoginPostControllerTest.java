@@ -3,9 +3,9 @@ package cabanas.garcia.ismael.opportunity.controller.web;
 import cabanas.garcia.ismael.opportunity.http.*;
 import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithCredentialsAndRedirectParamStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeWithCredentialsStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeWithCredentialsAndRedirectParamStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeWithSessionStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.RedirectView;
@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.jws.soap.SOAPBinding;
 import java.net.HttpURLConnection;
 import java.util.Optional;
 

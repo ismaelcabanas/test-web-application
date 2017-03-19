@@ -1,6 +1,4 @@
-package cabanas.garcia.ismael.opportunity.server.sun;
-
-import com.sun.net.httpserver.HttpExchange;
+package cabanas.garcia.ismael.opportunity.server.sun.stubs;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity.server.sun;
+package cabanas.garcia.ismael.opportunity.server.sun.stubs;
 
 public class HttpExchangeAuthenticatedUserStub extends HttpExchangeWithSessionCookieStub {
     private static final String SESSION_ID = "aSessionId";

@@ -1,8 +1,6 @@
 package cabanas.garcia.ismael.opportunity.http.imp;
 
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
-import com.sun.net.httpserver.HttpExchange;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeSuccessResourceStub;
 
 import java.net.URI;
 

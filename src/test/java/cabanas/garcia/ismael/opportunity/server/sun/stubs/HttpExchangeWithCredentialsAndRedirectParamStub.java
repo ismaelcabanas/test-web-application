@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity.server.sun;
+package cabanas.garcia.ismael.opportunity.server.sun.stubs;
 
 import cabanas.garcia.ismael.opportunity.http.RequestConstants;
 import lombok.extern.slf4j.Slf4j;

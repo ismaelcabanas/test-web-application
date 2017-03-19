@@ -4,7 +4,7 @@ import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestFactory;
 import cabanas.garcia.ismael.opportunity.http.RequestMethodEnum;
 import cabanas.garcia.ismael.opportunity.http.imp.HttpExchangeWithQueryStringParamStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeSuccessResourceStub;
 import cabanas.garcia.ismael.opportunity.support.Resource;
 import cabanas.garcia.ismael.opportunity.view.LoginRawView;
 import com.sun.net.httpserver.HttpExchange;

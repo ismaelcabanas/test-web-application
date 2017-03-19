@@ -1,7 +1,6 @@
-package cabanas.garcia.ismael.opportunity.server.sun;
+package cabanas.garcia.ismael.opportunity.server.sun.stubs;
 
 import cabanas.garcia.ismael.opportunity.http.Session;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
 
 public class HttpExchangeWithSessionStub extends HttpExchangeSuccessResourceStub {
     private Session session;

@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity.server.sun;
+package cabanas.garcia.ismael.opportunity.server.sun.stubs;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;

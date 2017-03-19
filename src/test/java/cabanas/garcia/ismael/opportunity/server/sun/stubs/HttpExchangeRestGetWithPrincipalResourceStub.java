@@ -1,6 +1,5 @@
 package cabanas.garcia.ismael.opportunity.server.sun.stubs;
 
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
 import com.sun.net.httpserver.HttpPrincipal;
 
 public class HttpExchangeRestGetWithPrincipalResourceStub extends HttpExchangeSuccessResourceStub {

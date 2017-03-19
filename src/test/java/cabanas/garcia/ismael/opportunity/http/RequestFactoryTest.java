@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.http;
 
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
-import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeWithSessionStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeSuccessResourceStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeWithSessionStub;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 
