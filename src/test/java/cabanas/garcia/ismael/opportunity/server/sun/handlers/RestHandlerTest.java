@@ -1,20 +1,35 @@
 package cabanas.garcia.ismael.opportunity.server.sun.handlers;
 
+import cabanas.garcia.ismael.opportunity.controller.Controller;
 import cabanas.garcia.ismael.opportunity.controller.Controllers;
 import cabanas.garcia.ismael.opportunity.http.Request;
+import cabanas.garcia.ismael.opportunity.http.RequestFactory;
+import cabanas.garcia.ismael.opportunity.http.Response;
+import cabanas.garcia.ismael.opportunity.http.imp.DefaultResponse;
 import cabanas.garcia.ismael.opportunity.model.Role;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
+import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
+import cabanas.garcia.ismael.opportunity.server.sun.HttpExchangeSuccessResourceStub;
+import cabanas.garcia.ismael.opportunity.server.sun.stubs.HttpExchangeRestGetWithPrincipalResourceStub;
 import cabanas.garcia.ismael.opportunity.service.UserService;
+import cabanas.garcia.ismael.opportunity.support.Resource;
+import cabanas.garcia.ismael.opportunity.view.View;
+import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.Optional;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestHandlerTest {
@@ -32,184 +47,114 @@ public class RestHandlerTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private PermissionChecker permissionChecker;
+
     @Captor
     private ArgumentCaptor<Request> requestCaptor;
 
     @Test
-    public void test(){
-
-    }
-    /*@Test
-    public void should_handle_GET_requests_if_authenticated_user() throws Exception{
+    public void should_handle_requests_if_authenticated_user_with_required_permissions() throws Exception{
         // given
         HttpExchange httpExchange = new HttpExchangeRestGetWithPrincipalResourceStub(USERS_PATH, USER_1);
 
         Request request = RequestFactory.create(httpExchange);
 
-        RestHandler sut = new RestHandler(controllers, userService);
+        RestHandler sut = new RestHandler(controllers, userService, permissionChecker);
 
-        // when
-        sut.handle(httpExchange);
-
-        // then
-        verify(controllers).select(requestCaptor.capture());
-        assertThat(requestCaptor.getValue(), is(equalTo(request)));
-        verifyZeroInteractions(userService);
-    }
-
-    @Test
-    public void should_select_unauthorized_controller_if_not_authenticated_user() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeRestWithoutPrincipalResourceStub(USERS_PATH);
-
-        Request request = RequestFactory.create(httpExchange);
-
-        RestHandler sut = new RestHandler(controllers, userService);
-
-        // when
-        sut.handle(httpExchange);
-
-        // then
-        verify(controllers).unauthorized(any());
-        verifyZeroInteractions(userService);
-    }*/
-    /*
-    @Test
-    public void should_filter_doChain_POST_requests_if_authenticated_admin_user() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeRestPostWithPrincipalResourceStub(USERS_PATH, USER_1);
-
-        Request request = RequestFactory.create(httpExchange);
-
-        RestAuthorizationFilter sut = new RestAuthorizationFilter(userService);
-
-        when(userService.findByUsername(anyString())).thenReturn(ADMIN_USER);
-
-        // when
-        sut.doFilter(httpExchange, chain);
-
-        // then
-        verify(chain).doFilter(httpExchange);
-        verify(userService).findByUsername(USER_1);
-    }
-
-    @Test
-    public void should_filter_doChain_PUT_requests_if_authenticated_admin_user() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeRestPutWithPrincipalResourceStub(USERS_PATH, USER_1);
-
-        Request request = RequestFactory.create(httpExchange);
-
-        RestAuthorizationFilter sut = new RestAuthorizationFilter(userService);
-
-        when(userService.findByUsername(anyString())).thenReturn(ADMIN_USER);
-
-        // when
-        sut.doFilter(httpExchange, chain);
-
-        // then
-        verify(chain).doFilter(httpExchange);
-        verify(userService).findByUsername(USER_1);
-    }
-
-    @Test
-    public void should_filter_doChain_DELETE_requests_if_authenticated_admin_user() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeRestDeleteWithPrincipalResourceStub(USERS_PATH, USER_1);
-
-        Request request = RequestFactory.create(httpExchange);
-
-        RestAuthorizationFilter sut = new RestAuthorizationFilter(userService);
-
-        when(userService.findByUsername(anyString())).thenReturn(ADMIN_USER);
-
-        // when
-        sut.doFilter(httpExchange, chain);
-
-        // then
-        verify(chain).doFilter(httpExchange);
-        verify(userService).findByUsername(USER_1);
-    }
-
-    @Test
-    public void should_redirect_to_unauthorization_if_not_principal_in_request() throws Exception{
-        // given
-        HttpExchange httpExchange = new HttpExchangeRestWithoutPrincipalResourceStub(USERS_PATH);
-
-        Request request = RequestFactory.create(httpExchange);
-
-        RestAuthorizationFilter sut = new RestAuthorizationFilter(userService);
+        when(controllers.select(request)).thenReturn(new SuccessController());
+        when(userService.findByUsername(Mockito.anyString())).thenReturn(NO_ADMIN_USER);
+        when(permissionChecker.hasPermission(any(), any())).thenReturn(true);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
         // when
-        sut.doFilter(httpExchangeSpy, chain);
+        sut.handle(httpExchangeSpy);
 
         // then
-        verifyZeroInteractions(chain, userService);
-        verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
+        verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_OK, "Test".getBytes().length);
     }
 
     @Test
-    public void should_filter_doChain_POST_requests_if_not_admin_user() throws Exception{
+    public void should_handle_requests_if_authenticated_user_without_required_permissions() throws Exception{
         // given
-        HttpExchange httpExchange = new HttpExchangeRestPostWithPrincipalResourceStub(USERS_PATH, USER_1);
+        HttpExchange httpExchange = new HttpExchangeRestGetWithPrincipalResourceStub(USERS_PATH, USER_1);
 
         Request request = RequestFactory.create(httpExchange);
 
-        RestAuthorizationFilter sut = new RestAuthorizationFilter(userService);
+        RestHandler sut = new RestHandler(controllers, userService, permissionChecker);
 
-        when(userService.findByUsername(anyString())).thenReturn(NO_ADMIN_USER);
+        when(controllers.select(request)).thenReturn(new SuccessController());
+        when(userService.findByUsername(Mockito.anyString())).thenReturn(NO_ADMIN_USER);
+        when(permissionChecker.hasPermission(any(), any())).thenReturn(false);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
         // when
-        sut.doFilter(httpExchangeSpy, chain);
+        sut.handle(httpExchangeSpy);
 
         // then
-        verifyZeroInteractions(chain, userService);
-        verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
+        verifyZeroInteractions(controllers);
+        verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
     }
 
     @Test
-    public void should_filter_doChain_PUT_requests_if_not_admin_user() throws Exception{
+    public void should_handle_requests_if_not_authenticated_user() throws Exception{
         // given
-        HttpExchange httpExchange = new HttpExchangeRestPutWithPrincipalResourceStub(USERS_PATH, USER_1);
+        HttpExchange httpExchange = new HttpExchangeSuccessResourceStub("/page1");
 
         Request request = RequestFactory.create(httpExchange);
 
-        RestAuthorizationFilter sut = new RestAuthorizationFilter(userService);
-
-        when(userService.findByUsername(anyString())).thenReturn(NO_ADMIN_USER);
+        RestHandler sut = new RestHandler(controllers, userService, permissionChecker);
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
         // when
-        sut.doFilter(httpExchangeSpy, chain);
+        sut.handle(httpExchangeSpy);
 
         // then
-        verifyZeroInteractions(chain, userService);
+        verifyZeroInteractions(permissionChecker, controllers, userService);
         verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
     }
 
     @Test
-    public void should_filter_doChain_DELETE_requests_if_not_admin_user() throws Exception{
+    public void should_handle_requests_if_authenticated_user_not_exist_in_repository() throws Exception{
         // given
-        HttpExchange httpExchange = new HttpExchangeRestDeleteWithPrincipalResourceStub(USERS_PATH, USER_1);
+        HttpExchange httpExchange = new HttpExchangeRestGetWithPrincipalResourceStub(USERS_PATH, USER_1);
 
         Request request = RequestFactory.create(httpExchange);
 
-        RestAuthorizationFilter sut = new RestAuthorizationFilter(userService);
+        RestHandler sut = new RestHandler(controllers, userService, permissionChecker);
 
-        when(userService.findByUsername(anyString())).thenReturn(NO_ADMIN_USER);
+        when(controllers.select(request)).thenReturn(new SuccessController());
+        when(userService.findByUsername(Mockito.anyString())).thenReturn(Optional.empty());
 
         HttpExchange httpExchangeSpy = spy(httpExchange);
 
         // when
-        sut.doFilter(httpExchangeSpy, chain);
+        sut.handle(httpExchangeSpy);
 
         // then
-        verifyZeroInteractions(chain, userService);
+        verifyZeroInteractions(controllers, permissionChecker);
         verify(httpExchangeSpy).sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
-    }*/
+    }
+
+    private class SuccessController extends Controller {
+        @Override
+        public View process(Request request) {
+            return new SuccessView();
+        }
+
+        @Override
+        public Resource getMappingPath() {
+            return null;
+        }
+
+        private class SuccessView implements View {
+            @Override
+            public Response render() {
+                return DefaultResponse.builder().statusCode(HttpURLConnection.HTTP_OK).content("Test".getBytes()).build();
+            }
+        }
+    }
 }
