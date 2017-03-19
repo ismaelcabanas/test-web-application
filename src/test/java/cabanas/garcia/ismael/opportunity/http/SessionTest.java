@@ -1,26 +1,19 @@
 package cabanas.garcia.ismael.opportunity.http;
 
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.util.DateUtil;
 import cabanas.garcia.ismael.opportunity.util.TimeProvider;
 import cabanas.garcia.ismael.opportunity.util.UUIDProvider;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)

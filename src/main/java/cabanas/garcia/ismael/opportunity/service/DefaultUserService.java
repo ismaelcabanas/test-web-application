@@ -17,8 +17,9 @@ public class DefaultUserService implements UserService{
     public Optional<User> login(String username, String password) {
         Optional<User> userFromRepository = userRepository.read(username);
         if(userFromRepository.isPresent()){
-            if(userFromRepository.get().getPassword().equals(password))
+            if(userFromRepository.get().getPassword().equals(password)) {
                 return Optional.of(newUserWithoutPassword(userFromRepository.get()));
+            }
         }
 
         return Optional.empty();
@@ -36,8 +37,9 @@ public class DefaultUserService implements UserService{
         Optional<User> userPersisted = userRepository.read(username);
 
         User user = null;
-        if(userPersisted.isPresent())
+        if(userPersisted.isPresent()) {
             user = newUserWithoutPassword(userPersisted.get());
+        }
         return Optional.ofNullable(user);
     }
 

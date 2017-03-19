@@ -12,7 +12,6 @@ import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiatio
 import cabanas.garcia.ismael.opportunity.internal.creation.instance.Instantiator;
 import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
-import cabanas.garcia.ismael.opportunity.repository.SessionRepository;
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;
 import cabanas.garcia.ismael.opportunity.service.UserService;
