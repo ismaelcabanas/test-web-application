@@ -1,4 +1,4 @@
-package cabanas.garcia.ismael.opportunity.server.sun;
+package cabanas.garcia.ismael.opportunity.server.sun.filter;
 
 import cabanas.garcia.ismael.opportunity.http.Request;
 import cabanas.garcia.ismael.opportunity.http.RequestConstants;

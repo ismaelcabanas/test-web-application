@@ -12,8 +12,8 @@ import cabanas.garcia.ismael.opportunity.security.permission.DefaultRestPermissi
 import cabanas.garcia.ismael.opportunity.security.permission.PermissionChecker;
 import cabanas.garcia.ismael.opportunity.server.authenticators.RestBasicAuthenticator;
 import cabanas.garcia.ismael.opportunity.server.sun.ServerConfiguration;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpHandler;
+import cabanas.garcia.ismael.opportunity.server.sun.filter.SunHttpAuthorizationFilter;
+import cabanas.garcia.ismael.opportunity.server.sun.handlers.SunHttpHandler;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.server.sun.handlers.RestHandler;
 import cabanas.garcia.ismael.opportunity.service.DefaultUserService;

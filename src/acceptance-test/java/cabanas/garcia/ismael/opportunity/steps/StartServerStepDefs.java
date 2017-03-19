@@ -1,15 +1,11 @@
 package cabanas.garcia.ismael.opportunity.steps;
 
-import cabanas.garcia.ismael.opportunity.http.session.DefaultSessionManager;
-import cabanas.garcia.ismael.opportunity.http.session.SessionManager;
 import cabanas.garcia.ismael.opportunity.model.Roles;
 import cabanas.garcia.ismael.opportunity.model.User;
-import cabanas.garcia.ismael.opportunity.repository.InMemorySessionRepository;
 import cabanas.garcia.ismael.opportunity.repository.InMemoryUserRepository;
 import cabanas.garcia.ismael.opportunity.repository.UserRepository;
 import cabanas.garcia.ismael.opportunity.security.permission.Permission;
 import cabanas.garcia.ismael.opportunity.security.permission.Permissions;
-import cabanas.garcia.ismael.opportunity.server.sun.SunHttpAuthorizationFilter;
 import cabanas.garcia.ismael.opportunity.server.sun.SunHttpServer;
 import cabanas.garcia.ismael.opportunity.service.DefaultPrivateResourceService;
 import cabanas.garcia.ismael.opportunity.service.PrivateResourcesService;
@@ -23,11 +19,9 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static cabanas.garcia.ismael.opportunity.steps.Hooks.filters;
 import static cabanas.garcia.ismael.opportunity.steps.Hooks.httpServer;
 
 public class StartServerStepDefs implements En {
