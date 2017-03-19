@@ -1,7 +1,7 @@
 package cabanas.garcia.ismael.opportunity.model;
 
 public enum RoleEnum {
-    ADMIN("Admin");
+    ADMIN("ADMIN");
 
     private final String rolename;
 
