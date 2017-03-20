@@ -49,6 +49,7 @@ public class SunHttpAuthorizationFilter extends Filter{
         if(privateResourcesService.hasResource(resource)){
             Optional<Session> session = sessionManager.validate(request);
             if(session.isPresent()){
+                request.setSession(session.get());
                 if(permissionChecker.hasPermission(session.get().getUser(), resource)){
                     log.debug("User {} has permission to resource {}", session.get().getUser().getUsername(), resource);
                     sessionManager.update(session.get());
