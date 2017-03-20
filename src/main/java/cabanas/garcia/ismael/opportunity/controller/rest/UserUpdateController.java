@@ -61,7 +61,7 @@ public class UserUpdateController extends Controller{
         if(stringOfRoles != null){
             String[] rolesSplitted = stringOfRoles.split(",");
             for(int i=0; i<rolesSplitted.length; i++){
-                roles.add(rolesSplitted[i]);
+                roles.add(rolesSplitted[i].trim());
             }
         }
 

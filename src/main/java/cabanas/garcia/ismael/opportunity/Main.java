@@ -41,6 +41,10 @@ import java.util.*;
 public class Main {
 
     private static final String CHANGEIT = "changeit";
+    private static final String DEFAULT_PORT = "8080";
+    private static final String DEFAULT_SESSION_TIMEOUT = "300";
+    private static final String SESSION_TIMEOUT_SYSTEM_PROPERTY = "sessionTimeout";
+    private static final String PORT_SYSTEM_PROPERTY = "port";
     private static PermissionChecker permissionChecker;
     private static PrivateResourcesService privateResourcesService;
 
@@ -63,8 +67,10 @@ public class Main {
 
         loadDefaultUsers();
 
-        SunHttpServer httpServer = new SunHttpServer(8080);
-        httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, 3600);
+        int port = Integer.parseInt(System.getProperty(PORT_SYSTEM_PROPERTY, DEFAULT_PORT));
+        SunHttpServer httpServer = new SunHttpServer(port);
+        int sessionTimeout = Integer.parseInt(System.getProperty(SESSION_TIMEOUT_SYSTEM_PROPERTY, DEFAULT_SESSION_TIMEOUT));
+        httpServer.getConfiguration().add(ServerConfiguration.SESSION_TIMEOUT, sessionTimeout);
         httpServer.getConfiguration().add(ServerConfiguration.REDIRECT_LOGOUT, "/login");
 
         Controllers webControllers = webControllers();
