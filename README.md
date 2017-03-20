@@ -14,7 +14,7 @@ building an application server.
     * If you want skip just unit tests write `mvn clean install -DskipUTs=true`
     * If you want skip just integration and acceptance test write `mvn clean install -DskipITs=true`
 5. The application distribution archive can be found `/target` directory
-6. Run the application from command line `java -jar /target/test-web-application.jar`
+6. Run the application from command line `java -jar /target/test-web-application-standalone.jar`
     * The application has two optional parameters:
         * **-Dport**: indicating the listening port for the application, by default is **8080**
         * **-DsessionTimeout**: indicating the max age of session in seconds, by default is **300** seconds (5 minutes) 
