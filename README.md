@@ -20,5 +20,174 @@ building an application server.
         * **-DsessionTimeout**: indicating the max age of session in seconds, by default is **300** seconds (5 minutes) 
 7. After the application has started, the web application should be available in [http://localhost:8080](http://localhost:8080), if you started it with default optional parameters.
 
+# REST API
 
+**Create users**
+----
 
+Create a new user resource with username, password and separated comma list of roles
+    
+* **URL**
+
+  `/users`
+
+* **Method:**
+  
+  `POST`
+
+ 
+*  **URL Params**
+
+   Not apply 
+
+*  **Content-type accepted**
+
+   application/x-www-form-urlencoded
+   
+* **Data Params**
+
+    **Example**
+  `username=user4&password=changeit&roles=PAGE_1%2C+PAGE_2`
+
+* **Success Response:**
+  
+  * **Code:** 201 <br />
+    **Content:** `User(username=user4, password=********, roles=Roles(roleList=[Role(name=PAGE_1), Role(name= PAGE_2)]))`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+
+  * **Code:** 403 Forbidden <br />
+    **Content:** 
+
+**Update users**
+----
+
+Update roles of a given user resource
+
+* **URL**
+
+  `/users/{username}`
+  
+  **Example**
+  `/users/user2`
+
+* **Method:**
+  
+  `PUT`
+ 
+*  **URL Params**
+
+   Not apply 
+
+*  **Content-type accepted**
+
+   application/x-www-form-urlencoded
+   
+* **Data Params**
+
+    **Example**
+  `roles=ADMIN%2C+PAGE_2`
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** `User(username=user2, password=********, roles=Roles(roleList=[Role(name=ADMIN), Role(name=PAGE_2)]))`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+
+  * **Code:** 403 Forbidden <br />
+    **Content:** 
+  
+  * **Code:** 404 Not found <br />
+      **Content:**   
+    
+**Delete users**
+----
+
+Delete a given user resource
+
+* **URL**
+
+  `/users/{username}`
+  
+  **Example**
+  `/users/user2`
+
+* **Method:**
+  
+  `DELETE`
+ 
+*  **URL Params**
+
+   Not apply 
+
+*  **Content-type accepted**
+
+   Not apply
+   
+* **Data Params**
+
+    Not apply
+
+* **Success Response:**
+  
+  * **Code:** 204 <br />
+    **Content:** 
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+
+  * **Code:** 403 Forbidden <br />
+    **Content:** 
+
+  * **Code:** 404 Not found <br />
+    **Content:**
+    
+**Get user**
+----
+
+Get a given user resource
+
+* **URL**
+
+  `/users/{username}`
+  
+  **Example**
+  `/users/user3`
+
+* **Method:**
+  
+  `GET`
+ 
+*  **URL Params**
+
+   Not apply 
+
+*  **Content-type accepted**
+
+   Not apply
+   
+* **Data Params**
+
+    Not apply
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** `User(username=user3, password=********, roles=Roles(roleList=[Role(name=PAGE_3)]))`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+
+  * **Code:** 404 Not found <br />
+    **Content:**
