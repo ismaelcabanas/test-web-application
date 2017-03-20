@@ -44,7 +44,7 @@ public class SunHttpHandler extends AbstractHttpHandler {
 
         Optional<Session> session = request.getSession();
         if(session.isPresent()) {
-            log.debug("No session cookie set, not exist session");
+            log.debug("Setting session cookie");
             addCookieResponseHeader(httpExchange, session.get());
         }
 
